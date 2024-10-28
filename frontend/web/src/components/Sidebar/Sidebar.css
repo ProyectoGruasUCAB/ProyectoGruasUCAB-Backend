@@ -23,3 +23,14 @@
     color: #fff; /* Color del texto para el enlace activo */
   }
   
+  .icon {
+    padding-right: 10px;
+  }
+
+  .order-bar {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-left: 1px solid #dee2e6;
+    height: 100vh;
+  }

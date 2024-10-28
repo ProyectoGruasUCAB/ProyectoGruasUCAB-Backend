@@ -13,7 +13,9 @@ import Servicios from './components/Servicios/servicios';
 import Department from './components/Department/department';
 import Notification from './components/Notifications/notifications';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import LoginForm from './components/Login/login';
+import AddOperator from './components/Operator/addOpeator';
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
         <Header />
         <div className="App-body d-flex">
           <Sidebar />
-          <div className="content p-4">
+          <div className="content">
             <Routes>
               <Route path="/orders" element={<Orders/>} />
               <Route path="/operators" element={<Operator/>} />
@@ -34,6 +36,9 @@ function App() {
               <Route path="/servicios" element={<Servicios/>} />
               <Route path="/departments" element={<Department/>} />
               <Route path="/notifications" element={<Notification/>} />
+              <Route path="/Login" element={<LoginForm/>} />
+              <Route path="/addOperator" element={<AddOperator/>} />
+              <Route path="*" element={<Navigate to="/orders" replace/>} />
             </Routes>  
           </div>
         </div>

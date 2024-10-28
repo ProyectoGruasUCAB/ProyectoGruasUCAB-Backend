@@ -1,10 +1,18 @@
 import React from "react";
+import ShowList from "../showList";
+
+const initialItems = [
+    { id: 1, name: "Cliente 1"} ,
+    { id: 3, name: "Cliente 3"} ,
+    { id: 4, name: "Cliente 4"} ,
+    { id: 2, name: "Cliente 2"} ,
+    { id: 5, name: "Cliente 5"} ,
+];
 
 function Cliente() {
     return (
         <div>
-            <h2>Clientes</h2>
-            <p>Listado de clientes registrados en la plataforma.</p>
+            <ShowList title = "Clientes" initialItems={initialItems}/>
         </div>
     );
 }
