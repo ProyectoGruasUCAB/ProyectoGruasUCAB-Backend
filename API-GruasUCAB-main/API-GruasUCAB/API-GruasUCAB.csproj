@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>API_GruasUCAB</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishAot>true</PublishAot>
+    <NoWarn>IL2026</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\API-GruasUCAB.Auth\API-GruasUCAB.Auth.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Department\API-GruasUCAB.Department.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Policy\API-GruasUCAB.Policy.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.ServiceFee\API-GruasUCAB.ServiceFee.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.ServiceOrder\API-GruasUCAB.ServiceOrder.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Supplier\API-GruasUCAB.Supplier.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Users\API-GruasUCAB.Users.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Vehicle\API-GruasUCAB.Vehicle.csproj" />
+  </ItemGroup>
+
+</Project>
