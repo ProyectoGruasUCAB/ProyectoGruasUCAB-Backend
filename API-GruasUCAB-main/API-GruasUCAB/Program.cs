@@ -1,3 +1,11 @@
+using API_GruasUCAB.Auth.Application.Command.Login;
+using API_GruasUCAB.Auth.Application.Command.Logout;
+using API_GruasUCAB.Auth.Application.Command.CreateUser;
+using API_GruasUCAB.Auth.Application.Command.AssignRole;
+using API_GruasUCAB.Auth.Application.Command.DeleteUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs;
+using API_GruasUCAB.Auth.Infrastructure.Response;
+using API_GruasUCAB.Auth.Infrastructure.Providers;
 using API_GruasUCAB.Core.Application.Services;
 using API_GruasUCAB.Core.Infrastructure.HeadersToken;
 using API_GruasUCAB.Core.Infrastructure.ClientCredentials;
@@ -48,6 +56,23 @@ builder.Services.AddScoped<IHeadersClientCredentialsToken, HeadersClientCredenti
 builder.Services.AddScoped<IKeycloakRequestBuilder, KeycloakRequestBuilder>();
 builder.Services.AddScoped<IUrlHelperKeycloak, UrlHelperKeycloak>();
 builder.Services.AddScoped<IKeycloakRepository, KeycloakRepository>();
+
+builder.Services.AddScoped<AuthLoginValidate>();
+builder.Services.AddScoped<AuthLogoutValidate>();
+
+builder.Services.AddScoped<IService<LoginRequestDTO, LoginResponseDTO>, AuthLoginValidate>();
+builder.Services.AddScoped<IService<CreateUserRequestDTO, CreateUserResponseDTO>, AuthCreateUserValidate>();
+builder.Services.AddScoped<IService<AssignRoleRequestDTO, AssignRoleResponseDTO>, AssignRoleValidator>();
+builder.Services.AddScoped<IService<EmailRequestDTO, EmailResponseDTO>, EmailService>();
+builder.Services.AddScoped<IService<DeleteUserRequestDTO, DeleteUserResponseDTO>, AuthDeleteUserValidate>();
+builder.Services.AddScoped<IService<LogoutRequestDTO, LogoutResponseDTO>, AuthLogoutValidate>();
+
+// Register MediatR
+builder.Services.AddMediatR(typeof(LoginCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(CreateUserCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(AssignRoleCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(DeleteUserCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(LogoutCommandHandler).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
 
