@@ -15,22 +15,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="MediatR" Version="11.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+    <PackageReference Include="Scriban" Version="5.12.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API-GruasUCAB.Auth\API-GruasUCAB.Auth.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Commons\API-GruasUCAB.Commons.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Auth\API-GruasUCAB.Auth.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.Department\API-GruasUCAB.Department.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.Policy\API-GruasUCAB.Policy.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.ServiceFee\API-GruasUCAB.ServiceFee.csproj" />
