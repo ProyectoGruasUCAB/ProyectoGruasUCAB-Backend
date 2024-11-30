@@ -1,4 +1,6 @@
 using API_GruasUCAB.Auth.Application.Command.Login;
+using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Application.Command.RecoverPassword;
 using API_GruasUCAB.Auth.Application.Command.CreateUser;
 using API_GruasUCAB.Auth.Application.Command.AssignRole;
 using API_GruasUCAB.Auth.Application.Command.DeleteUser;
@@ -63,6 +65,45 @@ namespace API_GruasUCAB.Auth.Controllers
                 var authResponse = await _mediator.Send(command);
                 return Ok(authResponse);
             });
+        }
+
+        [HttpPost]
+        [Route("HandleIncompleteAccount")]
+        [ProducesResponseType(typeof(IncompleteAccountResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> HandleIncompleteAccount([FromBody] IncompleteAccountRequestDTO request)
+        {
+            return await ExecuteAction(async () =>
+            {
+                var command = new HandleIncompleteAccountCommand(request);
+                var response = await _mediator.Send(command);
+
+                if (response.Success)
+                {
+                    return Ok(response.Message);
+                }
+                return BadRequest(response.Message);
+            });
+        }
+
+        [HttpPost]
+        [Route("RecoverPassword")]
+        [ProducesResponseType(typeof(RecoverPasswordResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> RecoverPassword([FromBody] RecoverPasswordRequestDTO request)
+        {
+            var command = new RecoverPasswordCommand(request);
+            var result = await _mediator.Send(command);
+
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+            return BadRequest(result.Message);
         }
 
         [HttpPost]
