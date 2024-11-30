@@ -1,0 +1,88 @@
+{
+  "realm": "GruasUCAB",
+  "enabled": true,
+  "users": [
+    {
+      "username": "example@gmail.com",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "example@gmail.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "1234",
+          "temporary": false
+        }
+      ],
+      "clientRoles": {
+        "ClientGruasUCAB": ["Administrador"]
+      }
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "ClientGruasUCAB",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "redirectUris": ["http://localhost:5144/*"],
+      "webOrigins": ["http://localhost:5144"],
+      "publicClient": false,
+      "secret": "ESf6O4ul3ry1EneCi6lD22Vc0hQqvAKT",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "attributes": {
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience-GruasUCAB",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "ClientGruasUCAB",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "email",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "email",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "client": {
+      "ClientGruasUCAB": [
+        {
+          "name": "Conductor",
+          "description": "Role for conductors"
+        },
+        {
+          "name": "Proveedor",
+          "description": "Role for providers"
+        },
+        {
+          "name": "Trabajador",
+          "description": "Role for workers"
+        },
+        {
+          "name": "Administrador",
+          "description": "Role for administrators"
+        }
+      ]
+    }
+  }
+}
