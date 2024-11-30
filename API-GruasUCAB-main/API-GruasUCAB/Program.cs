@@ -2,6 +2,7 @@ using API_GruasUCAB.Auth.Application.Command.Login;
 using API_GruasUCAB.Auth.Application.Command.Logout;
 using API_GruasUCAB.Auth.Application.Command.CreateUser;
 using API_GruasUCAB.Auth.Application.Command.AssignRole;
+using API_GruasUCAB.Auth.Application.Command.ChangePassword;
 using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Application.Command.DeleteUser;
 using API_GruasUCAB.Auth.Application.Command.RecoverPassword;
@@ -54,6 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HeadersToken>();
+builder.Services.AddScoped<RoleVerifier>();
 builder.Services.AddScoped<IHeadersClientCredentialsToken, HeadersClientCredentialsToken>();
 builder.Services.AddScoped<IKeycloakRequestBuilder, KeycloakRequestBuilder>();
 builder.Services.AddScoped<IUrlHelperKeycloak, UrlHelperKeycloak>();
@@ -64,6 +66,7 @@ builder.Services.AddScoped<AuthLogoutValidate>();
 
 builder.Services.AddScoped<IService<LoginRequestDTO, LoginResponseDTO>, AuthLoginValidate>();
 builder.Services.AddScoped<IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>, AuthHandleIncompleteAccountValidator>();
+builder.Services.AddScoped<IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>, ChangePasswordValidator>();
 builder.Services.AddScoped<IService<CreateUserRequestDTO, CreateUserResponseDTO>, AuthCreateUserValidate>();
 builder.Services.AddScoped<IService<AssignRoleRequestDTO, AssignRoleResponseDTO>, AssignRoleValidator>();
 builder.Services.AddScoped<IService<EmailRequestDTO, EmailResponseDTO>, EmailService>();
@@ -74,6 +77,7 @@ builder.Services.AddScoped<IService<RecoverPasswordRequestDTO, RecoverPasswordRe
 // Register MediatR
 builder.Services.AddMediatR(typeof(LoginCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(HandleIncompleteAccountCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(ChangePasswordCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(CreateUserCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(AssignRoleCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(DeleteUserCommandHandler).Assembly);
