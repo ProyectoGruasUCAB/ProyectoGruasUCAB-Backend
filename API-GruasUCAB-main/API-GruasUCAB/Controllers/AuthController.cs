@@ -1,5 +1,6 @@
 using API_GruasUCAB.Auth.Application.Command.Login;
 using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Application.Command.ChangePassword;
 using API_GruasUCAB.Auth.Application.Command.RecoverPassword;
 using API_GruasUCAB.Auth.Application.Command.CreateUser;
 using API_GruasUCAB.Auth.Application.Command.AssignRole;
@@ -78,6 +79,27 @@ namespace API_GruasUCAB.Auth.Controllers
             return await ExecuteAction(async () =>
             {
                 var command = new HandleIncompleteAccountCommand(request);
+                var response = await _mediator.Send(command);
+
+                if (response.Success)
+                {
+                    return Ok(response.Message);
+                }
+                return BadRequest(response.Message);
+            });
+        }
+
+        [HttpPut]
+        [Route("ChangePassword")]
+        [ProducesResponseType(typeof(ChangePasswordResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO request)
+        {
+            return await ExecuteAction(async () =>
+            {
+                var command = new ChangePasswordCommand(request);
                 var response = await _mediator.Send(command);
 
                 if (response.Success)
