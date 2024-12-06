@@ -6,8 +6,14 @@ using API_GruasUCAB.Auth.Application.Command.CreateUser;
 using API_GruasUCAB.Auth.Application.Command.AssignRole;
 using API_GruasUCAB.Auth.Application.Command.DeleteUser;
 using API_GruasUCAB.Auth.Application.Command.Logout;
-using API_GruasUCAB.Auth.Infrastructure.DTOs;
-using API_GruasUCAB.Auth.Infrastructure.Response;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.ChangePassword;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
@@ -23,7 +29,6 @@ namespace API_GruasUCAB.Auth.Controllers
         {
             _mediator = mediator;
         }
-
         private async Task<IActionResult> ExecuteAction(Func<Task<IActionResult>> action)
         {
             if (!ModelState.IsValid)
@@ -64,7 +69,11 @@ namespace API_GruasUCAB.Auth.Controllers
             {
                 var command = new LoginCommand(request);
                 var authResponse = await _mediator.Send(command);
-                return Ok(authResponse);
+                if (authResponse.Success)
+                {
+                    return Ok(authResponse);
+                }
+                return BadRequest(authResponse.Message);
             });
         }
 
@@ -79,13 +88,12 @@ namespace API_GruasUCAB.Auth.Controllers
             return await ExecuteAction(async () =>
             {
                 var command = new HandleIncompleteAccountCommand(request);
-                var response = await _mediator.Send(command);
-
-                if (response.Success)
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
                 {
-                    return Ok(response.Message);
+                    return Ok(authResponse);
                 }
-                return BadRequest(response.Message);
+                return BadRequest(authResponse.Message);
             });
         }
 
@@ -100,13 +108,12 @@ namespace API_GruasUCAB.Auth.Controllers
             return await ExecuteAction(async () =>
             {
                 var command = new ChangePasswordCommand(request);
-                var response = await _mediator.Send(command);
-
-                if (response.Success)
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
                 {
-                    return Ok(response.Message);
+                    return Ok(authResponse);
                 }
-                return BadRequest(response.Message);
+                return BadRequest(authResponse.Message);
             });
         }
 
@@ -118,14 +125,16 @@ namespace API_GruasUCAB.Auth.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> RecoverPassword([FromBody] RecoverPasswordRequestDTO request)
         {
-            var command = new RecoverPasswordCommand(request);
-            var result = await _mediator.Send(command);
-
-            if (result.Success)
+            return await ExecuteAction(async () =>
             {
-                return Ok(result.Message);
-            }
-            return BadRequest(result.Message);
+                var command = new RecoverPasswordCommand(request);
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
+                {
+                    return Ok(authResponse);
+                }
+                return BadRequest(authResponse.Message);
+            });
         }
 
         [HttpPost]
@@ -139,13 +148,12 @@ namespace API_GruasUCAB.Auth.Controllers
             return await ExecuteAction(async () =>
             {
                 var command = new CreateUserCommand(request);
-                var result = await _mediator.Send(command);
-
-                if (result.Success)
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
                 {
-                    return Ok(result.Message);
+                    return Ok(authResponse);
                 }
-                return BadRequest(result.Message);
+                return BadRequest(authResponse.Message);
             });
         }
 
@@ -160,13 +168,12 @@ namespace API_GruasUCAB.Auth.Controllers
             return await ExecuteAction(async () =>
             {
                 var command = new AssignRoleCommand(request);
-                var response = await _mediator.Send(command);
-
-                if (response.Success)
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
                 {
-                    return Ok(response.Message);
+                    return Ok(authResponse);
                 }
-                return BadRequest(response.Message);
+                return BadRequest(authResponse.Message);
             });
         }
 
@@ -178,14 +185,16 @@ namespace API_GruasUCAB.Auth.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequestDTO request)
         {
-            var command = new DeleteUserCommand(request);
-            var response = await _mediator.Send(command);
-
-            if (response.Success)
+            return await ExecuteAction(async () =>
             {
-                return Ok(response.Message);
-            }
-            return BadRequest(response.Message);
+                var command = new DeleteUserCommand(request);
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
+                {
+                    return Ok(authResponse);
+                }
+                return BadRequest(authResponse.Message);
+            });
         }
 
         [HttpPost]
@@ -198,9 +207,13 @@ namespace API_GruasUCAB.Auth.Controllers
         {
             return await ExecuteAction(async () =>
             {
-                var command = new LogoutCommand(request.RefreshToken);
-                var result = await _mediator.Send(command);
-                return Ok(result);
+                var command = new LogoutCommand(request);
+                var authResponse = await _mediator.Send(command);
+                if (authResponse.Success)
+                {
+                    return Ok(authResponse);
+                }
+                return BadRequest(authResponse.Message);
             });
         }
     }

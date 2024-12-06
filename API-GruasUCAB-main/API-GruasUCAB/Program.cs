@@ -1,37 +1,54 @@
-using API_GruasUCAB.Auth.Application.Command.Login;
-using API_GruasUCAB.Auth.Application.Command.Logout;
-using API_GruasUCAB.Auth.Application.Command.CreateUser;
-using API_GruasUCAB.Auth.Application.Command.AssignRole;
-using API_GruasUCAB.Auth.Application.Command.ChangePassword;
-using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
-using API_GruasUCAB.Auth.Application.Command.DeleteUser;
-using API_GruasUCAB.Auth.Application.Command.RecoverPassword;
-using API_GruasUCAB.Auth.Infrastructure.DTOs;
-using API_GruasUCAB.Auth.Infrastructure.Response;
-using API_GruasUCAB.Auth.Infrastructure.Providers;
+using API_GruasUCAB.Auth.Application.Handlers.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Application.Handlers.RecoverPassword;
+using API_GruasUCAB.Auth.Application.Handlers.ChangePassword;
+using API_GruasUCAB.Auth.Application.Handlers.AssignRole;
+using API_GruasUCAB.Auth.Application.Handlers.CreateUser;
+using API_GruasUCAB.Auth.Application.Handlers.DeleteUser;
+using API_GruasUCAB.Auth.Application.Handlers.Logout;
+using API_GruasUCAB.Auth.Application.Handlers.Login;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.UrlHelperKeycloak;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.Email;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.ChangePassword;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
+using API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword;
+using API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword;
+using API_GruasUCAB.Auth.Infrastructure.Validators.AssignRole;
+using API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser;
+using API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser;
+using API_GruasUCAB.Auth.Infrastructure.Validators.Logout;
+using API_GruasUCAB.Auth.Infrastructure.Validators.Login;
+using API_GruasUCAB.Auth.Infrastructure.Validators.Email;
 using API_GruasUCAB.Core.Application.Services;
 using API_GruasUCAB.Core.Infrastructure.HeadersToken;
-using API_GruasUCAB.Core.Infrastructure.ClientCredentials;
-using API_GruasUCAB.Core.Infrastructure.RoleVerifier;
-using API_GruasUCAB.Core.Infrastructure.KeycloakRequestBuilder;
-using API_GruasUCAB.Core.Infrastructure.UrlHelperKeycloak;
-using API_GruasUCAB.Core.Infrastructure.KeycloakRepository;
+using API_GruasUCAB.Core.Infrastructure.RoleValidator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MediatR;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 var bearerScheme = builder.Configuration["Keycloak:Auth_Type"];
 
-// Add services to the container.
+//  Add Container
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("Sprint-1", new OpenApiInfo { Title = "GruasUCAB", Version = "Alfa" });
 
-    // Configurar el esquema de seguridad JWT
+    //  JWT
     c.AddSecurityDefinition(bearerScheme, new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -55,7 +72,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HeadersToken>();
-builder.Services.AddScoped<RoleVerifier>();
+builder.Services.AddScoped<RoleValidator>();
+builder.Services.AddScoped<EmailProcessor>();
+builder.Services.AddScoped<SmtpClientFactory>();
+builder.Services.AddScoped<EmailTemplateService>();
 builder.Services.AddScoped<IHeadersClientCredentialsToken, HeadersClientCredentialsToken>();
 builder.Services.AddScoped<IKeycloakRequestBuilder, KeycloakRequestBuilder>();
 builder.Services.AddScoped<IUrlHelperKeycloak, UrlHelperKeycloak>();
@@ -63,10 +83,11 @@ builder.Services.AddScoped<IKeycloakRepository, KeycloakRepository>();
 
 builder.Services.AddScoped<AuthLoginValidate>();
 builder.Services.AddScoped<AuthLogoutValidate>();
+builder.Services.AddScoped<AssignRoleValidator>();
 
 builder.Services.AddScoped<IService<LoginRequestDTO, LoginResponseDTO>, AuthLoginValidate>();
 builder.Services.AddScoped<IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>, AuthHandleIncompleteAccountValidator>();
-builder.Services.AddScoped<IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>, ChangePasswordValidator>();
+builder.Services.AddScoped<IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>, AuthChangePasswordValidator>();
 builder.Services.AddScoped<IService<CreateUserRequestDTO, CreateUserResponseDTO>, AuthCreateUserValidate>();
 builder.Services.AddScoped<IService<AssignRoleRequestDTO, AssignRoleResponseDTO>, AssignRoleValidator>();
 builder.Services.AddScoped<IService<EmailRequestDTO, EmailResponseDTO>, EmailService>();
@@ -74,7 +95,6 @@ builder.Services.AddScoped<IService<DeleteUserRequestDTO, DeleteUserResponseDTO>
 builder.Services.AddScoped<IService<LogoutRequestDTO, LogoutResponseDTO>, AuthLogoutValidate>();
 builder.Services.AddScoped<IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>, AuthRecoverPasswordValidate>();
 
-// Register MediatR
 builder.Services.AddMediatR(typeof(LoginCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(HandleIncompleteAccountCommandHandler).Assembly);
 builder.Services.AddMediatR(typeof(ChangePasswordCommandHandler).Assembly);
@@ -107,7 +127,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//  HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

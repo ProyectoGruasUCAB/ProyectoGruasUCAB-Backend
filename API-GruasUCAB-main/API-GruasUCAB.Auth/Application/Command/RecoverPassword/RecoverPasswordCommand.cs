@@ -1,5 +1,4 @@
-using API_GruasUCAB.Auth.Infrastructure.DTOs;
-using API_GruasUCAB.Auth.Infrastructure.Response;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
 using MediatR;
 
 namespace API_GruasUCAB.Auth.Application.Command.RecoverPassword

@@ -1,16 +1,15 @@
-using API_GruasUCAB.Auth.Infrastructure.DTOs;
-using API_GruasUCAB.Auth.Infrastructure.Response;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
 using MediatR;
 
 namespace API_GruasUCAB.Auth.Application.Command.Logout
 {
      public class LogoutCommand : IRequest<LogoutResponseDTO>
      {
-          public string RefreshToken { get; set; }
+          public LogoutRequestDTO LogoutRequestDTO { get; set; }
 
-          public LogoutCommand(string refreshToken)
+          public LogoutCommand(LogoutRequestDTO logoutRequestDTO)
           {
-               RefreshToken = refreshToken;
+               LogoutRequestDTO = logoutRequestDTO;
           }
      }
 }
