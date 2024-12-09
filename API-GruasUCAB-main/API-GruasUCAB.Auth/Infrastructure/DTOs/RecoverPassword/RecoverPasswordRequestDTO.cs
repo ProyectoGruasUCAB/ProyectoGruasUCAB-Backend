@@ -1,11 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword
 {
-     public class RecoverPasswordRequestDTO
+     public class RecoverPasswordRequestDTO : BaseRequestDTO
      {
-          [Required(ErrorMessage = "Email is required.")]
-          [EmailAddress(ErrorMessage = "Invalid email format.")]
-          public string Email { get; set; } = string.Empty;
+
      }
 }

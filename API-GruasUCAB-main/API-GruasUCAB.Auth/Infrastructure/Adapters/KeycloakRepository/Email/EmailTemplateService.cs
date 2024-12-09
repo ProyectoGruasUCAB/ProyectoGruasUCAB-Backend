@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.Email
 {
      public class EmailTemplateService

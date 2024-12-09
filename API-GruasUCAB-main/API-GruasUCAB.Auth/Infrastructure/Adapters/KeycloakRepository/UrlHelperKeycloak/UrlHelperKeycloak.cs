@@ -1,6 +1,3 @@
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.UrlHelperKeycloak
 {
      public class UrlHelperKeycloak : IUrlHelperKeycloak

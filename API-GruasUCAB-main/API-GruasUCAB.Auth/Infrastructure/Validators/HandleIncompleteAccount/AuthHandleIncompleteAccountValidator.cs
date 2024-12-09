@@ -1,40 +1,16 @@
-using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
-using API_GruasUCAB.Auth.Application.Command.Logout;
-using API_GruasUCAB.Auth.Application.Command.Login;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
-using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System;
-using MediatR;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
 {
      public class AuthHandleIncompleteAccountValidator : IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
-          private readonly IMediator _mediator;
-          private readonly HeadersToken _headersToken;
           private readonly IHeadersClientCredentialsToken _headersClientCredentialsToken;
           private readonly IKeycloakRepository _keycloakRepository;
           private readonly IService<LoginRequestDTO, LoginResponseDTO> _loginService;
           private readonly IService<LogoutRequestDTO, LogoutResponseDTO> _logoutService;
 
-          public AuthHandleIncompleteAccountValidator(IHttpClientFactory httpClientFactory, IConfiguration configuration, IMediator mediator, HeadersToken headersToken, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<LoginRequestDTO, LoginResponseDTO> loginService, IService<LogoutRequestDTO, LogoutResponseDTO> logoutService)
+          public AuthHandleIncompleteAccountValidator(IHttpClientFactory httpClientFactory, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<LoginRequestDTO, LoginResponseDTO> loginService, IService<LogoutRequestDTO, LogoutResponseDTO> logoutService)
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
-               _mediator = mediator;
-               _headersToken = headersToken;
                _headersClientCredentialsToken = headersClientCredentialsToken;
                _keycloakRepository = keycloakRepository;
                _loginService = loginService;
@@ -48,7 +24,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     // Login
                     var loginResponse = await _loginService.Execute(new LoginRequestDTO
                     {
-                         Email = request.Email,
+                         UserEmail = request.UserEmail,
                          Password = request.Password
                     });
                     if (loginResponse.Message.Contains("Account is not fully set up"))
@@ -59,16 +35,15 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     {
                          throw new UnauthorizedException("Login failed", new List<string> { loginResponse.Message });
                     }
-                    Console.WriteLine($"Login successful. RefreshToken: {loginResponse.Message}");
 
                     // Login successful => Logout
                     await _logoutService.Execute(new LogoutRequestDTO
                     {
+                         UserEmail = request.UserEmail,
                          RefreshToken = loginResponse.RefreshToken
                     });
 
-                    // Throw exception if login was successful but account is not fully set up
-                    throw new UnauthorizedException($"{request.Email} does not have a temporary password", new List<string> { "The account is fully set up" });
+                    throw new UnauthorizedException($"{request.UserEmail} does not have a temporary password", new List<string> { "The account is fully set up" });
                }
                catch (UnauthorizedException ex) when (ex.Message.Contains("Account is not fully set up"))
                {
@@ -78,11 +53,11 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     await _headersClientCredentialsToken.SetClientCredentialsToken(client);
 
                     // Email => UserId ^ "UPDATE_PASSWORD"?
-                    var (userId, hasRequiredAction) = await _keycloakRepository.GetUserByEmailAsync(client, request.Email, "UPDATE_PASSWORD");
+                    var (userId, hasRequiredAction) = await _keycloakRepository.GetUserByEmailAsync(client, request.UserEmail, "UPDATE_PASSWORD");
 
                     if (!hasRequiredAction)
                     {
-                         return new IncompleteAccountResponseDTO { Success = false, Message = "El usuario no tiene una contraseña temporal.", Email = request.Email, Time = DateTime.UtcNow };
+                         return new IncompleteAccountResponseDTO { Success = false, Message = "The user does not have a temporary password.", UserEmail = request.UserEmail, Time = DateTime.UtcNow };
                     }
 
                     // Reset Password
@@ -96,7 +71,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     {
                          Success = true,
                          Message = "Password reset successful",
-                         Email = request.Email,
+                         UserEmail = request.UserEmail,
                          TemporaryPassword = temporaryPassword,
                          Time = DateTime.UtcNow
                     };
@@ -107,7 +82,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     {
                          Success = false,
                          Message = ex.Message,
-                         Email = request.Email,
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow
                     };
                }
@@ -117,7 +92,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
                     {
                          Success = false,
                          Message = ex.Message,
-                         Email = request.Email,
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow
                     };
                }

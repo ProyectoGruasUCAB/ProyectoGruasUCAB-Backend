@@ -1,14 +1,3 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
-using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
 {
      public class AuthDeleteUserValidate : IService<DeleteUserRequestDTO, DeleteUserResponseDTO>
@@ -17,13 +6,15 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
           private readonly IConfiguration _configuration;
           private readonly IKeycloakRepository _keycloakRepository;
           private readonly IHeadersClientCredentialsToken _headersClientCredentialsToken;
+          private readonly HeadersToken _headersToken;
 
-          public AuthDeleteUserValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, IKeycloakRepository keycloakRepository, IHeadersClientCredentialsToken headersClientCredentialsToken)
+          public AuthDeleteUserValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, IKeycloakRepository keycloakRepository, IHeadersClientCredentialsToken headersClientCredentialsToken, HeadersToken headersToken)
           {
                _httpClientFactory = httpClientFactory;
                _configuration = configuration;
                _keycloakRepository = keycloakRepository;
                _headersClientCredentialsToken = headersClientCredentialsToken;
+               _headersToken = headersToken;
           }
 
           public async Task<DeleteUserResponseDTO> Execute(DeleteUserRequestDTO request)
@@ -32,13 +23,26 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
 
                try
                {
-                    //   client_credentials 
-                    await _headersClientCredentialsToken.SetClientCredentialsToken(client);
+                    // Headers Token
+                    var token = _headersToken.GetToken();
+                    _headersToken.SetAuthorizationHeader(client);
 
-                    //   Email => UserID
-                    var (userId, _) = await _keycloakRepository.GetUserByEmailAsync(client, request.Email, string.Empty);
+                    // Introspect Token
+                    var (_, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
 
-                    //   Delete User
+                    // Validar si el email coincide
+                    if (!string.Equals(email, request.UserEmail, StringComparison.OrdinalIgnoreCase))
+                    {
+                         return new DeleteUserResponseDTO { Success = false, Message = "Email does not match.", DeletedUserEmail = request.EmailToDelete, Time = DateTime.UtcNow, UserEmail = request.UserEmail };
+                    }
+
+                    // client_credentials 
+                    //await _headersClientCredentialsToken.SetClientCredentialsToken(client);
+
+                    // Email => UserID
+                    var (userId, _) = await _keycloakRepository.GetUserByEmailAsync(client, request.EmailToDelete, string.Empty);
+
+                    // Delete User
                     var userDeleted = await _keycloakRepository.DeleteUserAsync(client, _configuration, userId);
                     if (!userDeleted)
                     {
@@ -49,17 +53,20 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
                     {
                          Success = true,
                          Message = "User deleted successfully",
-                         UserId = userId,
-                         Time = DateTime.UtcNow
+                         DeletedUserEmail = request.EmailToDelete,
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
-               catch (UnauthorizedException ex)
+               catch (UnauthorizedAccessException ex)
                {
                     return new DeleteUserResponseDTO
                     {
                          Success = false,
                          Message = $"Unauthorized access: {ex.Message}",
-                         Time = DateTime.UtcNow
+                         DeletedUserEmail = request.EmailToDelete,
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
                catch (Exception ex)
@@ -68,7 +75,9 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
                     {
                          Success = false,
                          Message = ex.Message,
-                         Time = DateTime.UtcNow
+                         DeletedUserEmail = request.EmailToDelete,
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
           }

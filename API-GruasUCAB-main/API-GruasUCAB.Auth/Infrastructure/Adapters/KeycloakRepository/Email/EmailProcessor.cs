@@ -1,9 +1,3 @@
-using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
-using API_GruasUCAB.Core.Application.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.Email
 {
      public class EmailProcessor

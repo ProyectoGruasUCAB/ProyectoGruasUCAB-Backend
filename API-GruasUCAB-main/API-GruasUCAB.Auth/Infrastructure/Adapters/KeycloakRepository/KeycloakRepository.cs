@@ -1,25 +1,13 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.UrlHelperKeycloak;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Net.Http;
-using System.Text;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
 {
      public class KeycloakRepository : IKeycloakRepository
      {
-          private readonly IHttpClientFactory _httpClientFactory;
           private readonly IConfiguration _configuration;
           private readonly IUrlHelperKeycloak _urlHelperKeycloak;
           private readonly IKeycloakRequestBuilder _keycloakRequestBuilder;
 
-          public KeycloakRepository(IHttpClientFactory httpClientFactory, IConfiguration configuration, IUrlHelperKeycloak urlHelperKeycloak, IKeycloakRequestBuilder keycloakRequestBuilder)
+          public KeycloakRepository(IConfiguration configuration, IUrlHelperKeycloak urlHelperKeycloak, IKeycloakRequestBuilder keycloakRequestBuilder)
           {
-               _httpClientFactory = httpClientFactory;
                _configuration = configuration;
                _urlHelperKeycloak = urlHelperKeycloak;
                _keycloakRequestBuilder = keycloakRequestBuilder;
@@ -96,8 +84,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
                return clientCredentialsRoot.GetProperty("access_token").GetString() ?? string.Empty;
           }
 
-          //   Introspect Token => UserID ^ Role
-          public async Task<(string UserId, string Role)> IntrospectTokenAsync(HttpClient client, string token)
+          //   Introspect Token => UserID ^ Role ^ Email
+          public async Task<(string UserId, string Role, string Email)> IntrospectTokenAsync(HttpClient client, string token)
           {
                var introspectEndpoint = _urlHelperKeycloak.GetIntrospectUrl(_configuration);
 
@@ -124,6 +112,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
                }
 
                var userId = introspectResult.GetProperty("sub").GetString() ?? throw new UnauthorizedAccessException("UserId is null.");
+               var email = introspectResult.GetProperty("email").GetString() ?? throw new UnauthorizedAccessException("Email is null.");
                var clientId = _configuration["Keycloak:ClientId"] ?? throw new ConfigurationException("ClientId configuration is missing.");
 
                if (introspectResult.TryGetProperty("resource_access", out var resourceAccess) &&
@@ -137,7 +126,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
                     var allowedRoles = _configuration.GetSection("Roles").Get<List<string>>() ?? new List<string>();
                     if (allowedRoles.Contains(role))
                     {
-                         return (userId, role);
+                         return (userId, role, email);
                     }
                     throw new UnauthorizedAccessException($"Role '{role}' is not allowed.");
                }
@@ -361,6 +350,37 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
                }
 
                return true;
+          }
+
+          //   Refresh Token
+          public async Task<(string AccessToken, string RefreshToken)> RefreshTokenAsync(HttpClient client, string refreshToken)
+          {
+               var tokenEndpoint = _urlHelperKeycloak.GetTokenUrl(_configuration);
+
+               var refreshTokenRequest = _keycloakRequestBuilder
+                   .WithClientId()
+                   .WithClientSecret()
+                   .WithGrantType("refresh_token")
+                   .WithRefreshToken(refreshToken)
+                   .BuildAsForm();
+
+               var formContent = new FormUrlEncodedContent(refreshTokenRequest);
+               var response = await client.PostAsync(tokenEndpoint, formContent);
+               var content = await response.Content.ReadAsStringAsync();
+
+               if (!response.IsSuccessStatusCode)
+               {
+                    var errorDetails = JsonDocument.Parse(content).RootElement.GetProperty("error_description").GetString();
+                    throw new UnauthorizedException("Error al refrescar el token", new List<string> { errorDetails ?? "No additional details provided." });
+               }
+
+               var jsonDocument = JsonDocument.Parse(content);
+               var root = jsonDocument.RootElement;
+
+               var newAccessToken = root.GetProperty("access_token").GetString() ?? throw new UnauthorizedAccessException("Access token is null.");
+               var newRefreshToken = root.GetProperty("refresh_token").GetString() ?? throw new UnauthorizedAccessException("Refresh token is null.");
+
+               return (newAccessToken, newRefreshToken);
           }
 
           //   Logout

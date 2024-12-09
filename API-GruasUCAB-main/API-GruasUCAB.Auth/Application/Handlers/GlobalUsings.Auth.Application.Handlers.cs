@@ -1,0 +1,9 @@
+global using API_GruasUCAB.Auth.Application.Handlers.HandleIncompleteAccount;
+global using API_GruasUCAB.Auth.Application.Handlers.RecoverPassword;
+global using API_GruasUCAB.Auth.Application.Handlers.ChangePassword;
+global using API_GruasUCAB.Auth.Application.Handlers.RefreshToken;
+global using API_GruasUCAB.Auth.Application.Handlers.AssignRole;
+global using API_GruasUCAB.Auth.Application.Handlers.CreateUser;
+global using API_GruasUCAB.Auth.Application.Handlers.DeleteUser;
+global using API_GruasUCAB.Auth.Application.Handlers.Logout;
+global using API_GruasUCAB.Auth.Application.Handlers.Login;

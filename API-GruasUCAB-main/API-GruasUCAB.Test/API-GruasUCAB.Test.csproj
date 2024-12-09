@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\API-GruasUCAB.Users\API-GruasUCAB.Users.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
+  </ItemGroup>
+
 </Project>

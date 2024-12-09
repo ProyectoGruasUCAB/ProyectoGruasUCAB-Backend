@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.UrlHelperKeycloak
 {
      public interface IUrlHelperKeycloak
