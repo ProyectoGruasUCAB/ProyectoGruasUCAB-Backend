@@ -18,8 +18,7 @@ namespace API_GruasUCAB.Auth.Application.Handlers.RecoverPassword
 
           public async Task<RecoverPasswordResponseDTO> Handle(RecoverPasswordCommand request, CancellationToken cancellationToken)
           {
-               var response = await _recoverPasswordService.Execute(request.Request);
-               return response;
+               return await _recoverPasswordService.Execute(request.Request);
           }
      }
 }

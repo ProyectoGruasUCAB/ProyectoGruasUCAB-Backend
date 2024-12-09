@@ -1,7 +1,7 @@
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
 using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
             try
             {
                 // Login
-                var (accessToken, refreshToken) = await _keycloakRepository.GetTokenAsync(client, request.Email, request.Password);
+                var (accessToken, refreshToken) = await _keycloakRepository.GetTokenAsync(client, request.UserEmail, request.Password);
                 var authType = _configuration["Keycloak:Auth_Type"];
                 if (string.IsNullOrEmpty(authType))
                 {
@@ -43,13 +43,14 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(authType, accessToken);
 
                 // Introspect Token => UserID ^ Role
-                var (userId, role) = await _keycloakRepository.IntrospectTokenAsync(client, accessToken);
+                var (userId, role, _) = await _keycloakRepository.IntrospectTokenAsync(client, accessToken);
 
                 return new LoginResponseDTO
                 {
                     Success = true,
                     Message = "Login successful",
                     Time = DateTime.UtcNow,
+                    UserEmail = request.UserEmail,
                     Token = accessToken,
                     RefreshToken = refreshToken,
                     UserID = userId,
@@ -62,6 +63,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
                 {
                     Success = false,
                     Message = $"Unauthorized access: {ex.Message}",
+                    UserEmail = request.UserEmail,
                     Time = DateTime.UtcNow
                 };
             }
@@ -71,6 +73,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
                 {
                     Success = false,
                     Message = ex.Message,
+                    UserEmail = request.UserEmail,
                     Time = DateTime.UtcNow
                 };
             }

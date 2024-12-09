@@ -8,9 +8,6 @@ namespace API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword
      {
           [Required]
           [JsonPropertyOrder(2)]
-          public string Email { get; set; } = string.Empty;
-          [Required]
-          [JsonPropertyOrder(2)]
           public bool TemporaryPassword { get; set; }
      }
 }

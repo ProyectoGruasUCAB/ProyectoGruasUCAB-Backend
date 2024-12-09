@@ -2,15 +2,15 @@ using API_GruasUCAB.Core.Infrastructure.ResponseDTO;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole
+namespace API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken
 {
-     public class AssignRoleResponseDTO : BaseResponseDTO
+     public class RefreshTokenResponseDTO : BaseResponseDTO
      {
           [Required]
           [JsonPropertyOrder(2)]
-          public string EmailAssignedRole { get; set; } = string.Empty;
+          public string AccessToken { get; set; } = string.Empty;
           [Required]
           [JsonPropertyOrder(2)]
-          public string RoleName { get; set; } = string.Empty;
+          public string RefreshToken { get; set; } = string.Empty;
      }
 }

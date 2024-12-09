@@ -1,17 +1,17 @@
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.Email;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
 using API_GruasUCAB.Core.Application.Services;
 using API_GruasUCAB.Core.Infrastructure.PasswordGenerator;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System;
-using System.Collections.Generic;
 
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
 {
@@ -44,7 +44,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
                     await _headersClientCredentialsToken.SetClientCredentialsToken(client);
 
                     //   Email => UserId ^ "UPDATE_PASSWORD"?
-                    var (userId, hasRequiredAction) = await _keycloakRepository.GetUserByEmailAsync(client, request.Email, "UPDATE_PASSWORD");
+                    var (userId, hasRequiredAction) = await _keycloakRepository.GetUserByEmailAsync(client, request.UserEmail, "UPDATE_PASSWORD");
 
                     if (hasRequiredAction)
                     {
@@ -52,14 +52,13 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
                          {
                               Success = false,
                               Message = "The user already has a temporary password.",
-                              Time = DateTime.UtcNow,
-                              Email = request.Email
+                              UserEmail = request.UserEmail,
+                              Time = DateTime.UtcNow
                          };
                     }
 
                     //   New Password
                     var password = PasswordGenerator.GeneratePassword();
-                    Console.WriteLine($"\n\nGenerated password: {password}\n\n");
 
                     //   Reset Password
                     var passwordReset = await _keycloakRepository.ResetPasswordAsync(client, userId, password, temporaryPassword);
@@ -70,24 +69,25 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
 
 
                     // Enviar correo electrónico con la contraseña generada
-                    var emailResponse = await _emailProcessor.SendEmailAsync(request.Email, "Password Recovery", "temporary-password.ftl", new Dictionary<string, string> { { "password", password } });
+                    var emailResponse = await _emailProcessor.SendEmailAsync(request.UserEmail, "Password Recovery", "temporary-password.ftl", new Dictionary<string, string> { { "password", password } });
                     if (!emailResponse.Success)
                     {
                          return new RecoverPasswordResponseDTO
                          {
                               Success = false,
                               Message = "Error sending recovery email",
-                              Time = DateTime.UtcNow,
-                              Email = request.Email
+                              UserEmail = request.UserEmail,
+                              Time = DateTime.UtcNow
                          };
                     }
 
+                    Console.WriteLine($"\n\nGenerated password: {password}\n\n");
                     return new RecoverPasswordResponseDTO
                     {
                          Success = true,
                          Message = "Password recovery email sent successfully",
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow,
-                         Email = request.Email,
                          TemporaryPassword = temporaryPassword
                     };
                }
@@ -97,8 +97,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
                     {
                          Success = false,
                          Message = $"Unauthorized access: {ex.Message}",
-                         Time = DateTime.UtcNow,
-                         Email = request.Email
+                         UserEmail = request.UserEmail,
+                         Time = DateTime.UtcNow
                     };
                }
                catch (Exception ex)
@@ -107,8 +107,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
                     {
                          Success = false,
                          Message = ex.Message,
-                         Time = DateTime.UtcNow,
-                         Email = request.Email
+                         UserEmail = request.UserEmail,
+                         Time = DateTime.UtcNow
                     };
                }
           }

@@ -1,7 +1,7 @@
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
 using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -35,13 +35,14 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Logout
                     //   Introspect Token
                     _headersToken.SetAuthorizationHeader(client);
                     var token = _headersToken.GetToken();
-                    var (userId, role) = await _keycloakRepository.IntrospectTokenAsync(client, token);
+                    var (userId, role, _) = await _keycloakRepository.IntrospectTokenAsync(client, token);
 
                     //   Token Active = Error
                     return new LogoutResponseDTO
                     {
                          Success = false,
                          Message = "Logout failed: Token is still active",
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow,
                          Active = true
                     };
@@ -53,6 +54,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Logout
                     {
                          Success = true,
                          Message = "Logout successful",
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow,
                          Active = false
                     };
@@ -63,6 +65,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.Logout
                     {
                          Success = false,
                          Message = ex.Message,
+                         UserEmail = request.UserEmail,
                          Time = DateTime.UtcNow,
                          Active = true
                     };

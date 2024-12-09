@@ -8,13 +8,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser
      {
           [Required]
           [JsonPropertyOrder(2)]
-          public string UserCreatorId { get; set; } = string.Empty;
-          [Required]
-          [JsonPropertyOrder(2)]
-          public string UserId { get; set; } = string.Empty;
-          [Required]
-          [JsonPropertyOrder(2)]
-          public string Email { get; set; } = string.Empty;
+          public string EmailToCreate { get; set; } = string.Empty;
           [Required]
           [JsonPropertyOrder(2)]
           public string NameRole { get; set; } = string.Empty;

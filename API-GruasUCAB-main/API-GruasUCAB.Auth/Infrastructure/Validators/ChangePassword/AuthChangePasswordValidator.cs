@@ -1,7 +1,7 @@
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.ChangePassword;
 using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Core.Infrastructure.HeadersToken;
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
@@ -29,13 +29,22 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword
           {
                var client = _httpClientFactory.CreateClient();
                bool temporaryPassword = false;
-               var token = _headersToken.GetToken();
-               _headersToken.SetAuthorizationHeader(client);
 
                try
                {
+
+                    //   Headers Token
+                    var token = _headersToken.GetToken();
+                    _headersToken.SetAuthorizationHeader(client);
+
                     // Introspect Token
-                    (string userId, string role) = await _keycloakRepository.IntrospectTokenAsync(client, token);
+                    var (userId, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
+
+                    // Validar si el email coincide
+                    if (!string.Equals(email, request.UserEmail, StringComparison.OrdinalIgnoreCase))
+                    {
+                         return new ChangePasswordResponseDTO { Success = false, Message = "Email does not match.", Time = DateTime.UtcNow, UserEmail = request.UserEmail };
+                    }
 
                     // Change Password
                     var passwordChanged = await _keycloakRepository.ChangeUserPasswordAsync(client, userId, request.NewPassword, temporaryPassword);
@@ -49,7 +58,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword
                          Success = true,
                          Message = "Password changed successfully",
                          TemporaryPassword = temporaryPassword,
-                         Time = DateTime.UtcNow
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
                catch (UnauthorizedAccessException ex)
@@ -58,7 +68,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword
                     {
                          Success = false,
                          Message = $"Unauthorized access: {ex.Message}",
-                         Time = DateTime.UtcNow
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
                catch (Exception ex)
@@ -67,7 +78,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword
                     {
                          Success = false,
                          Message = ex.Message,
-                         Time = DateTime.UtcNow
+                         Time = DateTime.UtcNow,
+                         UserEmail = request.UserEmail
                     };
                }
           }

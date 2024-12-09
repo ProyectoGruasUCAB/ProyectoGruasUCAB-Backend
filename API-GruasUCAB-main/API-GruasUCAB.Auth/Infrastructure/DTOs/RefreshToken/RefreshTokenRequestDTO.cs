@@ -2,9 +2,9 @@ using API_GruasUCAB.Core.Infrastructure.ResponseDTO;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace API_GruasUCAB.Auth.Infrastructure.DTOs.Logout
+namespace API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken
 {
-     public class LogoutRequestDTO : BaseRequestDTO
+     public class RefreshTokenRequestDTO : BaseRequestDTO
      {
           [Required(ErrorMessage = "RefreshToken is required.")]
           [JsonPropertyOrder(2)]

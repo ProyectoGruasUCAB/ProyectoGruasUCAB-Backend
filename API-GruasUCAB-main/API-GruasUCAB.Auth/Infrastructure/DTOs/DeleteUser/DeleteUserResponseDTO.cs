@@ -8,6 +8,6 @@ namespace API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser
      {
           [Required]
           [JsonPropertyOrder(2)]
-          public string UserId { get; set; } = string.Empty;
+          public string DeletedUserEmail { get; set; } = string.Empty;
      }
 }
