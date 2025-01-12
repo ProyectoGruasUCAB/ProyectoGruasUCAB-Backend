@@ -1,0 +1,2 @@
+global using API_GruasUCAB.Department.Application.Handlers.CreateDepartment;
+global using API_GruasUCAB.Department.Application.Handlers.UpdateDepartment;

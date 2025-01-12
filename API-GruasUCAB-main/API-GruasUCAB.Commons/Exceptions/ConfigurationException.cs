@@ -1,5 +1,3 @@
-using System;
-
 namespace API_GruasUCAB.Commons.Exceptions
 {
      public class ConfigurationException : Exception

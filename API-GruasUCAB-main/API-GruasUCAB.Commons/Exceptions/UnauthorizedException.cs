@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System;
-
 namespace API_GruasUCAB.Commons.Exceptions
 {
      public class UnauthorizedException : Exception
