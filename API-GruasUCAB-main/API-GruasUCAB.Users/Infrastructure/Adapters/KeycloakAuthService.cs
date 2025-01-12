@@ -1,8 +1,3 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
-using API_GruasUCAB.Users.Application.Services.Auth;
-using System.Net.Http;
-using System.Threading.Tasks;
-
 namespace API_GruasUCAB.Users.Infrastructure.Adapters.Auth
 {
      public class KeycloakAuthService : IAuthService

@@ -2,7 +2,7 @@ namespace API_GruasUCAB.ServiceFee
 {
      public static class ServiceFeeServiceRegistration
      {
-          public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
+          public static void RegisterServices(IServiceCollection services)
           {
                services.AddMediatR(typeof(CreateServiceFeeCommandHandler).Assembly);
                services.AddScoped<IService<CreateServiceFeeRequestDTO, CreateServiceFeeResponseDTO>, CreateServiceFeeService>();

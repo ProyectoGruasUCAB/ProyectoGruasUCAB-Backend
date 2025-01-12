@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder.DTO
 {
     public class KeycloakRequestDTO

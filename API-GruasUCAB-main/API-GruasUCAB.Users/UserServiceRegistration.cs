@@ -2,7 +2,7 @@ namespace API_GruasUCAB.Users
 {
      public static class UserServiceRegistration
      {
-          public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
+          public static void RegisterServices(IServiceCollection services)
           {
                services.AddScoped<IUserFactory, UserFactory>();
                services.AddMediatR(typeof(RecordUserDataCommandHandler).Assembly);

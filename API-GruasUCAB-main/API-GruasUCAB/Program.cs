@@ -15,8 +15,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 AuthServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-UserServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-ServiceFeeServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
+UserServiceRegistration.RegisterServices(builder.Services);
+ServiceFeeServiceRegistration.RegisterServices(builder.Services);
 
 // Configurar Swagger
 builder.Services.AddSwaggerConfiguration(builder.Configuration);

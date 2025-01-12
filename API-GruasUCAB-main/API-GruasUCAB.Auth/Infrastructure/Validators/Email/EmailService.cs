@@ -1,6 +1,3 @@
-
-//using System.Net.Mail;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.Email
 {
      public class EmailService : IService<EmailRequestDTO, EmailResponseDTO>

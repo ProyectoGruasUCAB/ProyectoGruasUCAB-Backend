@@ -7,7 +7,6 @@ global using API_GruasUCAB.Commons.Exceptions;
 global using System.Threading.Tasks;
 global using System.Globalization;
 global using System.Threading;
-global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using MediatR;
 global using System;
