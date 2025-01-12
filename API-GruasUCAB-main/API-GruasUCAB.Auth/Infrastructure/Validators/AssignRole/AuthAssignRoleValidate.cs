@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-=======
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
-using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Core.Utilities.RoleValidator;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System;
-
->>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.AssignRole
 {
      public class AssignRoleValidator : IService<AssignRoleRequestDTO, AssignRoleResponseDTO>

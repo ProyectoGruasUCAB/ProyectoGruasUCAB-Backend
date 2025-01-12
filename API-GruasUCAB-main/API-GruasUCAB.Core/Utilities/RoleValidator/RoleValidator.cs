@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-using System.Collections.Generic;
-using System;
-
->>>>>>> origin/Development
 namespace API_GruasUCAB.Core.Utilities.RoleValidator
 {
     public static class RoleValidator

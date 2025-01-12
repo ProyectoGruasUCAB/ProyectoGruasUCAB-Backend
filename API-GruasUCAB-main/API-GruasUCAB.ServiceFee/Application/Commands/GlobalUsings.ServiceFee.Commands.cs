@@ -1,0 +1,2 @@
+global using API_GruasUCAB.ServiceFee.Application.Commands.CreateServiceFee;
+global using API_GruasUCAB.ServiceFee.Application.Commands.UpdateServiceFee;
