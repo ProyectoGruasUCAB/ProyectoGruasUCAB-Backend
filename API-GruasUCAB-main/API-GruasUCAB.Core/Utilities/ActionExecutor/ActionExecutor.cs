@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using Microsoft.Extensions.Logging;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Core.Utilities.ActionExecutor
 {
      public static class ActionExecutor

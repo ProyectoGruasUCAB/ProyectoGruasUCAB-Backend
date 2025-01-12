@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Application.Command.Logout;
 using API_GruasUCAB.Auth.Application.Command.Login;
@@ -16,25 +18,20 @@ using System.Net.Http;
 using System;
 using MediatR;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.HandleIncompleteAccount
 {
      public class AuthHandleIncompleteAccountValidator : IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
-          private readonly IMediator _mediator;
-          private readonly HeadersToken _headersToken;
           private readonly IHeadersClientCredentialsToken _headersClientCredentialsToken;
           private readonly IKeycloakRepository _keycloakRepository;
           private readonly IService<LoginRequestDTO, LoginResponseDTO> _loginService;
           private readonly IService<LogoutRequestDTO, LogoutResponseDTO> _logoutService;
 
-          public AuthHandleIncompleteAccountValidator(IHttpClientFactory httpClientFactory, IConfiguration configuration, IMediator mediator, HeadersToken headersToken, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<LoginRequestDTO, LoginResponseDTO> loginService, IService<LogoutRequestDTO, LogoutResponseDTO> logoutService)
+          public AuthHandleIncompleteAccountValidator(IHttpClientFactory httpClientFactory, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<LoginRequestDTO, LoginResponseDTO> loginService, IService<LogoutRequestDTO, LogoutResponseDTO> logoutService)
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
-               _mediator = mediator;
-               _headersToken = headersToken;
                _headersClientCredentialsToken = headersClientCredentialsToken;
                _keycloakRepository = keycloakRepository;
                _loginService = loginService;

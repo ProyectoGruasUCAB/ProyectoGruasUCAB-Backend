@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Application.Command.RefreshToken;
 using API_GruasUCAB.Core.Application.Services;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken;
@@ -5,6 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using MediatR;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Application.Handlers.RefreshToken
 {
      public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenResponseDTO>

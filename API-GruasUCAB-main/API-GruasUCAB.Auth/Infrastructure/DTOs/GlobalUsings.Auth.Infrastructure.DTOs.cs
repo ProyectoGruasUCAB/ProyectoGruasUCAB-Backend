@@ -1,0 +1,12 @@
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.ChangePassword;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
+global using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
+global using System.ComponentModel.DataAnnotations;
+global using System.Text.Json.Serialization;

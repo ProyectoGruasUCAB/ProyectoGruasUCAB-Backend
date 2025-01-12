@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
@@ -9,20 +11,19 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
 {
     public class AuthLoginValidate : IService<LoginRequestDTO, LoginResponseDTO>
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        private readonly HeadersToken _headersToken;
         private readonly IKeycloakRepository _keycloakRepository;
 
-        public AuthLoginValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IKeycloakRepository keycloakRepository)
+        public AuthLoginValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, IKeycloakRepository keycloakRepository)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _headersToken = headersToken;
             _keycloakRepository = keycloakRepository;
         }
 

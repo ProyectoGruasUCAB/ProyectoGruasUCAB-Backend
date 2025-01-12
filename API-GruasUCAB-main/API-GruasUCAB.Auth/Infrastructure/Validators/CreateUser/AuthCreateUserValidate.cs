@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
@@ -16,25 +18,26 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
 {
      public class AuthCreateUserValidate : IService<CreateUserRequestDTO, CreateUserResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
           private readonly HeadersToken _headersToken;
-          private readonly IHeadersClientCredentialsToken _headersClientCredentialsToken;
           private readonly IKeycloakRepository _keycloakRepository;
           private readonly IService<DeleteUserRequestDTO, DeleteUserResponseDTO> _deleteUserService;
           private readonly IService<AssignRoleRequestDTO, AssignRoleResponseDTO> _assignRoleService;
           private readonly EmailProcessor _emailProcessor;
 
+<<<<<<< HEAD
+          public AuthCreateUserValidate(IHttpClientFactory httpClientFactory, HeadersToken headersToken, IKeycloakRepository keycloakRepository, IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService, IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService, EmailProcessor emailProcessor)
+=======
           public AuthCreateUserValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService, IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService, EmailProcessor emailProcessor)
+>>>>>>> origin/Development
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
                _headersToken = headersToken;
-               _headersClientCredentialsToken = headersClientCredentialsToken;
                _keycloakRepository = keycloakRepository;
                _deleteUserService = deleteUserService;
                _assignRoleService = assignRoleService;

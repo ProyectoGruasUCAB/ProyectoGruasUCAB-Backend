@@ -1,8 +1,12 @@
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Http;
+=======
 using Microsoft.Extensions.Configuration;
 using API_GruasUCAB.Commons.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using System.Linq;
+>>>>>>> origin/Development
 using System.Net.Http.Headers;
 
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken
@@ -10,12 +14,19 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken
      public class HeadersToken
      {
           private readonly IHttpContextAccessor _httpContextAccessor;
+<<<<<<< HEAD
+
+          public HeadersToken(IHttpContextAccessor httpContextAccessor)
+          {
+               _httpContextAccessor = httpContextAccessor;
+=======
           private readonly IConfiguration _configuration;
 
           public HeadersToken(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
           {
                _httpContextAccessor = httpContextAccessor;
                _configuration = configuration;
+>>>>>>> origin/Development
           }
 
           public string GetToken()

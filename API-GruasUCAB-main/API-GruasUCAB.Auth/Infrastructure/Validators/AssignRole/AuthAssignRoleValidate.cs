@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
@@ -8,19 +10,18 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.AssignRole
 {
      public class AssignRoleValidator : IService<AssignRoleRequestDTO, AssignRoleResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
           private readonly HeadersToken _headersToken;
           private readonly IKeycloakRepository _keycloakRepository;
 
-          public AssignRoleValidator(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IKeycloakRepository keycloakRepository)
+          public AssignRoleValidator(IHttpClientFactory httpClientFactory, HeadersToken headersToken, IKeycloakRepository keycloakRepository)
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
                _headersToken = headersToken;
                _keycloakRepository = keycloakRepository;
           }

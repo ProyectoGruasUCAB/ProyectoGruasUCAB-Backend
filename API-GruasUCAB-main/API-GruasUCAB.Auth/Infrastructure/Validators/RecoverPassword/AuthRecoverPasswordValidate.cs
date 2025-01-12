@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
@@ -13,22 +15,19 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
 {
      public class AuthRecoverPasswordValidate : IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
-          private readonly HeadersToken _headersToken;
           private readonly IHeadersClientCredentialsToken _headersClientCredentialsToken;
           private readonly IKeycloakRepository _keycloakRepository;
           private readonly EmailProcessor _emailProcessor;
 
-          public AuthRecoverPasswordValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, EmailProcessor emailProcessor)
+          public AuthRecoverPasswordValidate(IHttpClientFactory httpClientFactory, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, EmailProcessor emailProcessor)
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
-               _headersToken = headersToken;
                _headersClientCredentialsToken = headersClientCredentialsToken;
                _keycloakRepository = keycloakRepository;
                _emailProcessor = emailProcessor;

@@ -1,0 +1,30 @@
+namespace API_GruasUCAB.Users.Domain.ValueObject
+{
+     public class UserName : ValueObject<UserName>
+     {
+          public string Name { get; }
+
+          public UserName(string name)
+          {
+               if (string.IsNullOrWhiteSpace(name) || name.Length < 2 || name.Length > 50)
+                    throw new InvalidUserNameException();
+
+               Name = name;
+          }
+
+          public override bool Equals(UserName other)
+          {
+               return Name == other.Name;
+          }
+
+          protected override IEnumerable<object> GetEqualityComponents()
+          {
+               yield return Name;
+          }
+
+          public override string ToString()
+          {
+               return Name;
+          }
+     }
+}

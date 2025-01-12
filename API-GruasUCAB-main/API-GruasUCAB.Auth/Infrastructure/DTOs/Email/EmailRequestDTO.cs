@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace API_GruasUCAB.Auth.Infrastructure.DTOs.Email
 {
      public class EmailRequestDTO

@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
 using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.DeleteUser
 {
      public class AuthDeleteUserValidate : IService<DeleteUserRequestDTO, DeleteUserResponseDTO>

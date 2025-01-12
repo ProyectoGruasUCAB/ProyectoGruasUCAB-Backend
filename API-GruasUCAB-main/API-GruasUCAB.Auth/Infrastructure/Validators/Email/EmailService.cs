@@ -1,23 +1,14 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.Email;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
-using API_GruasUCAB.Core.Application.Services;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Net.Mail;
-using System;
+
+//using System.Net.Mail;
 
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.Email
 {
      public class EmailService : IService<EmailRequestDTO, EmailResponseDTO>
      {
-          private readonly IConfiguration _configuration;
-          private readonly EmailTemplateService _emailTemplateService;
           private readonly SmtpClientFactory _smtpClientFactory;
 
-          public EmailService(IConfiguration configuration, EmailTemplateService emailTemplateService, SmtpClientFactory smtpClientFactory)
+          public EmailService(SmtpClientFactory smtpClientFactory)
           {
-               _configuration = configuration;
-               _emailTemplateService = emailTemplateService;
                _smtpClientFactory = smtpClientFactory;
           }
 

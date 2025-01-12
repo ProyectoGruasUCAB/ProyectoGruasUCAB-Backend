@@ -1,5 +1,3 @@
-using System;
-
 namespace API_GruasUCAB.Core.Infrastructure.PasswordGenerator
 {
      public static class PasswordGenerator

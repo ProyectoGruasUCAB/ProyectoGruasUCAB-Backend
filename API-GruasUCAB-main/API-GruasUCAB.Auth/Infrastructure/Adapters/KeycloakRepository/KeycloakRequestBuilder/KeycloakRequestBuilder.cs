@@ -1,10 +1,4 @@
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder.DTO;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Net.Http;
-using System.Text;
 
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder
 {

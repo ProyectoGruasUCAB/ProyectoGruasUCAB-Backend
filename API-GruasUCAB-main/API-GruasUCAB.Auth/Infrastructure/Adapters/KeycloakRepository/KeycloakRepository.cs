@@ -1,25 +1,13 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.KeycloakRequestBuilder;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.UrlHelperKeycloak;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Net.Http;
-using System.Text;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
 {
      public class KeycloakRepository : IKeycloakRepository
      {
-          private readonly IHttpClientFactory _httpClientFactory;
           private readonly IConfiguration _configuration;
           private readonly IUrlHelperKeycloak _urlHelperKeycloak;
           private readonly IKeycloakRequestBuilder _keycloakRequestBuilder;
 
-          public KeycloakRepository(IHttpClientFactory httpClientFactory, IConfiguration configuration, IUrlHelperKeycloak urlHelperKeycloak, IKeycloakRequestBuilder keycloakRequestBuilder)
+          public KeycloakRepository(IConfiguration configuration, IUrlHelperKeycloak urlHelperKeycloak, IKeycloakRequestBuilder keycloakRequestBuilder)
           {
-               _httpClientFactory = httpClientFactory;
                _configuration = configuration;
                _urlHelperKeycloak = urlHelperKeycloak;
                _keycloakRequestBuilder = keycloakRequestBuilder;

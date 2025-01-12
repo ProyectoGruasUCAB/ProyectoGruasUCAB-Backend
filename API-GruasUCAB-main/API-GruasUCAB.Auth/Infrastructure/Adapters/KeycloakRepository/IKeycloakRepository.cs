@@ -1,9 +1,3 @@
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Net.Http;
-
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository
 {
      public interface IKeycloakRepository

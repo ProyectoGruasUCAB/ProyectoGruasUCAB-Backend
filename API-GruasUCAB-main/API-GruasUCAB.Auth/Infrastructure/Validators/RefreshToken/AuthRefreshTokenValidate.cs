@@ -1,9 +1,12 @@
+<<<<<<< HEAD
+=======
 using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken;
 using API_GruasUCAB.Core.Application.Services;
 using System.Threading.Tasks;
 using System.Net.Http;
 
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.RefreshToken
 {
      public class AuthRefreshTokenValidate : IService<RefreshTokenRequestDTO, RefreshTokenResponseDTO>
