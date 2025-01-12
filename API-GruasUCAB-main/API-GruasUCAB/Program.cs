@@ -1,6 +1,7 @@
 using API_GruasUCAB.Auth;
 using API_GruasUCAB.Users;
 using API_GruasUCAB.ServiceFee;
+using API_GruasUCAB.Department;
 using API_GruasUCAB.Core;
 using API_GruasUCAB.Core.Utilities.Logger;
 using API_GruasUCAB.Swagger;
@@ -17,6 +18,7 @@ builder.Services.AddHttpClient();
 AuthServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 UserServiceRegistration.RegisterServices(builder.Services);
 ServiceFeeServiceRegistration.RegisterServices(builder.Services);
+DepartmentServiceRegistration.RegisterServices(builder.Services);
 
 // Configurar Swagger
 builder.Services.AddSwaggerConfiguration(builder.Configuration);

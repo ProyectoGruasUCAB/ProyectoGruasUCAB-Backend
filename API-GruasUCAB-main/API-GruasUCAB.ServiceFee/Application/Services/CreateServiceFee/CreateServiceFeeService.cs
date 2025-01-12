@@ -19,7 +19,6 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
 
           public async Task<CreateServiceFeeResponseDTO> Execute(CreateServiceFeeRequestDTO request)
           {
-
                var token = _headersToken.GetToken();
                var client = _httpClientFactory.CreateClient();
                var (userId, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
@@ -29,18 +28,18 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                     throw new UnauthorizedException("Unauthorized access: token validation failed.");
                }
 
-               if (role != "Administrador" && role != "Trabajador")
+               if (role != "Administrador" || role != "Trabajador")
                {
                     throw new UnauthorizedException("Unauthorized access: role validation failed.");
                }
 
-               var serviceFeeId = new ServiceFeeId(Guid.NewGuid());
-               var serviceFeeName = new ServiceFeeName(request.Name);
-               var serviceFeePrice = new ServiceFeePrice(request.Price);
-               var serviceFeePriceKm = new ServiceFeePriceKm(request.PriceKm);
-               var serviceFeeRadius = new ServiceFeeRadius(request.Radius);
-
-               var serviceFee = _serviceFeeFactory.CreateServiceFee(serviceFeeId, serviceFeeName, serviceFeePrice, serviceFeePriceKm, serviceFeeRadius);
+               var serviceFee = _serviceFeeFactory.CreateServiceFee(
+                   new ServiceFeeId(Guid.NewGuid()),
+                   new ServiceFeeName(request.Name),
+                   new ServiceFeePrice(request.Price),
+                   new ServiceFeePriceKm(request.PriceKm),
+                   new ServiceFeeRadius(request.Radius)
+               );
 
                List<IDomainEvent> domainEvents = new List<IDomainEvent>(serviceFee.GetEvents());
                foreach (var domainEvent in serviceFee.GetEvents())
@@ -48,7 +47,7 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                     domainEvents.Add(domainEvent);
                }
 
-               await _eventStore.AppendEvents(serviceFeeId.ToString(), domainEvents);
+               await _eventStore.AppendEvents(serviceFee.Id.ToString(), domainEvents);
 
                return new CreateServiceFeeResponseDTO
                {
@@ -56,7 +55,7 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                     Message = "Service fee created successfully",
                     UserEmail = request.UserEmail,
                     Time = DateTime.UtcNow,
-                    ServiceFeeId = serviceFeeId.Id
+                    ServiceFeeId = serviceFee.Id.Id
                };
           }
      }

@@ -19,10 +19,9 @@ using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MediatR;
 
-namespace API_GruasUCAB.Auth.Controllers
+namespace Auth.Controllers
 {
     [ApiController]
     [Route("[controller]")]
