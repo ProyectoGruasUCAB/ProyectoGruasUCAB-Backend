@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+using API_GruasUCAB.Core.Infrastructure.ResponseDTO;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole
 {
      public class AssignRoleRequestDTO : BaseRequestDTO

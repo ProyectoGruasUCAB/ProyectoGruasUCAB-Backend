@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 global using API_GruasUCAB.Core.Utilities.Logger;
 global using API_GruasUCAB.Commons.Exceptions;
 global using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,3 +17,27 @@ global using System;
 global using API_GruasUCAB.Core.Domain.DomainEvent;
 global using API_GruasUCAB.Core.Domain.ValueObject;
 global using API_GruasUCAB.Core.Domain.Entity;
+=======
+global using API_GruasUCAB.Core.Application.Services;
+global using API_GruasUCAB.Core.Utilities.Logger;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Configuration.Json;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Http;
+global using Microsoft.AspNetCore.Http.Abstractions;
+global using System.ComponentModel.DataAnnotations;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using MediatR;
+global using Newtonsoft.Json;
+global using Newtonsoft.Json.Serialization;
+global using Newtonsoft.Json.Linq;
+global using Serilog;
+global using Serilog.Events;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.ModelBinding;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+global using System;
+>>>>>>> origin/Development

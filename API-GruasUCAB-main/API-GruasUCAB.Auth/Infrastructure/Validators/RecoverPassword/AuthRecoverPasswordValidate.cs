@@ -1,3 +1,21 @@
+<<<<<<< HEAD
+=======
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.Email;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
+using API_GruasUCAB.Core.Application.Services;
+using API_GruasUCAB.Core.Infrastructure.PasswordGenerator;
+using API_GruasUCAB.Commons.Exceptions;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System;
+
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.RecoverPassword
 {
      public class AuthRecoverPasswordValidate : IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>

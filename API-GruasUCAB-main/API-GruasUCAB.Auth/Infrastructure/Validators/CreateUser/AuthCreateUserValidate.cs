@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+=======
+using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
+using API_GruasUCAB.Auth.Infrastructure.DTOs.Email;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.ClientCredentials;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
+using API_GruasUCAB.Auth.Infrastructure.Adapters.Email;
+using API_GruasUCAB.Core.Application.Services;
+using API_GruasUCAB.Core.Infrastructure.PasswordGenerator;
+using API_GruasUCAB.Core.Utilities.RoleValidator;
+using API_GruasUCAB.Commons.Exceptions;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System;
+
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
 {
      public class AuthCreateUserValidate : IService<CreateUserRequestDTO, CreateUserResponseDTO>
@@ -9,7 +30,11 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
           private readonly IService<AssignRoleRequestDTO, AssignRoleResponseDTO> _assignRoleService;
           private readonly EmailProcessor _emailProcessor;
 
+<<<<<<< HEAD
           public AuthCreateUserValidate(IHttpClientFactory httpClientFactory, HeadersToken headersToken, IKeycloakRepository keycloakRepository, IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService, IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService, EmailProcessor emailProcessor)
+=======
+          public AuthCreateUserValidate(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IHeadersClientCredentialsToken headersClientCredentialsToken, IKeycloakRepository keycloakRepository, IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService, IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService, EmailProcessor emailProcessor)
+>>>>>>> origin/Development
           {
                _httpClientFactory = httpClientFactory;
                _headersToken = headersToken;

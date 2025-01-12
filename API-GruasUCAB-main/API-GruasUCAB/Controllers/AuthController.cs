@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using API_GruasUCAB.Auth.Application.Commands.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Application.Commands.RecoverPassword;
 using API_GruasUCAB.Auth.Application.Commands.ChangePassword;
@@ -7,6 +8,17 @@ using API_GruasUCAB.Auth.Application.Commands.CreateUser;
 using API_GruasUCAB.Auth.Application.Commands.DeleteUser;
 using API_GruasUCAB.Auth.Application.Commands.Logout;
 using API_GruasUCAB.Auth.Application.Commands.Login;
+=======
+using API_GruasUCAB.Auth.Application.Command.HandleIncompleteAccount;
+using API_GruasUCAB.Auth.Application.Command.RecoverPassword;
+using API_GruasUCAB.Auth.Application.Command.ChangePassword;
+using API_GruasUCAB.Auth.Application.Command.RefreshToken;
+using API_GruasUCAB.Auth.Application.Command.AssignRole;
+using API_GruasUCAB.Auth.Application.Command.CreateUser;
+using API_GruasUCAB.Auth.Application.Command.DeleteUser;
+using API_GruasUCAB.Auth.Application.Command.Logout;
+using API_GruasUCAB.Auth.Application.Command.Login;
+>>>>>>> origin/Development
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
@@ -19,6 +31,7 @@ using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MediatR;
 
 namespace API_GruasUCAB.Auth.Controllers
@@ -201,6 +214,7 @@ namespace API_GruasUCAB.Auth.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("Logout")]
         [ProducesResponseType(typeof(LogoutResponseDTO), 200)]
         [ProducesResponseType(400)]

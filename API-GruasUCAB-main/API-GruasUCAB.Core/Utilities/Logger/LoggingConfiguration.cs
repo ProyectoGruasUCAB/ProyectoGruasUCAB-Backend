@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+using Serilog;
+using Serilog.Events;
+using Microsoft.AspNetCore.Builder;
+
+>>>>>>> origin/Development
 namespace API_GruasUCAB.Core.Utilities.Logger
 {
      public static class LoggingConfiguration
