@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-=======
-using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
-using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.Login;
-using API_GruasUCAB.Core.Application.Services;
-using API_GruasUCAB.Commons.Exceptions;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System;
-
->>>>>>> origin/Development
 namespace API_GruasUCAB.Auth.Infrastructure.Validators.Login
 {
     public class AuthLoginValidate : IService<LoginRequestDTO, LoginResponseDTO>

@@ -1,5 +1,3 @@
-
-
 namespace API_GruasUCAB.Users.Domain.Entities
 {
      public class Administrator : AggregateRoot<UserId>
