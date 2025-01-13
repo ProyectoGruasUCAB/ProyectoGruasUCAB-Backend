@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
-namespace Department.Controllers
+namespace API_GruasUCAB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -44,7 +44,7 @@ namespace Department.Controllers
         }
 
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         [Route("UpdateDepartment")]
         [ProducesResponseType(typeof(UpdateDepartmentResponseDTO), 200)]
         [ProducesResponseType(400)]

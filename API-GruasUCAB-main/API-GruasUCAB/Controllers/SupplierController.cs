@@ -1,7 +1,7 @@
-using API_GruasUCAB.Users.Application.Commands.RecordUserData;
-using API_GruasUCAB.Users.Application.Commands.UpdateUser;
-using API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData;
-using API_GruasUCAB.Users.Infrastructure.DTOs.UpdateUser;
+using API_GruasUCAB.Supplier.Application.Commands.CreateSupplier;
+using API_GruasUCAB.Supplier.Application.Commands.UpdateSupplier;
+using API_GruasUCAB.Supplier.Infrastructure.DTOs.CreateSupplier;
+using API_GruasUCAB.Supplier.Infrastructure.DTOs.UpdateSupplier;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +11,12 @@ namespace API_GruasUCAB.Controllers
 {
      [ApiController]
      [Route("[controller]")]
-     public class UserController : ControllerBase
+     public class SupplierController : ControllerBase
      {
           private readonly IMediator _mediator;
-          private readonly ILogger<UserController> _logger;
+          private readonly ILogger<SupplierController> _logger;
 
-          public UserController(IMediator mediator, ILogger<UserController> logger)
+          public SupplierController(IMediator mediator, ILogger<SupplierController> logger)
           {
                _mediator = mediator;
                _logger = logger;
@@ -24,44 +24,44 @@ namespace API_GruasUCAB.Controllers
 
           [HttpPost]
           [Authorize]
-          [Route("RecordUserData")]
-          [ProducesResponseType(typeof(RecordUserDataResponseDTO), 200)]
+          [Route("CreateSupplier")]
+          [ProducesResponseType(typeof(CreateSupplierResponseDTO), 200)]
           [ProducesResponseType(400)]
           [ProducesResponseType(401)]
           [ProducesResponseType(500)]
-          public async Task<IActionResult> CreateUser([FromBody] RecordUserDataRequestDTO request)
+          public async Task<IActionResult> CreateSupplier([FromBody] CreateSupplierRequestDTO request)
           {
                return await ActionExecutor.Execute(async () =>
                {
-                    var command = new RecordUserDataCommand(request);
+                    var command = new CreateSupplierCommand(request);
                     var response = await _mediator.Send(command);
                     if (response.Success)
                     {
                          return Ok(response);
                     }
                     return BadRequest(response);
-               }, ModelState, _logger, "RecordUserData");
+               }, ModelState, _logger, "CreateSupplier");
           }
 
           [HttpPut]
           //[Authorize]
-          [Route("UpdateUserData")]
-          [ProducesResponseType(typeof(UpdateRecordUserDataResponseDTO), 200)]
+          [Route("UpdateSupplier")]
+          [ProducesResponseType(typeof(UpdateSupplierResponseDTO), 200)]
           [ProducesResponseType(400)]
           [ProducesResponseType(401)]
           [ProducesResponseType(500)]
-          public async Task<IActionResult> UpdateUser([FromBody] UpdateRecordUserDataRequestDTO request)
+          public async Task<IActionResult> UpdateSupplier([FromBody] UpdateSupplierRequestDTO request)
           {
                return await ActionExecutor.Execute(async () =>
                {
-                    var command = new UpdateRecordUserDataCommand(request);
+                    var command = new UpdateSupplierCommand(request);
                     var response = await _mediator.Send(command);
                     if (response.Success)
                     {
                          return Ok(response);
                     }
                     return BadRequest(response);
-               }, ModelState, _logger, "UpdateUserData");
+               }, ModelState, _logger, "UpdateSupplier");
           }
      }
 }

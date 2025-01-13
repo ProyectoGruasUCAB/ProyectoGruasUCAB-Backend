@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
-namespace Auth.Controllers
+namespace API_GruasUCAB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
