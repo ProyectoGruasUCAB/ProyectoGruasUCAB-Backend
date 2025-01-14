@@ -7,10 +7,11 @@ using API_GruasUCAB.Vehicle;
 using API_GruasUCAB.Core;
 using API_GruasUCAB.Core.Utilities.Logger;
 using API_GruasUCAB.Swagger;
+using Yarp.ReverseProxy;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//   Configurar Serilog
+// Configurar Serilog
 CoreServiceRegistration.ConfigureLogging(builder);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -24,20 +25,43 @@ DepartmentServiceRegistration.RegisterServices(builder.Services);
 SupplierServiceRegistration.RegisterServices(builder.Services);
 VehicleServiceRegistration.RegisterServices(builder.Services);
 
+// Agregar YARP
+builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
 // Configurar Swagger
 builder.Services.AddSwaggerConfiguration(builder.Configuration);
 
+// Configurar CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
-//   Serilog
+// Configurar Serilog
 CoreServiceRegistration.UseLogging(app);
 
-//   Swagger
+// Configurar Swagger
 app.UseSwaggerUIConfiguration(app.Environment, builder.Configuration);
+
+// Usar Middleware de Autenticación y Autorización
 app.UseMiddleware<BearerTokenMiddleware>();
+
+app.UseRouting();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapReverseProxy();
 
 app.RunLogger();
