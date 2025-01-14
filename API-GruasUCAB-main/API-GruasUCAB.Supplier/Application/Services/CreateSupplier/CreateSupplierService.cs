@@ -8,7 +8,12 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
           private readonly IHttpClientFactory _httpClientFactory;
           private readonly HeadersToken _headersToken;
 
-          public CreateSupplierService(IEventStore eventStore, ISupplierFactory supplierFactory, IKeycloakRepository keycloakRepository, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+          public CreateSupplierService(
+              IEventStore eventStore,
+              ISupplierFactory supplierFactory,
+              IKeycloakRepository keycloakRepository,
+              IHttpClientFactory httpClientFactory,
+              IHttpContextAccessor httpContextAccessor)
           {
                _eventStore = eventStore;
                _supplierFactory = supplierFactory;
@@ -44,11 +49,7 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
                    new SupplierType(supplierType)
                );
 
-               List<IDomainEvent> domainEvents = new List<IDomainEvent>(supplier.GetEvents());
-               foreach (var domainEvent in supplier.GetEvents())
-               {
-                    domainEvents.Add(domainEvent);
-               }
+               var domainEvents = new List<IDomainEvent>(supplier.GetEvents());
 
                await _eventStore.AppendEvents(supplier.Id.ToString(), domainEvents);
 

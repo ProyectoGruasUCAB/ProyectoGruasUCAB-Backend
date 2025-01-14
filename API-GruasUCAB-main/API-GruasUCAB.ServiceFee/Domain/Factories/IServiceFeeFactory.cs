@@ -1,5 +1,3 @@
-using API_GruasUCAB.ServiceFee.Domain.AggregateRoot;
-
 namespace API_GruasUCAB.ServiceFee.Domain.Factories
 {
      public interface IServiceFeeFactory

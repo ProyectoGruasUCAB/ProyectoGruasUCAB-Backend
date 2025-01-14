@@ -4,7 +4,7 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData
      {
           [Required(ErrorMessage = "Id is required.")]
           [JsonPropertyOrder(2)]
-          public required Guid Id { get; set; }
+          public required Guid UserId { get; set; }
 
           [Required(ErrorMessage = "Name is required.")]
           [JsonPropertyOrder(2)]

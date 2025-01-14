@@ -16,7 +16,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                var events = new List<IDomainEvent>
                {
                 new RecordAdministratorDataEvent(
-                    new UserId(request.Id.ToString()),
+                    new UserId(request.UserId.ToString()),
                     new UserName("InitialName"),
                     new UserEmail("initial@example.com"),
                     new UserPhone("04125615987"),
@@ -29,14 +29,14 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                {
                     // Puedes agregar un evento predeterminado si es necesario
                     events.Add(new RecordAdministratorDataEvent(
-                        new UserId(request.Id.ToString()),
+                        new UserId(request.UserId.ToString()),
                         new UserName("DefaultName"),
                         new UserEmail("default@example.com"),
                         new UserPhone("0000000000"),
                         new UserBirthDate("2000-01-2000")
                     ));
                }
-               if (events.Count == 0) throw new UserNotFoundException(request.Id);
+               if (events.Count == 0) throw new UserNotFoundException(request.UserId);
 
                // Valida el rol del usuario
                if (!Enum.TryParse(request.Role, out UserRole userRole))
@@ -57,7 +57,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     if (userRole == UserRole.Administrador)
                     {
                          // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
+                         var fakeId = new UserId(request.UserId.ToString());
                          var fakeCedula = new UserCedula("V-28686611");
                          var fakeEmail = new UserEmail(request.UserEmail);
 
@@ -84,7 +84,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     else if (userRole == UserRole.Conductor)
                     {
                          // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
+                         var fakeId = new UserId(request.UserId.ToString());
                          var fakeCedula = new UserCedula("V-28686611");
                          var fakeEmail = new UserEmail(request.UserEmail);
 
@@ -116,7 +116,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     else if (userRole == UserRole.Trabajador)
                     {
                          // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
+                         var fakeId = new UserId(request.UserId.ToString());
                          var fakeCedula = new UserCedula("V-28686611");
                          var fakeEmail = new UserEmail(request.UserEmail);
 
@@ -144,7 +144,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     else if (userRole == UserRole.Proveedor)
                     {
                          // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
+                         var fakeId = new UserId(request.UserId.ToString());
                          var fakeCedula = new UserCedula("V-28686611");
                          var fakeEmail = new UserEmail(request.UserEmail);
 
@@ -171,7 +171,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 
                     // Genera nuevos eventos a partir de los cambios realizados y los almacena en el EventStore
                     var newEvents = user?.PullEvents() ?? throw new InvalidOperationException("User events could not be pulled.");
-                    await _eventStore.AppendEvents(request.Id.ToString(), newEvents);
+                    await _eventStore.AppendEvents(request.UserId.ToString(), newEvents);
 
                     // Obtén los detalles del usuario
                     var userDetails = GetUserDetails(user);
@@ -180,7 +180,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                          Success = true,
                          Message = $"User updated successfully. {userDetails}",
                          UserEmail = request.UserEmail,
-                         UserId = request.Id
+                         UserId = request.UserId
                     };
                }
                catch (Exception ex)

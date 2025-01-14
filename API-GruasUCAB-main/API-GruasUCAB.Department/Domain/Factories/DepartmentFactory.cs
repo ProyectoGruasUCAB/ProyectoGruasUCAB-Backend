@@ -1,5 +1,3 @@
-using API_GruasUCAB.Department.Domain.AggregateRoot;
-
 namespace API_GruasUCAB.Department.Domain.Factories
 {
      public class DepartmentFactory : IDepartmentFactory

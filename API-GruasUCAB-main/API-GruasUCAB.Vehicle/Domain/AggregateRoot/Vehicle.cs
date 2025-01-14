@@ -9,6 +9,9 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
           public VehicleBrand Brand { get; private set; }
           public VehicleColor Color { get; private set; }
           public VehicleModel Model { get; private set; }
+          public VehicleTypeId VehicleTypeId { get; private set; }
+          public UserId DriverId { get; private set; }
+          public SupplierId SupplierId { get; private set; }
 
           public Vehicle(
               VehicleId id,
@@ -18,7 +21,10 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
               VehicleLicensePlate licensePlate,
               VehicleBrand brand,
               VehicleColor color,
-              VehicleModel model)
+              VehicleModel model,
+              VehicleTypeId vehicleTypeId,
+              UserId driverId,
+              SupplierId supplierId)
               : base(id)
           {
                CivilLiability = civilLiability ?? throw new ArgumentNullException(nameof(civilLiability), "Vehicle must have a civil liability.");
@@ -28,9 +34,12 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
                Brand = brand ?? throw new ArgumentNullException(nameof(brand), "Vehicle must have a brand.");
                Color = color ?? throw new ArgumentNullException(nameof(color), "Vehicle must have a color.");
                Model = model ?? throw new ArgumentNullException(nameof(model), "Vehicle must have a model.");
+               VehicleTypeId = vehicleTypeId ?? throw new ArgumentNullException(nameof(vehicleTypeId), "Vehicle must have a type.");
+               DriverId = driverId ?? throw new ArgumentNullException(nameof(driverId), "Vehicle must have a driver.");
+               SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "Vehicle must have a supplier.");
 
                ValidateState();
-               AddDomainEvent(new VehicleCreatedEvent(id, civilLiability, civilLiabilityExpirationDate, trafficLicense, licensePlate, brand, color, model));
+               AddDomainEvent(new VehicleCreatedEvent(id, civilLiability, civilLiabilityExpirationDate, trafficLicense, licensePlate, brand, color, model, vehicleTypeId, driverId, supplierId));
           }
 
           protected override void ValidateState()
@@ -42,6 +51,9 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
                ValidateBrand();
                ValidateColor();
                ValidateModel();
+               ValidateVehicleTypeId();
+               ValidateDriverId();
+               ValidateSupplierId();
           }
 
           private void ValidateCivilLiability()
@@ -84,6 +96,24 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
           {
                if (Model == null)
                     throw new InvalidVehicleModelException();
+          }
+
+          private void ValidateVehicleTypeId()
+          {
+               if (VehicleTypeId == null)
+                    throw new InvalidVehicleTypeException();
+          }
+
+          private void ValidateDriverId()
+          {
+               if (DriverId == null)
+                    throw new InvalidDriverIdException();
+          }
+
+          private void ValidateSupplierId()
+          {
+               if (SupplierId == null)
+                    throw new InvalidSupplierIdException();
           }
 
           public void ChangeCivilLiability(VehicleCivilLiability newCivilLiability)
@@ -147,6 +177,33 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
                Model = newModel;
                ValidateState();
                AddDomainEvent(new VehicleModelChangedEvent(Id, newModel));
+          }
+
+          public void ChangeVehicleTypeId(VehicleTypeId newVehicleTypeId)
+          {
+               if (newVehicleTypeId == null)
+                    throw new ArgumentNullException(nameof(newVehicleTypeId), "New vehicle type cannot be null.");
+               VehicleTypeId = newVehicleTypeId;
+               ValidateState();
+               AddDomainEvent(new VehicleTypeChangedEvent(Id, newVehicleTypeId));
+          }
+
+          public void ChangeDriverId(UserId newDriverId)
+          {
+               if (newDriverId == null)
+                    throw new ArgumentNullException(nameof(newDriverId), "New user cannot be null.");
+               DriverId = newDriverId;
+               ValidateState();
+               AddDomainEvent(new VehicleDriverChangedEvent(Id, newDriverId));
+          }
+
+          public void ChangeSupplierId(SupplierId newSupplierId)
+          {
+               if (newSupplierId == null)
+                    throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
+               SupplierId = newSupplierId;
+               ValidateState();
+               AddDomainEvent(new VehicleSupplierChangedEvent(Id, newSupplierId));
           }
      }
 }

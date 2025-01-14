@@ -5,7 +5,7 @@ namespace API_GruasUCAB.Users.Domain.Events
           public UserId UserId { get; }
           public UserName NewName { get; }
           public DateTime Timestamp { get; }
-          public string DispatcherId => UserId.Id;
+          public string DispatcherId => UserId.ToString();
 
           public UserNameChangedEvent(UserId userId, UserName newName)
           {

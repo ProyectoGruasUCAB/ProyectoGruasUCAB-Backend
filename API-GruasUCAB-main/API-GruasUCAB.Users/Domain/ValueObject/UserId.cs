@@ -2,15 +2,25 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
 {
      public class UserId : ValueObject<UserId>
      {
-          public string Id { get; }
+          public Guid Id { get; }
 
-          public UserId(string id)
+          public UserId(Guid id)
           {
-               if (!IsValid(id))
+               if (id == Guid.Empty)
                     throw new InvalidUserIdException();
 
                Id = id;
           }
+
+          public UserId(string id)
+          {
+               if (!Guid.TryParse(id, out Guid parsedId) || parsedId == Guid.Empty)
+                    throw new InvalidUserIdException();
+
+               Id = parsedId;
+          }
+
+          public Guid Value => Id;
 
           public override bool Equals(UserId other)
           {
@@ -22,16 +32,9 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
                yield return Id;
           }
 
-          private static bool IsValid(string value)
-          {
-               return Regex.IsMatch(value, @"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
-          }
-
-          public string Value => Id;
-
           public override string ToString()
           {
-               return Id;
+               return Id.ToString();
           }
      }
 }

@@ -12,6 +12,14 @@ namespace API_GruasUCAB.Department.Domain.ValueObject
                Id = id;
           }
 
+          public DepartmentId(string id)
+          {
+               if (!Guid.TryParse(id, out Guid parsedId) || parsedId == Guid.Empty)
+                    throw new InvalidDepartmentIdException();
+
+               Id = parsedId;
+          }
+
           public Guid Value => Id;
 
           public override bool Equals(DepartmentId other)

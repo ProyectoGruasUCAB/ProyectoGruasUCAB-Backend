@@ -1,6 +1,4 @@
-using API_GruasUCAB.Core.Domain.conf;
-
-namespace API_GruasUCAB.Users.Infrastructure.EventStore
+namespace API_GruasUCAB.Core.Infrastructure.EventStore
 {
      public class InMemoryEventStore : IEventStore
      {

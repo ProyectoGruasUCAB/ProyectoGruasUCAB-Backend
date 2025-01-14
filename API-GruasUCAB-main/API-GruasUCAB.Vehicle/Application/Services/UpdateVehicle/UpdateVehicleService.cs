@@ -74,6 +74,21 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeModel(new VehicleModel(request.Model));
                }
 
+               if (request.VehicleTypeId.HasValue)
+               {
+                    vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
+               }
+
+               if (request.DriverId.HasValue)
+               {
+                    vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
+               }
+
+               if (request.SupplierId.HasValue)
+               {
+                    vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
+               }
+
                List<IDomainEvent> domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
                foreach (var domainEvent in vehicle.GetEvents())
                {
@@ -94,7 +109,10 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     LicensePlate = vehicle.LicensePlate.Value,
                     Brand = vehicle.Brand.Value,
                     Color = vehicle.Color.Value,
-                    Model = vehicle.Model.Value
+                    Model = vehicle.Model.Value,
+                    VehicleTypeId = vehicle.VehicleTypeId.Id,
+                    DriverId = vehicle.DriverId.Id,
+                    SupplierId = vehicle.SupplierId.Id
                };
           }
      }

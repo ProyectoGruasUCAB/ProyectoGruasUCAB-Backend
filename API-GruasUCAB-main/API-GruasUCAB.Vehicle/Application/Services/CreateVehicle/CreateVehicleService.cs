@@ -41,7 +41,10 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
                    new VehicleLicensePlate(request.LicensePlate),
                    new VehicleBrand(request.Brand),
                    new VehicleColor(request.Color),
-                   new VehicleModel(request.Model)
+                   new VehicleModel(request.Model),
+                   new VehicleTypeId(request.VehicleTypeId),
+                   new UserId(request.DriverId),
+                   new SupplierId(request.SupplierId)
                );
 
                List<IDomainEvent> domainEvents = new List<IDomainEvent>(vehicle.GetEvents());

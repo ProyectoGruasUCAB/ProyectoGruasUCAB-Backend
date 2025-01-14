@@ -14,6 +14,6 @@ namespace API_GruasUCAB.Supplier.Infrastructure.DTOs.UpdateSupplier
           public string? Name { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? Type { get; set; }
+          public string? Type { get; set; } = string.Empty;
      }
 }

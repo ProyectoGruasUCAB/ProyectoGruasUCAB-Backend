@@ -28,7 +28,7 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                     throw new UnauthorizedException("Unauthorized access: token validation failed.");
                }
 
-               if (role != "Administrador" || role != "Trabajador")
+               if (role != "Administrador" && role != "Trabajador")
                {
                     throw new UnauthorizedException("Unauthorized access: role validation failed.");
                }

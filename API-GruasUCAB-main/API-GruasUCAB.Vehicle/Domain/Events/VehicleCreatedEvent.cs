@@ -10,6 +10,9 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
           public VehicleBrand VehicleBrand { get; }
           public VehicleColor VehicleColor { get; }
           public VehicleModel VehicleModel { get; }
+          public VehicleTypeId VehicleTypeId { get; }
+          public UserId UserId { get; }
+          public SupplierId SupplierId { get; }
           public DateTime Timestamp { get; }
 
           public VehicleCreatedEvent(
@@ -20,7 +23,10 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
               VehicleLicensePlate vehicleLicensePlate,
               VehicleBrand vehicleBrand,
               VehicleColor vehicleColor,
-              VehicleModel vehicleModel)
+              VehicleModel vehicleModel,
+              VehicleTypeId vehicleTypeId,
+              UserId userId,
+              SupplierId supplierId)
           {
                VehicleId = vehicleId ?? throw new ArgumentNullException(nameof(vehicleId), "VehicleId cannot be null.");
                VehicleCivilLiability = vehicleCivilLiability ?? throw new ArgumentNullException(nameof(vehicleCivilLiability), "VehicleCivilLiability cannot be null.");
@@ -30,6 +36,9 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
                VehicleBrand = vehicleBrand ?? throw new ArgumentNullException(nameof(vehicleBrand), "VehicleBrand cannot be null.");
                VehicleColor = vehicleColor ?? throw new ArgumentNullException(nameof(vehicleColor), "VehicleColor cannot be null.");
                VehicleModel = vehicleModel ?? throw new ArgumentNullException(nameof(vehicleModel), "VehicleModel cannot be null.");
+               VehicleTypeId = vehicleTypeId ?? throw new ArgumentNullException(nameof(vehicleTypeId), "VehicleTypeId cannot be null.");
+               UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
+               SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "SupplierId cannot be null.");
                Timestamp = DateTime.UtcNow;
           }
 

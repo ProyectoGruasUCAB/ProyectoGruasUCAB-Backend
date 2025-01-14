@@ -1,8 +1,3 @@
-using API_GruasUCAB.Department.Infrastructure.DTOs.CreateDepartment;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace API_GruasUCAB.Department.Application.Handlers.CreateDepartment
 {
     public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand, CreateDepartmentResponseDTO>

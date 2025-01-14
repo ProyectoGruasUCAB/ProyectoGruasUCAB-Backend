@@ -9,7 +9,15 @@ namespace API_GruasUCAB.Vehicle.Domain.ValueObject
                if (string.IsNullOrWhiteSpace(licensePlate))
                     throw new InvalidVehicleLicensePlateException();
 
+               if (!IsValidLicensePlate(licensePlate))
+                    throw new InvalidVehicleLicensePlateException();
+
                LicensePlate = licensePlate;
+          }
+
+          private bool IsValidLicensePlate(string licensePlate)
+          {
+               return System.Text.RegularExpressions.Regex.IsMatch(licensePlate, @"^[A-Z0-9]+$");
           }
 
           public string Value => LicensePlate;

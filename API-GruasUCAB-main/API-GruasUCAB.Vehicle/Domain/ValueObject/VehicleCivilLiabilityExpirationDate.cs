@@ -1,7 +1,3 @@
-using API_GruasUCAB.Vehicle.Domain.Exceptions;
-using System;
-using System.Globalization;
-
 namespace API_GruasUCAB.Vehicle.Domain.ValueObject
 {
      public class VehicleCivilLiabilityExpirationDate : ValueObject<VehicleCivilLiabilityExpirationDate>
@@ -15,12 +11,12 @@ namespace API_GruasUCAB.Vehicle.Domain.ValueObject
                     throw new InvalidVehicleCivilLiabilityExpirationDateFormatException(expirationDate);
                }
 
-               if (parsedDate <= DateTime.UtcNow)
+               if (parsedDate < DateTime.UtcNow)
                {
                     throw new InvalidVehicleCivilLiabilityExpirationDateExpiredException(parsedDate);
                }
 
-               if (parsedDate > DateTime.UtcNow.AddYears(5))
+               if (parsedDate > DateTime.UtcNow.AddMonths(12))
                {
                     throw new InvalidVehicleCivilLiabilityExpirationDateTooFarException(parsedDate);
                }

@@ -12,6 +12,14 @@ namespace API_GruasUCAB.Vehicle.Domain.ValueObject
                Id = id;
           }
 
+          public VehicleId(string id)
+          {
+               if (!Guid.TryParse(id, out Guid parsedId) || parsedId == Guid.Empty)
+                    throw new InvalidVehicleIdException();
+
+               Id = parsedId;
+          }
+
           public Guid Value => Id;
 
           public override bool Equals(VehicleId other)
