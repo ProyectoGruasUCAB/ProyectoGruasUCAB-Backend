@@ -3,42 +3,27 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
      public class UpdateRecordUserDataService : IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>
      {
           private readonly IEventStore _eventStore;
+          private readonly IAdministratorFactory _administratorFactory;
+          private readonly IDriverFactory _driverFactory;
+          private readonly IWorkerFactory _workerFactory;
+          private readonly ISupplierFactory _supplierFactory;
 
-          public UpdateRecordUserDataService(IEventStore eventStore)
+          public UpdateRecordUserDataService(
+              IEventStore eventStore,
+              IAdministratorFactory administratorFactory,
+              IDriverFactory driverFactory,
+              IWorkerFactory workerFactory,
+              ISupplierFactory supplierFactory)
           {
                _eventStore = eventStore;
+               _administratorFactory = administratorFactory;
+               _driverFactory = driverFactory;
+               _workerFactory = workerFactory;
+               _supplierFactory = supplierFactory;
           }
 
           public async Task<UpdateRecordUserDataResponseDTO> Execute(UpdateRecordUserDataRequestDTO request)
           {
-               // Recupera los eventos asociados con el usuario
-               //var events = await _eventStore.GetEventsByStream(request.Id.ToString());
-               var events = new List<IDomainEvent>
-               {
-                new RecordAdministratorDataEvent(
-                    new UserId(request.Id.ToString()),
-                    new UserName("InitialName"),
-                    new UserEmail("initial@example.com"),
-                    new UserPhone("04125615987"),
-                    new UserBirthDate("01-01-2000")
-                )
-               };
-
-               // No lanzar excepción si no hay eventos
-               if (events.Count == 0)
-               {
-                    // Puedes agregar un evento predeterminado si es necesario
-                    events.Add(new RecordAdministratorDataEvent(
-                        new UserId(request.Id.ToString()),
-                        new UserName("DefaultName"),
-                        new UserEmail("default@example.com"),
-                        new UserPhone("0000000000"),
-                        new UserBirthDate("2000-01-2000")
-                    ));
-               }
-               if (events.Count == 0) throw new UserNotFoundException(request.Id);
-
-               // Valida el rol del usuario
                if (!Enum.TryParse(request.Role, out UserRole userRole))
                {
                     return await Task.FromResult(new UpdateRecordUserDataResponseDTO
@@ -54,133 +39,38 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                {
                     AggregateRoot<UserId>? user = null;
 
-                    if (userRole == UserRole.Administrador)
+                    switch (userRole)
                     {
-                         // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
-                         var fakeCedula = new UserCedula("V-28686611");
-                         var fakeEmail = new UserEmail(request.UserEmail);
-
-                         var admin = new Administrator(
-                            fakeId,
-                            new UserName(request.Name ?? "DefaultName"),
-                            fakeEmail,
-                            new UserPhone(request.Phone ?? "0000000000"),
-                            fakeCedula,
-                            new UserBirthDate(request.BirthDate ?? "2000-01-01")
-                        );
-
-                         // Aplica manualmente los eventos para reconstruir el estado del administrador
-                         foreach (var @event in events)
-                         {
-                              ApplyEvent(admin, @event);
-                         }
-
-                         // Aplica los cambios solicitados
-                         ApplyChanges(admin, request);
-
-                         user = admin;
-                    }
-                    else if (userRole == UserRole.Conductor)
-                    {
-                         // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
-                         var fakeCedula = new UserCedula("V-28686611");
-                         var fakeEmail = new UserEmail(request.UserEmail);
-
-                         var driver = new Driver(
-                             fakeId,
-                             new UserName(request.Name ?? "DefaultName"),
-                             fakeEmail,
-                             new UserPhone(request.Phone ?? "0000000000"),
-                             fakeCedula,
-                             new UserBirthDate(request.BirthDate ?? "2000-01-01"),
-                             new UserCedulaExpirationDate(request.CedulaExpirationDate ?? "2000-01-01"),
-                             new UserMedicalCertificate(request.MedicalCertificate ?? "DefaultCertificate"),
-                             new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate ?? "2000-01-01"),
-                             new UserDriverLicense(request.DriverLicense ?? "DefaultLicense"),
-                             new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate ?? "2000-01-01")
-                         );
-
-                         // Aplica manualmente los eventos para reconstruir el estado del conductor
-                         foreach (var @event in events)
-                         {
-                              ApplyEvent(driver, @event);
-                         }
-
-                         // Aplica los cambios solicitados
-                         ApplyChanges(driver, request);
-
-                         user = driver;
-                    }
-                    else if (userRole == UserRole.Trabajador)
-                    {
-                         // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
-                         var fakeCedula = new UserCedula("V-28686611");
-                         var fakeEmail = new UserEmail(request.UserEmail);
-
-                         var worker = new Worker(
-                             fakeId,
-                             new UserName(request.Name ?? "DefaultName"),
-                             fakeEmail,
-                             new UserPhone(request.Phone ?? "0000000000"),
-                             fakeCedula,
-                             new UserBirthDate(request.BirthDate ?? "2000-01-01"),
-                             new UserPosition(request.Position ?? "DefaultPosition")
-                         );
-
-                         // Aplica manualmente los eventos para reconstruir el estado del trabajador
-                         foreach (var @event in events)
-                         {
-                              ApplyEvent(worker, @event);
-                         }
-
-                         // Aplica los cambios solicitados
-                         ApplyChanges(worker, request);
-
-                         user = worker;
-                    }
-                    else if (userRole == UserRole.Proveedor)
-                    {
-                         // Crear variables "fake" para los valores que no se pueden modificar
-                         var fakeId = new UserId(request.Id.ToString());
-                         var fakeCedula = new UserCedula("V-28686611");
-                         var fakeEmail = new UserEmail(request.UserEmail);
-
-                         var provider = new Supplier(
-                             fakeId,
-                             new UserName(request.Name ?? "DefaultName"),
-                             fakeEmail,
-                             new UserPhone(request.Phone ?? "0000000000"),
-                             fakeCedula,
-                             new UserBirthDate(request.BirthDate ?? "2000-01-01")
-                         );
-
-                         // Aplica manualmente los eventos para reconstruir el estado del proveedor
-                         foreach (var @event in events)
-                         {
-                              ApplyEvent(provider, @event);
-                         }
-
-                         // Aplica los cambios solicitados
-                         ApplyChanges(provider, request);
-
-                         user = provider;
+                         case UserRole.Administrador:
+                              user = await _administratorFactory.GetAdministratorById(new UserId(request.UserId.ToString()));
+                              ApplyChanges((Administrator)user, request);
+                              break;
+                         case UserRole.Conductor:
+                              user = await _driverFactory.GetDriverById(new UserId(request.UserId.ToString()));
+                              ApplyChanges((Driver)user, request);
+                              break;
+                         case UserRole.Trabajador:
+                              user = await _workerFactory.GetWorkerById(new UserId(request.UserId.ToString()));
+                              ApplyChanges((Worker)user, request);
+                              break;
+                         case UserRole.Proveedor:
+                              user = await _supplierFactory.GetSupplierById(new UserId(request.UserId.ToString()));
+                              ApplyChanges((Supplier)user, request);
+                              break;
+                         default:
+                              throw new InvalidOperationException("Invalid user role");
                     }
 
-                    // Genera nuevos eventos a partir de los cambios realizados y los almacena en el EventStore
                     var newEvents = user?.PullEvents() ?? throw new InvalidOperationException("User events could not be pulled.");
-                    await _eventStore.AppendEvents(request.Id.ToString(), newEvents);
+                    await _eventStore.AppendEvents(request.UserId.ToString(), newEvents);
 
-                    // Obtén los detalles del usuario
                     var userDetails = GetUserDetails(user);
                     return new UpdateRecordUserDataResponseDTO
                     {
                          Success = true,
                          Message = $"User updated successfully. {userDetails}",
                          UserEmail = request.UserEmail,
-                         UserId = request.Id
+                         UserId = request.UserId
                     };
                }
                catch (Exception ex)
@@ -192,115 +82,6 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                          UserEmail = request.UserEmail,
                          UserId = Guid.Empty
                     });
-               }
-          }
-
-          private string GetUserDetails(AggregateRoot<UserId>? user)
-          {
-               if (user is Administrator admin)
-               {
-                    return $"Name: {admin.Name}, Email: {admin.Email}, Phone: {admin.Phone}, Cedula: {admin.Cedula}, BirthDate: {admin.BirthDate}";
-               }
-               else if (user is Driver driver)
-               {
-                    return $"Name: {driver.Name}, Email: {driver.Email}, Phone: {driver.Phone}, Cedula: {driver.Cedula}, BirthDate: {driver.BirthDate}, CedulaExpirationDate: {driver.CedulaExpirationDate}, MedicalCertificate: {driver.MedicalCertificate}, MedicalCertificateExpirationDate: {driver.MedicalCertificateExpirationDate}, DriverLicense: {driver.DriverLicense}, DriverLicenseExpirationDate: {driver.DriverLicenseExpirationDate}";
-               }
-               else if (user is Worker worker)
-               {
-                    return $"Name: {worker.Name}, Email: {worker.Email}, Phone: {worker.Phone}, Cedula: {worker.Cedula}, BirthDate: {worker.BirthDate}, Position: {worker.Position}";
-               }
-               else if (user is Supplier provider)
-               {
-                    return $"Name: {provider.Name}, Email: {provider.Email}, Phone: {provider.Phone}, Cedula: {provider.Cedula}, BirthDate: {provider.BirthDate}";
-               }
-               return "User details not available.";
-          }
-
-          private void ApplyEvent(Administrator admin, IDomainEvent @event)
-          {
-               if (@event is UserNameChangedEvent nameChangedEvent)
-               {
-                    admin.ChangeName(nameChangedEvent.NewName);
-               }
-               else if (@event is UserPhoneChangedEvent phoneChangedEvent)
-               {
-                    admin.ChangePhone(phoneChangedEvent.NewPhone);
-               }
-               else if (@event is UserBirthDateChangedEvent birthDateChangedEvent)
-               {
-                    admin.ChangeBirthDate(birthDateChangedEvent.NewBirthDate);
-               }
-          }
-
-          private void ApplyEvent(Driver driver, IDomainEvent @event)
-          {
-               if (@event is UserNameChangedEvent nameChangedEvent)
-               {
-                    driver.ChangeName(nameChangedEvent.NewName);
-               }
-               else if (@event is UserPhoneChangedEvent phoneChangedEvent)
-               {
-                    driver.ChangePhone(phoneChangedEvent.NewPhone);
-               }
-               else if (@event is UserBirthDateChangedEvent birthDateChangedEvent)
-               {
-                    driver.ChangeBirthDate(birthDateChangedEvent.NewBirthDate);
-               }
-               else if (@event is UserCedulaExpirationDateChangedEvent cedulaExpirationDateChangedEvent)
-               {
-                    driver.ChangeCedulaExpirationDate(cedulaExpirationDateChangedEvent.NewCedulaExpirationDate);
-               }
-               else if (@event is UserMedicalCertificateChangedEvent medicalCertificateChangedEvent)
-               {
-                    driver.ChangeMedicalCertificate(medicalCertificateChangedEvent.NewMedicalCertificate);
-               }
-               else if (@event is UserDriverLicenseChangedEvent driverLicenseChangedEvent)
-               {
-                    driver.ChangeDriverLicense(driverLicenseChangedEvent.NewDriverLicense);
-               }
-               else if (@event is UserMedicalCertificateExpirationDateChangedEvent medicalCertificateExpirationDateChangedEvent)
-               {
-                    driver.ChangeMedicalCertificateExpirationDate(medicalCertificateExpirationDateChangedEvent.NewMedicalCertificateExpirationDate);
-               }
-               else if (@event is UserDriverLicenseExpirationDateChangedEvent driverLicenseExpirationDateChangedEvent)
-               {
-                    driver.ChangeDriverLicenseExpirationDate(driverLicenseExpirationDateChangedEvent.NewDriverLicenseExpirationDate);
-               }
-          }
-
-          private void ApplyEvent(Worker worker, IDomainEvent @event)
-          {
-               if (@event is UserNameChangedEvent nameChangedEvent)
-               {
-                    worker.ChangeName(nameChangedEvent.NewName);
-               }
-               else if (@event is UserPhoneChangedEvent phoneChangedEvent)
-               {
-                    worker.ChangePhone(phoneChangedEvent.NewPhone);
-               }
-               else if (@event is UserBirthDateChangedEvent birthDateChangedEvent)
-               {
-                    worker.ChangeBirthDate(birthDateChangedEvent.NewBirthDate);
-               }
-               else if (@event is UserPositionChangedEvent positionChangedEvent)
-               {
-                    worker.ChangePosition(positionChangedEvent.NewPosition);
-               }
-          }
-
-          private void ApplyEvent(Supplier provider, IDomainEvent @event)
-          {
-               if (@event is UserNameChangedEvent nameChangedEvent)
-               {
-                    provider.ChangeName(nameChangedEvent.NewName);
-               }
-               else if (@event is UserPhoneChangedEvent phoneChangedEvent)
-               {
-                    provider.ChangePhone(phoneChangedEvent.NewPhone);
-               }
-               else if (@event is UserBirthDateChangedEvent birthDateChangedEvent)
-               {
-                    provider.ChangeBirthDate(birthDateChangedEvent.NewBirthDate);
                }
           }
 
@@ -422,6 +203,27 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     provider.ChangeBirthDate(new UserBirthDate(request.BirthDate));
                     provider.AddDomainEvent(new UserBirthDateChangedEvent(provider.Id, new UserBirthDate(request.BirthDate)));
                }
+          }
+
+          private string GetUserDetails(AggregateRoot<UserId>? user)
+          {
+               if (user is Administrator admin)
+               {
+                    return $"Name: {admin.Name}, Email: {admin.Email}, Phone: {admin.Phone}, Cedula: {admin.Cedula}, BirthDate: {admin.BirthDate}";
+               }
+               else if (user is Driver driver)
+               {
+                    return $"Name: {driver.Name}, Email: {driver.Email}, Phone: {driver.Phone}, Cedula: {driver.Cedula}, BirthDate: {driver.BirthDate}, CedulaExpirationDate: {driver.CedulaExpirationDate}, MedicalCertificate: {driver.MedicalCertificate}, MedicalCertificateExpirationDate: {driver.MedicalCertificateExpirationDate}, DriverLicense: {driver.DriverLicense}, DriverLicenseExpirationDate: {driver.DriverLicenseExpirationDate}";
+               }
+               else if (user is Worker worker)
+               {
+                    return $"Name: {worker.Name}, Email: {worker.Email}, Phone: {worker.Phone}, Cedula: {worker.Cedula}, BirthDate: {worker.BirthDate}, Position: {worker.Position}";
+               }
+               else if (user is Supplier provider)
+               {
+                    return $"Name: {provider.Name}, Email: {provider.Email}, Phone: {provider.Phone}, Cedula: {provider.Cedula}, BirthDate: {provider.BirthDate}";
+               }
+               return "User details not available.";
           }
      }
 }

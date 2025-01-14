@@ -10,7 +10,10 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
               VehicleLicensePlate licensePlate,
               VehicleBrand brand,
               VehicleColor color,
-              VehicleModel model)
+              VehicleModel model,
+              VehicleTypeId vehicleTypeId,
+              UserId driverId,
+              SupplierId supplierId)
           {
                return new AggregateRoot.Vehicle(
                    id,
@@ -20,7 +23,10 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
                    licensePlate,
                    brand,
                    color,
-                   model
+                   model,
+                   vehicleTypeId,
+                   driverId,
+                   supplierId
                );
           }
 
@@ -41,7 +47,10 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
                    new VehicleLicensePlate("ABC1234"),
                    new VehicleBrand("Toyota"),
                    new VehicleColor("Red"),
-                   new VehicleModel("Corolla")
+                   new VehicleModel("Corolla"),
+                   new VehicleTypeId(Guid.NewGuid()),
+                   new UserId(Guid.NewGuid()),
+                   new SupplierId(Guid.NewGuid())
                );
           }
      }

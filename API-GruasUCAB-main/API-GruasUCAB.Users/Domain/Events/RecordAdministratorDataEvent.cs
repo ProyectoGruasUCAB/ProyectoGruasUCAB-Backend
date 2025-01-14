@@ -17,7 +17,7 @@ namespace API_GruasUCAB.Users.Domain.Events
                BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "BirthDate cannot be null.");
           }
 
-          public string DispatcherId => UserId.Id;
+          public string DispatcherId => UserId.ToString();
           public string Name => nameof(RecordAdministratorDataEvent);
           public DateTime Timestamp { get; }
           public object Context => this;

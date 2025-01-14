@@ -4,35 +4,15 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
      {
           private readonly IEventStore _eventStore;
           private readonly IVehicleFactory _vehicleFactory;
-          private readonly IKeycloakRepository _keycloakRepository;
-          private readonly IHttpClientFactory _httpClientFactory;
-          private readonly HeadersToken _headersToken;
 
-          public UpdateVehicleService(IEventStore eventStore, IVehicleFactory vehicleFactory, IKeycloakRepository keycloakRepository, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+          public UpdateVehicleService(IEventStore eventStore, IVehicleFactory vehicleFactory)
           {
                _eventStore = eventStore;
                _vehicleFactory = vehicleFactory;
-               _keycloakRepository = keycloakRepository;
-               _httpClientFactory = httpClientFactory;
-               _headersToken = new HeadersToken(httpContextAccessor);
           }
 
           public async Task<UpdateVehicleResponseDTO> Execute(UpdateVehicleRequestDTO request)
           {
-               var token = _headersToken.GetToken();
-               var client = _httpClientFactory.CreateClient();
-               var (userId, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
-
-               if (email != request.UserEmail || userId != request.UserId.ToString())
-               {
-                    throw new UnauthorizedException("Unauthorized access: token validation failed.");
-               }
-
-               if (role != "Administrador")
-               {
-                    throw new UnauthorizedException("Unauthorized access: role validation failed.");
-               }
-
                var vehicle = await _vehicleFactory.GetVehicleById(new VehicleId(request.VehicleId));
                if (vehicle == null)
                {
@@ -74,11 +54,22 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeModel(new VehicleModel(request.Model));
                }
 
-               List<IDomainEvent> domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
-               foreach (var domainEvent in vehicle.GetEvents())
+               if (request.VehicleTypeId.HasValue)
                {
-                    domainEvents.Add(domainEvent);
+                    vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
                }
+
+               if (request.DriverId.HasValue)
+               {
+                    vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
+               }
+
+               if (request.SupplierId.HasValue)
+               {
+                    vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
+               }
+
+               var domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
 
                await _eventStore.AppendEvents(vehicle.Id.ToString(), domainEvents);
 
@@ -94,7 +85,10 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     LicensePlate = vehicle.LicensePlate.Value,
                     Brand = vehicle.Brand.Value,
                     Color = vehicle.Color.Value,
-                    Model = vehicle.Model.Value
+                    Model = vehicle.Model.Value,
+                    VehicleTypeId = vehicle.VehicleTypeId.Id,
+                    DriverId = vehicle.DriverId.Id,
+                    SupplierId = vehicle.SupplierId.Id
                };
           }
      }

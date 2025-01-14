@@ -30,7 +30,7 @@ namespace API_GruasUCAB.Users.Domain.Events
                Timestamp = DateTime.UtcNow;
           }
 
-          public string DispatcherId => UserId.Id;
+          public string DispatcherId => UserId.ToString();
           public string Name => nameof(RecordDriverDataEvent);
           public DateTime Timestamp { get; }
           public object Context => this;

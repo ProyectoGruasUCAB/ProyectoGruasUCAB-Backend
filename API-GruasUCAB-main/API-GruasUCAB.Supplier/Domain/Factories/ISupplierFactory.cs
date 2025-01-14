@@ -1,5 +1,3 @@
-using API_GruasUCAB.Supplier.Domain.AggregateRoot;
-
 namespace API_GruasUCAB.Supplier.Domain.Factories
 {
      public interface ISupplierFactory

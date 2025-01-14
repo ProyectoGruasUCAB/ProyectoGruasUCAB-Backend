@@ -6,6 +6,7 @@ global using API_GruasUCAB.Commons.Exceptions;
 global using Keycloak.AuthServices.Authentication;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.AspNetCore.Http;
 global using System.Text.Json;
 global using System.Net.Mail;
 global using System.Text;

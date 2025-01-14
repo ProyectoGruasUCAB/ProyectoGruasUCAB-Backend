@@ -1,3 +1,4 @@
+global using API_GruasUCAB.Users.Domain.Repositories;
 global using API_GruasUCAB.Users.Domain.ValueObject;
 global using API_GruasUCAB.Users.Domain.Exceptions;
 global using API_GruasUCAB.Users.Domain.Factories;

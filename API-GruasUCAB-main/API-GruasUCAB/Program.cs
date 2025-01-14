@@ -7,7 +7,6 @@ using API_GruasUCAB.Vehicle;
 using API_GruasUCAB.Core;
 using API_GruasUCAB.Core.Utilities.Logger;
 using API_GruasUCAB.Swagger;
-using Yarp.ReverseProxy;
 
 var builder = WebApplication.CreateBuilder(args);
 

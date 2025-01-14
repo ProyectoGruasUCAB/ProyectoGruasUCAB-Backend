@@ -1,10 +1,15 @@
 using API_GruasUCAB.ServiceFee.Application.Commands.CreateServiceFee;
 using API_GruasUCAB.ServiceFee.Application.Commands.UpdateServiceFee;
-using API_GruasUCAB.ServiceFee.Infrastructure.DTOs.UpdateServiceFee;
+using API_GruasUCAB.ServiceFee.Application.Queries.GetAllServiceFees;
+using API_GruasUCAB.ServiceFee.Application.Queries.GetServiceFeeById;
+using API_GruasUCAB.ServiceFee.Application.Queries.GetServiceFeeByName;
 using API_GruasUCAB.ServiceFee.Infrastructure.DTOs.CreateServiceFee;
+using API_GruasUCAB.ServiceFee.Infrastructure.DTOs.UpdateServiceFee;
+using API_GruasUCAB.ServiceFee.Infrastructure.DTOs.ServiceFeeQueries;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using MediatR;
 
 namespace API_GruasUCAB.Controllers
@@ -20,6 +25,70 @@ namespace API_GruasUCAB.Controllers
         {
             _mediator = mediator;
             _logger = logger;
+        }
+
+        private Guid GetUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("User ID is missing from the token.");
+            }
+            return Guid.Parse(userId);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetAllServiceFees")]
+        [ProducesResponseType(typeof(GetAllServiceFeesResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAllServiceFees()
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var userId = GetUserId();
+                var query = new GetAllServiceFeesQuery(userId);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetAllServiceFees");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetServiceFeeById/{id}")]
+        [ProducesResponseType(typeof(GetServiceFeeByIdResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetServiceFeeById(Guid id)
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var userId = GetUserId();
+                var query = new GetServiceFeeByIdQuery(userId, id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetServiceFeeById");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetServiceFeeByName/{name}")]
+        [ProducesResponseType(typeof(GetServiceFeeByNameResponseDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetServiceFeeByName(string name)
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var userId = GetUserId();
+                var query = new GetServiceFeeByNameQuery(userId, name);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetServiceFeeByName");
         }
 
         [HttpPost]

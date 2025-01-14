@@ -1,36 +1,29 @@
-using API_GruasUCAB.Auth.Infrastructure.Adapters.HeadersToken;
-using Microsoft.AspNetCore.Http;
-
 namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
      public class RecordUserDataService : IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>
      {
-          private readonly IUserFactory _userFactory;
+          private readonly IAdministratorFactory _administratorFactory;
+          private readonly IDriverFactory _driverFactory;
+          private readonly IWorkerFactory _workerFactory;
+          private readonly ISupplierFactory _supplierFactory;
           private readonly IEventStore _eventStore;
-          private readonly IKeycloakRepository _keycloakRepository;
-          private readonly IHttpClientFactory _httpClientFactory;
-          private readonly HeadersToken _headersToken;
 
-          public RecordUserDataService(IUserFactory userFactory, IEventStore eventStore, IKeycloakRepository keycloakRepository, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+          public RecordUserDataService(
+              IAdministratorFactory administratorFactory,
+              IDriverFactory driverFactory,
+              IWorkerFactory workerFactory,
+              ISupplierFactory supplierFactory,
+              IEventStore eventStore)
           {
-               _userFactory = userFactory;
+               _administratorFactory = administratorFactory;
+               _driverFactory = driverFactory;
+               _workerFactory = workerFactory;
+               _supplierFactory = supplierFactory;
                _eventStore = eventStore;
-               _keycloakRepository = keycloakRepository;
-               _httpClientFactory = httpClientFactory;
-               _headersToken = new HeadersToken(httpContextAccessor);
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               var token = _headersToken.GetToken();
-               var client = _httpClientFactory.CreateClient();
-               var (userId, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
-
-               if (email != request.UserEmail || role != request.Role || userId != request.Id.ToString())
-               {
-                    throw new UnauthorizedException("Unauthorized access: token validation failed.");
-               }
-
                object user;
                List<IDomainEvent> domainEvents = new List<IDomainEvent>();
 
@@ -49,8 +42,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                {
                     if (userRole == UserRole.Administrador)
                     {
-                         user = _userFactory.RecordAdministratorDataEvent(
-                             new UserId(request.Id.ToString()),
+                         user = _administratorFactory.CreateAdministrator(
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -59,7 +52,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                          );
 
                          var domainEvent = new RecordAdministratorDataEvent(
-                             new UserId(request.Id.ToString()),
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -69,8 +62,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     }
                     else if (userRole == UserRole.Conductor)
                     {
-                         user = _userFactory.RecordDriverDataEvent(
-                             new UserId(request.Id.ToString()),
+                         user = _driverFactory.CreateDriver(
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -84,7 +77,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                          );
 
                          var domainEvent = new RecordDriverDataEvent(
-                             new UserId(request.Id.ToString()),
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -99,8 +92,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     }
                     else if (userRole == UserRole.Trabajador)
                     {
-                         user = _userFactory.RecordWorkerDataEvent(
-                             new UserId(request.Id.ToString()),
+                         user = _workerFactory.CreateWorker(
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -110,7 +103,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                          );
 
                          var domainEvent = new RecordWorkerDataEvent(
-                             new UserId(request.Id.ToString()),
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -121,8 +114,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     }
                     else if (userRole == UserRole.Proveedor)
                     {
-                         user = _userFactory.RecordSupplierDataEvent(
-                             new UserId(request.Id.ToString()),
+                         user = _supplierFactory.CreateSupplier(
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -131,7 +124,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                          );
 
                          var domainEvent = new RecordSupplierDataEvent(
-                             new UserId(request.Id.ToString()),
+                             new UserId(request.UserId.ToString()),
                              new UserName(request.Name),
                              new UserEmail(request.UserEmail),
                              new UserPhone(request.Phone),
@@ -141,15 +134,14 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     }
 
                     // Registra los eventos en el EventStore
-                    await _eventStore.AppendEvents(request.Id.ToString(), domainEvents);
-                    //await _userRepository.AddAsync(user);
+                    await _eventStore.AppendEvents(request.UserId.ToString(), domainEvents);
 
                     return new RecordUserDataResponseDTO
                     {
                          Success = true,
                          Message = $"{userRole} created successfully",
                          UserEmail = request.UserEmail,
-                         UserId = request.Id
+                         UserId = request.UserId
                     };
                }
                catch (Exception ex)

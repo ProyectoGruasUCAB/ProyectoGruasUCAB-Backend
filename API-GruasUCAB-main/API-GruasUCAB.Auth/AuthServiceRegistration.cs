@@ -55,6 +55,7 @@ namespace API_GruasUCAB.Auth
                services.AddScoped<IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>, AuthChangePasswordValidator>();
                services.AddScoped<IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>, AuthRecoverPasswordValidate>();
                services.AddScoped<IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>, AuthHandleIncompleteAccountValidator>();
+
           }
      }
 }

@@ -1,9 +1,3 @@
-using API_GruasUCAB.Department.Domain.ValueObject;
-using API_GruasUCAB.Department.Domain.Events;
-using API_GruasUCAB.Core.Domain.AggregateRoot;
-using System;
-using System.Collections.Generic;
-
 namespace API_GruasUCAB.Department.Domain.AggregateRoot
 {
      public class Department : AggregateRoot<DepartmentId>

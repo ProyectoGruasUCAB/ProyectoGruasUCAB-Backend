@@ -10,7 +10,10 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
               VehicleLicensePlate licensePlate,
               VehicleBrand brand,
               VehicleColor color,
-              VehicleModel model);
+              VehicleModel model,
+              VehicleTypeId vehicleTypeId,
+              UserId driverId,
+              SupplierId supplierId);
 
           Task<AggregateRoot.Vehicle> GetVehicleById(VehicleId id);
      }

@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Domain.Exceptions
 {
-     public class InvalidUserEmailException : Exception
+     public class InvalidUserEmailException : DomainException
      {
           public InvalidUserEmailException()
               : base("Invalid user email")

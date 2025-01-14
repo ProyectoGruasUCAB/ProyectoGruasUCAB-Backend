@@ -2,7 +2,6 @@ using API_GruasUCAB.Auth.Application.Commands.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Application.Commands.RecoverPassword;
 using API_GruasUCAB.Auth.Application.Commands.ChangePassword;
 using API_GruasUCAB.Auth.Application.Commands.RefreshToken;
-using API_GruasUCAB.Auth.Application.Commands.AssignRole;
 using API_GruasUCAB.Auth.Application.Commands.CreateUser;
 using API_GruasUCAB.Auth.Application.Commands.DeleteUser;
 using API_GruasUCAB.Auth.Application.Commands.Logout;
@@ -12,7 +11,6 @@ using API_GruasUCAB.Auth.Infrastructure.DTOs.HandleIncompleteAccount;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RecoverPassword;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.ChangePassword;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.RefreshToken;
-using API_GruasUCAB.Auth.Infrastructure.DTOs.AssignRole;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.DeleteUser;
 using API_GruasUCAB.Auth.Infrastructure.DTOs.Logout;
@@ -156,27 +154,6 @@ namespace API_GruasUCAB.Controllers
                 }
                 return BadRequest(authResponse.Message);
             }, ModelState, _logger, "CreateUser");
-        }
-
-        [HttpPost]
-        [Authorize]
-        [Route("AssignRole")]
-        [ProducesResponseType(typeof(AssignRoleResponseDTO), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequestDTO request)
-        {
-            return await ActionExecutor.Execute(async () =>
-            {
-                var command = new AssignRoleCommand(request);
-                var authResponse = await _mediator.Send(command);
-                if (authResponse.Success)
-                {
-                    return Ok(authResponse);
-                }
-                return BadRequest(authResponse.Message);
-            }, ModelState, _logger, "AssignRole");
         }
 
         [HttpDelete]

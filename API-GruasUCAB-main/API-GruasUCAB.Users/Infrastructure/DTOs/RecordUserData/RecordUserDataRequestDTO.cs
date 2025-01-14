@@ -4,19 +4,19 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData
      {
           [Required(ErrorMessage = "Id is required.")]
           [JsonPropertyOrder(2)]
-          public required Guid Id { get; set; }
+          public required Guid UserId { get; set; }
 
           [Required(ErrorMessage = "Name is required.")]
           [JsonPropertyOrder(2)]
-          public required string Name { get; set; }
+          public required string Name { get; set; } = string.Empty;
 
           [Required(ErrorMessage = "Phone is required.")]
           [JsonPropertyOrder(2)]
-          public required string Phone { get; set; }
+          public required string Phone { get; set; } = string.Empty;
 
           [Required(ErrorMessage = "Cedula is required.")]
           [JsonPropertyOrder(2)]
-          public required string Cedula { get; set; }
+          public required string Cedula { get; set; } = string.Empty;
 
           [Required(ErrorMessage = "Roles are required.")]
           [JsonPropertyOrder(2)]
@@ -24,24 +24,24 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData
 
           [Required(ErrorMessage = "Birth date is required.")]
           [JsonPropertyOrder(2)]
-          public required string BirthDate { get; set; }
+          public required string BirthDate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? CedulaExpirationDate { get; set; }
+          public string? CedulaExpirationDate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? MedicalCertificate { get; set; }
+          public string? MedicalCertificate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? MedicalCertificateExpirationDate { get; set; }
+          public string? MedicalCertificateExpirationDate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? DriverLicense { get; set; }
+          public string? DriverLicense { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? DriverLicenseExpirationDate { get; set; }
+          public string? DriverLicenseExpirationDate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? Position { get; set; }
+          public string? Position { get; set; } = string.Empty;
      }
 }

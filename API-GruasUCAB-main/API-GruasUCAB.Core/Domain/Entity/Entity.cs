@@ -1,5 +1,3 @@
-using API_GruasUCAB.Core.Domain.ValueObject;
-
 namespace API_GruasUCAB.Core.Domain.Entity
 {
      public abstract class Entity<T> where T : ValueObject<T>
