@@ -32,7 +32,5 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserBirthDate(administratorDTO.BirthDate)
                );
           }
-
-
      }
 }

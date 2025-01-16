@@ -11,6 +11,5 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserBirthDate birthDate);
 
           Task<Administrator> GetAdministratorById(UserId id);
-
      }
 }
