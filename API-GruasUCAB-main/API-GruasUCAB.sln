@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-GruasUCAB.Department", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-GruasUCAB.Vehicle", "API-GruasUCAB.Vehicle\API-GruasUCAB.Vehicle.csproj", "{C8C8C8C8-8901-2345-JKLM-8901234567MN}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-GruasUCAB.Policy", "API-GruasUCAB.Policy\API-GruasUCAB.Policy.csproj", "{D9D9D9D9-9012-3456-KLMN-9012345678OP}"
+EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
         Debug|Any CPU = Debug|Any CPU
@@ -65,5 +67,9 @@ Global
         {C8C8C8C8-8901-2345-JKLM-8901234567MN}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {C8C8C8C8-8901-2345-JKLM-8901234567MN}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {C8C8C8C8-8901-2345-JKLM-8901234567MN}.Release|Any CPU.Build.0 = Release|Any CPU
+        {D9D9D9D9-9012-3456-KLMN-9012345678OP}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {D9D9D9D9-9012-3456-KLMN-9012345678OP}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {D9D9D9D9-9012-3456-KLMN-9012345678OP}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {D9D9D9D9-9012-3456-KLMN-9012345678OP}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
