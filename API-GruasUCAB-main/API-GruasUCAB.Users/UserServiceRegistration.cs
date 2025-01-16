@@ -14,11 +14,13 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IWorkerFactory, WorkerFactory>();
             services.AddScoped<ISupplierFactory, SupplierFactory>();
 
-
             services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
             services.AddHttpClient();
 
+            services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
+            services.AddScoped<IKeycloakRepository, KeycloakRepository>();
+            services.AddHttpClient();
 
             // Repositories
             services.AddScoped<IAdministratorRepository, AdministratorRepository>();
@@ -58,7 +60,6 @@ namespace API_GruasUCAB.Users
 
             services.AddHttpClient();
 
-            /*
             //  SecurityDecorator
             services.Decorate<IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>>(
                 (inner, provider) => new RecordUserDataSecurityDecorator<RecordUserDataRequestDTO, RecordUserDataResponseDTO>(
@@ -178,7 +179,6 @@ namespace API_GruasUCAB.Users
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
                     "Administrador", "Trabajador"));
-            */
         }
     }
 }
