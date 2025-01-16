@@ -2,6 +2,13 @@ namespace API_GruasUCAB.Supplier.Domain.Factories
 {
      public class SupplierFactory : ISupplierFactory
      {
+          private readonly ISupplierRepository _supplierRepository;
+
+          public SupplierFactory(ISupplierRepository supplierRepository)
+          {
+               _supplierRepository = supplierRepository;
+          }
+
           public AggregateRoot.Supplier CreateSupplier(
               SupplierId id,
               SupplierName name,
@@ -12,10 +19,12 @@ namespace API_GruasUCAB.Supplier.Domain.Factories
 
           public async Task<AggregateRoot.Supplier> GetSupplierById(SupplierId id)
           {
-               // Implementa la lógica para obtener el proveedor por su ID
-               // Esto puede involucrar una llamada a un repositorio o una base de datos
-               // Aquí se usa Task.FromResult como un ejemplo de implementación asincrónica
-               return await Task.FromResult(new AggregateRoot.Supplier(id, new SupplierName("Example"), new SupplierType(SupplierTypeEnum.Externo)));
+               var supplierDTO = await _supplierRepository.GetSupplierByIdAsync(id.Id);
+               return new AggregateRoot.Supplier(
+                   new SupplierId(supplierDTO.SupplierId),
+                   new SupplierName(supplierDTO.Name),
+                   new SupplierType(Enum.Parse<SupplierTypeEnum>(supplierDTO.Type))
+               );
           }
      }
 }

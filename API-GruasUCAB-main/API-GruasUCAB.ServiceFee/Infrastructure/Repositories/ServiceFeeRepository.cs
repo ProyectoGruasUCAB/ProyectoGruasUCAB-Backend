@@ -63,5 +63,29 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
                }
                return await Task.FromResult(serviceFee);
           }
+
+          public async Task AddServiceFeeAsync(ServiceFeeDTO serviceFee)
+          {
+               // Simulación de una llamada a la base de datos
+               _serviceFees.Add(serviceFee);
+               await Task.CompletedTask;
+          }
+
+          public async Task UpdateServiceFeeAsync(ServiceFeeDTO serviceFee)
+          {
+               // Simulación de una llamada a la base de datos
+               var existingServiceFee = _serviceFees.FirstOrDefault(s => s.ServiceFeeId == serviceFee.ServiceFeeId);
+               if (existingServiceFee == null)
+               {
+                    throw new KeyNotFoundException($"Service fee with ID {serviceFee.ServiceFeeId} not found.");
+               }
+
+               existingServiceFee.Name = serviceFee.Name;
+               existingServiceFee.Price = serviceFee.Price;
+               existingServiceFee.PriceKm = serviceFee.PriceKm;
+               existingServiceFee.Radius = serviceFee.Radius;
+
+               await Task.CompletedTask;
+          }
      }
 }

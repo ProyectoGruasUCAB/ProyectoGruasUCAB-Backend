@@ -2,12 +2,12 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
 {
      public class CreateVehicleService : IService<CreateVehicleRequestDTO, CreateVehicleResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IVehicleRepository _vehicleRepository;
           private readonly IVehicleFactory _vehicleFactory;
 
-          public CreateVehicleService(IEventStore eventStore, IVehicleFactory vehicleFactory)
+          public CreateVehicleService(IVehicleRepository vehicleRepository, IVehicleFactory vehicleFactory)
           {
-               _eventStore = eventStore;
+               _vehicleRepository = vehicleRepository;
                _vehicleFactory = vehicleFactory;
           }
 
@@ -27,9 +27,22 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
                    new SupplierId(request.SupplierId)
                );
 
-               var domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
+               var vehicleDTO = new VehicleDTO
+               {
+                    VehicleId = vehicle.Id.Id,
+                    CivilLiability = vehicle.CivilLiability.Value,
+                    CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("yyyy-MM-dd"),
+                    TrafficLicense = vehicle.TrafficLicense.Value,
+                    LicensePlate = vehicle.LicensePlate.Value,
+                    Brand = vehicle.Brand.Value,
+                    Color = vehicle.Color.Value,
+                    Model = vehicle.Model.Value,
+                    VehicleTypeId = vehicle.VehicleTypeId.Id,
+                    DriverId = vehicle.DriverId.Id,
+                    SupplierId = vehicle.SupplierId.Id
+               };
 
-               await _eventStore.AppendEvents(vehicle.Id.ToString(), domainEvents);
+               await _vehicleRepository.AddVehicleAsync(vehicleDTO);
 
                return new CreateVehicleResponseDTO
                {

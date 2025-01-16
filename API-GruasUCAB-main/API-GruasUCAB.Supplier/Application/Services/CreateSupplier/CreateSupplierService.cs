@@ -2,14 +2,14 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
 {
      public class CreateSupplierService : IService<CreateSupplierRequestDTO, CreateSupplierResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly ISupplierRepository _supplierRepository;
           private readonly ISupplierFactory _supplierFactory;
 
           public CreateSupplierService(
-              IEventStore eventStore,
+              ISupplierRepository supplierRepository,
               ISupplierFactory supplierFactory)
           {
-               _eventStore = eventStore;
+               _supplierRepository = supplierRepository;
                _supplierFactory = supplierFactory;
           }
 
@@ -26,9 +26,14 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
                    new SupplierType(supplierType)
                );
 
-               var domainEvents = new List<IDomainEvent>(supplier.GetEvents());
+               var supplierDTO = new SupplierDTO
+               {
+                    SupplierId = supplier.Id.Id,
+                    Name = supplier.Name.Value,
+                    Type = supplier.Type.Value.ToString()
+               };
 
-               await _eventStore.AppendEvents(supplier.Id.ToString(), domainEvents);
+               await _supplierRepository.AddSupplierAsync(supplierDTO);
 
                return new CreateSupplierResponseDTO
                {

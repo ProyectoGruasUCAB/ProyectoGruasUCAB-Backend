@@ -2,31 +2,25 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
      public class RecordUserDataService : IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>
      {
-          private readonly IAdministratorFactory _administratorFactory;
-          private readonly IDriverFactory _driverFactory;
-          private readonly IWorkerFactory _workerFactory;
-          private readonly ISupplierFactory _supplierFactory;
-          private readonly IEventStore _eventStore;
+          private readonly IRecordUserData _recordAdministratorData;
+          private readonly IRecordUserData _recordDriverData;
+          private readonly IRecordUserData _recordWorkerData;
+          private readonly IRecordUserData _recordSupplierData;
 
           public RecordUserDataService(
-              IAdministratorFactory administratorFactory,
-              IDriverFactory driverFactory,
-              IWorkerFactory workerFactory,
-              ISupplierFactory supplierFactory,
-              IEventStore eventStore)
+              IRecordUserData recordAdministratorData,
+              IRecordUserData recordDriverData,
+              IRecordUserData recordWorkerData,
+              IRecordUserData recordSupplierData)
           {
-               _administratorFactory = administratorFactory;
-               _driverFactory = driverFactory;
-               _workerFactory = workerFactory;
-               _supplierFactory = supplierFactory;
-               _eventStore = eventStore;
+               _recordAdministratorData = recordAdministratorData;
+               _recordDriverData = recordDriverData;
+               _recordWorkerData = recordWorkerData;
+               _recordSupplierData = recordSupplierData;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               object user;
-               List<IDomainEvent> domainEvents = new List<IDomainEvent>();
-
                if (!Enum.TryParse(request.Role, out UserRole userRole))
                {
                     return await Task.FromResult(new RecordUserDataResponseDTO
@@ -40,109 +34,19 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 
                try
                {
-                    if (userRole == UserRole.Administrador)
+                    switch (userRole)
                     {
-                         user = _administratorFactory.CreateAdministrator(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserCedula(request.Cedula),
-                             new UserBirthDate(request.BirthDate)
-                         );
-
-                         var domainEvent = new RecordAdministratorDataEvent(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserBirthDate(request.BirthDate)
-                         );
-                         domainEvents.Add(domainEvent);
+                         case UserRole.Administrador:
+                              return await _recordAdministratorData.Execute(request);
+                         case UserRole.Conductor:
+                              return await _recordDriverData.Execute(request);
+                         case UserRole.Trabajador:
+                              return await _recordWorkerData.Execute(request);
+                         case UserRole.Proveedor:
+                              return await _recordSupplierData.Execute(request);
+                         default:
+                              throw new InvalidOperationException("Invalid user role");
                     }
-                    else if (userRole == UserRole.Conductor)
-                    {
-                         user = _driverFactory.CreateDriver(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserCedula(request.Cedula),
-                             new UserBirthDate(request.BirthDate),
-                             new UserCedulaExpirationDate(request.CedulaExpirationDate ?? throw new ArgumentNullException(nameof(request.CedulaExpirationDate))),
-                             new UserMedicalCertificate(request.MedicalCertificate ?? throw new ArgumentNullException(nameof(request.MedicalCertificate))),
-                             new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate ?? throw new ArgumentNullException(nameof(request.MedicalCertificateExpirationDate))),
-                             new UserDriverLicense(request.DriverLicense ?? throw new ArgumentNullException(nameof(request.DriverLicense))),
-                             new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(request.DriverLicenseExpirationDate)))
-                         );
-
-                         var domainEvent = new RecordDriverDataEvent(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserBirthDate(request.BirthDate),
-                             new UserCedulaExpirationDate(request.CedulaExpirationDate),
-                             new UserMedicalCertificate(request.MedicalCertificate),
-                             new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate),
-                             new UserDriverLicense(request.DriverLicense),
-                             new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate)
-                         );
-                         domainEvents.Add(domainEvent);
-                    }
-                    else if (userRole == UserRole.Trabajador)
-                    {
-                         user = _workerFactory.CreateWorker(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserCedula(request.Cedula),
-                             new UserBirthDate(request.BirthDate),
-                             new UserPosition(request.Position ?? throw new ArgumentNullException(nameof(request.Position)))
-                         );
-
-                         var domainEvent = new RecordWorkerDataEvent(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserBirthDate(request.BirthDate),
-                             new UserPosition(request.Position)
-                         );
-                         domainEvents.Add(domainEvent);
-                    }
-                    else if (userRole == UserRole.Proveedor)
-                    {
-                         user = _supplierFactory.CreateSupplier(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserCedula(request.Cedula),
-                             new UserBirthDate(request.BirthDate)
-                         );
-
-                         var domainEvent = new RecordSupplierDataEvent(
-                             new UserId(request.UserId.ToString()),
-                             new UserName(request.Name),
-                             new UserEmail(request.UserEmail),
-                             new UserPhone(request.Phone),
-                             new UserBirthDate(request.BirthDate)
-                         );
-                         domainEvents.Add(domainEvent);
-                    }
-
-                    // Registra los eventos en el EventStore
-                    await _eventStore.AppendEvents(request.UserId.ToString(), domainEvents);
-
-                    return new RecordUserDataResponseDTO
-                    {
-                         Success = true,
-                         Message = $"{userRole} created successfully",
-                         UserEmail = request.UserEmail,
-                         UserId = request.UserId
-                    };
                }
                catch (Exception ex)
                {

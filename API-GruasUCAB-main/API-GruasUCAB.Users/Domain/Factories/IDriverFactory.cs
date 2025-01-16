@@ -14,10 +14,7 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,
               UserDriverLicenseExpirationDate driverLicenseExpirationDate);
-<<<<<<< HEAD
 
           Task<Driver> GetDriverById(UserId id);
-=======
->>>>>>> origin/Development
      }
 }

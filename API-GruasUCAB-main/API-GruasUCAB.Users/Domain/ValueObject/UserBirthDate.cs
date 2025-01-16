@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public DateTime BirthDate { get; }
 
+          public DateTime Value => BirthDate;
+
           public UserBirthDate(string birthDate)
           {
                if (!DateTime.TryParseExact(birthDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))

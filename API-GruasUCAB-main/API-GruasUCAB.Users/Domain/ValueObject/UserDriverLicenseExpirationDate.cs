@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public DateTime ExpirationDate { get; }
 
+          public DateTime Value => ExpirationDate;
+
           public UserDriverLicenseExpirationDate(string expirationDate)
           {
                if (!DateTime.TryParseExact(expirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))

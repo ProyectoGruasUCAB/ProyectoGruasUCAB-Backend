@@ -2,12 +2,12 @@ namespace API_GruasUCAB.Department.Application.Services.CreateDepartment
 {
      public class CreateDepartmentService : IService<CreateDepartmentRequestDTO, CreateDepartmentResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IDepartmentRepository _departmentRepository;
           private readonly IDepartmentFactory _departmentFactory;
 
-          public CreateDepartmentService(IEventStore eventStore, IDepartmentFactory departmentFactory)
+          public CreateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory)
           {
-               _eventStore = eventStore;
+               _departmentRepository = departmentRepository;
                _departmentFactory = departmentFactory;
           }
 
@@ -19,9 +19,14 @@ namespace API_GruasUCAB.Department.Application.Services.CreateDepartment
                    new DepartmentDescription(request.Descripcion)
                );
 
-               var domainEvents = new List<IDomainEvent>(department.GetEvents());
+               var departmentDTO = new DepartmentDTO
+               {
+                    DepartmentId = department.Id.Id,
+                    Name = department.Name.Value,
+                    Descripcion = department.Description.Value
+               };
 
-               await _eventStore.AppendEvents(department.Id.ToString(), domainEvents);
+               await _departmentRepository.AddDepartmentAsync(departmentDTO);
 
                return new CreateDepartmentResponseDTO
                {

@@ -2,22 +2,30 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
 {
      public class UpdateServiceFeeService : IService<UpdateServiceFeeRequestDTO, UpdateServiceFeeResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IServiceFeeRepository _serviceFeeRepository;
           private readonly IServiceFeeFactory _serviceFeeFactory;
 
-          public UpdateServiceFeeService(IEventStore eventStore, IServiceFeeFactory serviceFeeFactory)
+          public UpdateServiceFeeService(IServiceFeeRepository serviceFeeRepository, IServiceFeeFactory serviceFeeFactory)
           {
-               _eventStore = eventStore;
+               _serviceFeeRepository = serviceFeeRepository;
                _serviceFeeFactory = serviceFeeFactory;
           }
 
           public async Task<UpdateServiceFeeResponseDTO> Execute(UpdateServiceFeeRequestDTO request)
           {
-               var serviceFee = await _serviceFeeFactory.GetServiceFeeById(new ServiceFeeId(request.ServiceFeeId));
-               if (serviceFee == null)
+               var serviceFeeDTO = await _serviceFeeRepository.GetServiceFeeByIdAsync(request.ServiceFeeId);
+               if (serviceFeeDTO == null)
                {
                     throw new ServiceFeeNotFoundException(request.ServiceFeeId);
                }
+
+               var serviceFee = _serviceFeeFactory.CreateServiceFee(
+                   new ServiceFeeId(serviceFeeDTO.ServiceFeeId),
+                   new ServiceFeeName(serviceFeeDTO.Name),
+                   new ServiceFeePrice(serviceFeeDTO.Price),
+                   new ServiceFeePriceKm(serviceFeeDTO.PriceKm),
+                   new ServiceFeeRadius(serviceFeeDTO.Radius)
+               );
 
                if (!string.IsNullOrEmpty(request.Name))
                {
@@ -39,9 +47,12 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
                     serviceFee.ChangeRadius(new ServiceFeeRadius(request.Radius.Value));
                }
 
-               var domainEvents = new List<IDomainEvent>(serviceFee.GetEvents());
+               serviceFeeDTO.Name = serviceFee.Name.Value;
+               serviceFeeDTO.Price = serviceFee.Price.Value;
+               serviceFeeDTO.PriceKm = serviceFee.PriceKm.Value;
+               serviceFeeDTO.Radius = serviceFee.Radius.Value;
 
-               await _eventStore.AppendEvents(serviceFee.Id.ToString(), domainEvents);
+               await _serviceFeeRepository.UpdateServiceFeeAsync(serviceFeeDTO);
 
                return new UpdateServiceFeeResponseDTO
                {

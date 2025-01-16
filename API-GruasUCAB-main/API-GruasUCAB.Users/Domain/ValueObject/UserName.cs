@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Name { get; }
 
+          public string Value => Name;
+
           public UserName(string name)
           {
                if (string.IsNullOrWhiteSpace(name) || name.Length < 2 || name.Length > 50)

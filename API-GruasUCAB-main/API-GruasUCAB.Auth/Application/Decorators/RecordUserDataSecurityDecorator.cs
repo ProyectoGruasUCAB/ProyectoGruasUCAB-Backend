@@ -30,13 +30,6 @@ namespace API_GruasUCAB.Auth.Application.Decorators
                var client = _httpClientFactory.CreateClient();
                var (userId, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
 
-               // Escribir en la consola los valores obtenidos del token
-               Console.WriteLine($"Token Introspection - UserId: {userId}, Role: {role}, Email: {email}");
-
-               // Escribir en la consola los valores de la solicitud
-               Console.WriteLine($"Request - UserEmail: {(request as dynamic)?.UserEmail}, Role: {(request as dynamic)?.Role}, UserId: {(request as dynamic)?.UserId}");
-
-               // Verificar que los campos coincidan con los valores del token
                if (email != (request as dynamic)?.UserEmail || role != (request as dynamic)?.Role || userId != (request as dynamic)?.UserId.ToString())
                {
                     throw new UnauthorizedException("Unauthorized access: token validation failed.");

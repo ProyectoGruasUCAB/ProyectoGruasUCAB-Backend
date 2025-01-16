@@ -2,6 +2,13 @@ namespace API_GruasUCAB.Users.Domain.Factories
 {
      public class SupplierFactory : ISupplierFactory
      {
+          private readonly IProviderRepository _providerRepository;
+
+          public SupplierFactory(IProviderRepository providerRepository)
+          {
+               _providerRepository = providerRepository;
+          }
+
           public Supplier CreateSupplier(
               UserId id,
               UserName name,
@@ -12,23 +19,18 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Supplier(id, name, email, phone, cedula, birthDate);
           }
-<<<<<<< HEAD
 
           public async Task<Supplier> GetSupplierById(UserId id)
           {
-               // Implementa la lógica para obtener el proveedor por su ID
-               // Esto puede involucrar una llamada a un repositorio o una base de datos
-               // Aquí se usa Task.FromResult como un ejemplo de implementación asincrónica
-               return await Task.FromResult(new Supplier(
-                   id,
-                   new UserName("Example Name"),
-                   new UserEmail("example@example.com"),
-                   new UserPhone("04240000000"),
-                   new UserCedula("V-12345678"),
-                   new UserBirthDate("01-01-2000")
-               ));
+               var providerDTO = await _providerRepository.GetProviderByIdAsync(id.Id);
+               return new Supplier(
+                   new UserId(providerDTO.Id),
+                   new UserName(providerDTO.Name),
+                   new UserEmail(providerDTO.UserEmail),
+                   new UserPhone(providerDTO.Phone),
+                   new UserCedula(providerDTO.Cedula),
+                   new UserBirthDate(providerDTO.BirthDate)
+               );
           }
-=======
->>>>>>> origin/Development
      }
 }

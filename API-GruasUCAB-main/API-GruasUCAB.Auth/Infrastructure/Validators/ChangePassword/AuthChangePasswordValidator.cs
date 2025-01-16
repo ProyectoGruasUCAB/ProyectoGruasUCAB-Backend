@@ -3,14 +3,12 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.ChangePassword
      public class AuthChangePasswordValidator : IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>
      {
           private readonly IHttpClientFactory _httpClientFactory;
-          private readonly IConfiguration _configuration;
           private readonly HeadersToken _headersToken;
           private readonly IKeycloakRepository _keycloakRepository;
 
-          public AuthChangePasswordValidator(IHttpClientFactory httpClientFactory, IConfiguration configuration, HeadersToken headersToken, IKeycloakRepository keycloakRepository)
+          public AuthChangePasswordValidator(IHttpClientFactory httpClientFactory, HeadersToken headersToken, IKeycloakRepository keycloakRepository)
           {
                _httpClientFactory = httpClientFactory;
-               _configuration = configuration;
                _headersToken = headersToken;
                _keycloakRepository = keycloakRepository;
           }

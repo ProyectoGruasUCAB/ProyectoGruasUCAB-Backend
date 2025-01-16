@@ -2,24 +2,30 @@ namespace API_GruasUCAB.Supplier.Application.Services.UpdateSupplier
 {
      public class UpdateSupplierService : IService<UpdateSupplierRequestDTO, UpdateSupplierResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly ISupplierRepository _supplierRepository;
           private readonly ISupplierFactory _supplierFactory;
 
           public UpdateSupplierService(
-              IEventStore eventStore,
+              ISupplierRepository supplierRepository,
               ISupplierFactory supplierFactory)
           {
-               _eventStore = eventStore;
+               _supplierRepository = supplierRepository;
                _supplierFactory = supplierFactory;
           }
 
           public async Task<UpdateSupplierResponseDTO> Execute(UpdateSupplierRequestDTO request)
           {
-               var supplier = await _supplierFactory.GetSupplierById(new SupplierId(request.SupplierId));
-               if (supplier == null)
+               var supplierDTO = await _supplierRepository.GetSupplierByIdAsync(request.SupplierId);
+               if (supplierDTO == null)
                {
                     throw new SupplierNotFoundException(request.SupplierId);
                }
+
+               var supplier = _supplierFactory.CreateSupplier(
+                   new SupplierId(supplierDTO.SupplierId),
+                   new SupplierName(supplierDTO.Name),
+                   new SupplierType(Enum.Parse<SupplierTypeEnum>(supplierDTO.Type))
+               );
 
                if (!string.IsNullOrEmpty(request.Name))
                {
@@ -31,9 +37,10 @@ namespace API_GruasUCAB.Supplier.Application.Services.UpdateSupplier
                     supplier.ChangeType(new SupplierType(supplierType));
                }
 
-               var domainEvents = new List<IDomainEvent>(supplier.GetEvents());
+               supplierDTO.Name = supplier.Name.Value;
+               supplierDTO.Type = supplier.Type.Value.ToString();
 
-               await _eventStore.AppendEvents(supplier.Id.ToString(), domainEvents);
+               await _supplierRepository.UpdateSupplierAsync(supplierDTO);
 
                return new UpdateSupplierResponseDTO
                {

@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Phone { get; }
 
+          public string Value => Phone;
+
           public UserPhone(string phone)
           {
                if (!IsValid(phone))

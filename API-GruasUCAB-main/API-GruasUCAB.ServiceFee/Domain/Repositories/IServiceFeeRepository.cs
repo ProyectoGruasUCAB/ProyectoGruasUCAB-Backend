@@ -5,5 +5,7 @@ namespace API_GruasUCAB.ServiceFee.Domain.Repositories
           Task<List<ServiceFeeDTO>> GetAllServiceFeesAsync();
           Task<ServiceFeeDTO> GetServiceFeeByIdAsync(Guid id);
           Task<ServiceFeeDTO> GetServiceFeeByNameAsync(string name);
+          Task AddServiceFeeAsync(ServiceFeeDTO serviceFee);
+          Task UpdateServiceFeeAsync(ServiceFeeDTO serviceFee);
      }
 }

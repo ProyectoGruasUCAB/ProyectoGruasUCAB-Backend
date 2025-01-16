@@ -9,7 +9,6 @@ namespace API_GruasUCAB.Department
             services.AddScoped<IService<UpdateDepartmentRequestDTO, UpdateDepartmentResponseDTO>, UpdateDepartmentService>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IDepartmentFactory, DepartmentFactory>();
-            services.AddScoped<IEventStore, InMemoryEventStore>();
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
             services.AddHttpClient();
 

@@ -2,6 +2,13 @@ namespace API_GruasUCAB.Users.Domain.Factories
 {
      public class DriverFactory : IDriverFactory
      {
+          private readonly IDriverRepository _driverRepository;
+
+          public DriverFactory(IDriverRepository driverRepository)
+          {
+               _driverRepository = driverRepository;
+          }
+
           public Driver CreateDriver(
               UserId id,
               UserName name,
@@ -17,28 +24,23 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Driver(id, name, email, phone, cedula, birthDate, cedulaExpirationDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate);
           }
-<<<<<<< HEAD
 
           public async Task<Driver> GetDriverById(UserId id)
           {
-               // Implementa la lógica para obtener el conductor por su ID
-               // Esto puede involucrar una llamada a un repositorio o una base de datos
-               // Aquí se usa Task.FromResult como un ejemplo de implementación asincrónica
-               return await Task.FromResult(new Driver(
-                   id,
-                   new UserName("Example Name"),
-                   new UserEmail("example@example.com"),
-                   new UserPhone("04240000000"),
-                   new UserCedula("V-12345678"),
-                   new UserBirthDate("01-01-2000"),
-                   new UserCedulaExpirationDate("01-01-2025"),
-                   new UserMedicalCertificate("Example Certificate"),
-                   new UserMedicalCertificateExpirationDate("01-01-2025"),
-                   new UserDriverLicense("Example License"),
-                   new UserDriverLicenseExpirationDate("01-01-2025")
-               ));
+               var driverDTO = await _driverRepository.GetDriverByIdAsync(id.Id);
+               return new Driver(
+                   new UserId(driverDTO.Id),
+                   new UserName(driverDTO.Name),
+                   new UserEmail(driverDTO.UserEmail),
+                   new UserPhone(driverDTO.Phone),
+                   new UserCedula(driverDTO.Cedula),
+                   new UserBirthDate(driverDTO.BirthDate),
+                   new UserCedulaExpirationDate(driverDTO.CedulaExpirationDate),
+                   new UserMedicalCertificate(driverDTO.MedicalCertificate),
+                   new UserMedicalCertificateExpirationDate(driverDTO.MedicalCertificateExpirationDate),
+                   new UserDriverLicense(driverDTO.DriverLicense),
+                   new UserDriverLicenseExpirationDate(driverDTO.DriverLicenseExpirationDate)
+               );
           }
-=======
->>>>>>> origin/Development
      }
 }

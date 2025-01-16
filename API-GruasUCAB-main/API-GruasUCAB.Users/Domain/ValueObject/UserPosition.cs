@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Position { get; }
 
+          public string Value => Position;
+
           public UserPosition(string position)
           {
                if (string.IsNullOrWhiteSpace(position))

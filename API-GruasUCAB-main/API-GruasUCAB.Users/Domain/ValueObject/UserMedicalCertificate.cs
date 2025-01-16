@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Certificate { get; }
 
+          public string Value => Certificate;
+
           public UserMedicalCertificate(string certificate)
           {
                if (string.IsNullOrWhiteSpace(certificate))

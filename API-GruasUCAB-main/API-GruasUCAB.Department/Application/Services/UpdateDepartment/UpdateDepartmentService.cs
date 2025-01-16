@@ -2,22 +2,28 @@ namespace API_GruasUCAB.Department.Application.Services.UpdateDepartment
 {
      public class UpdateDepartmentService : IService<UpdateDepartmentRequestDTO, UpdateDepartmentResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IDepartmentRepository _departmentRepository;
           private readonly IDepartmentFactory _departmentFactory;
 
-          public UpdateDepartmentService(IEventStore eventStore, IDepartmentFactory departmentFactory)
+          public UpdateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory)
           {
-               _eventStore = eventStore;
+               _departmentRepository = departmentRepository;
                _departmentFactory = departmentFactory;
           }
 
           public async Task<UpdateDepartmentResponseDTO> Execute(UpdateDepartmentRequestDTO request)
           {
-               var department = await _departmentFactory.GetDepartmentById(new DepartmentId(request.DepartmentId));
-               if (department == null)
+               var departmentDTO = await _departmentRepository.GetDepartmentByIdAsync(request.DepartmentId);
+               if (departmentDTO == null)
                {
                     throw new DepartmentNotFoundException(request.DepartmentId);
                }
+
+               var department = _departmentFactory.CreateDepartment(
+                   new DepartmentId(departmentDTO.DepartmentId),
+                   new DepartmentName(departmentDTO.Name),
+                   new DepartmentDescription(departmentDTO.Descripcion)
+               );
 
                if (!string.IsNullOrEmpty(request.Name))
                {
@@ -29,6 +35,10 @@ namespace API_GruasUCAB.Department.Application.Services.UpdateDepartment
                     department.ChangeDescription(new DepartmentDescription(request.Descripcion));
                }
 
+               departmentDTO.Name = department.Name.Value;
+               departmentDTO.Descripcion = department.Description.Value;
+
+               await _departmentRepository.UpdateDepartmentAsync(departmentDTO);
 
                return new UpdateDepartmentResponseDTO
                {

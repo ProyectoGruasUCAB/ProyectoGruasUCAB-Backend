@@ -8,8 +8,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser
           [Required]
           [JsonPropertyOrder(2)]
           public string NameRole { get; set; } = string.Empty;
-          [Required]
+
           [JsonPropertyOrder(2)]
-          public string WorkplaceId { get; set; } = string.Empty;
+          public Guid? WorkplaceId { get; set; }
      }
 }

@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string License { get; }
 
+          public string Value => License;
+
           public UserDriverLicense(string license)
           {
                if (string.IsNullOrWhiteSpace(license))

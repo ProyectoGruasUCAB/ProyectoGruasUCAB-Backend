@@ -15,7 +15,7 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
                     DriverId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
                     SupplierId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                     CivilLiability = "Liability A",
-                    CivilLiabilityExpirationDate = "2023-12-31",
+                    CivilLiabilityExpirationDate = "01-12-2025",
                     TrafficLicense = "License A",
                     LicensePlate = "ABC123",
                     Brand = "Brand A",
@@ -80,6 +80,36 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Vehicle with license plate {licensePlate} not found.");
                }
                return await Task.FromResult(vehicle);
+          }
+
+          public async Task AddVehicleAsync(VehicleDTO vehicle)
+          {
+               // Simulación de una llamada a la base de datos
+               _vehicles.Add(vehicle);
+               await Task.CompletedTask;
+          }
+
+          public async Task UpdateVehicleAsync(VehicleDTO vehicle)
+          {
+               // Simulación de una llamada a la base de datos
+               var existingVehicle = _vehicles.FirstOrDefault(v => v.VehicleId == vehicle.VehicleId);
+               if (existingVehicle == null)
+               {
+                    throw new KeyNotFoundException($"Vehicle with ID {vehicle.VehicleId} not found.");
+               }
+
+               existingVehicle.CivilLiability = vehicle.CivilLiability;
+               existingVehicle.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate;
+               existingVehicle.TrafficLicense = vehicle.TrafficLicense;
+               existingVehicle.LicensePlate = vehicle.LicensePlate;
+               existingVehicle.Brand = vehicle.Brand;
+               existingVehicle.Color = vehicle.Color;
+               existingVehicle.Model = vehicle.Model;
+               existingVehicle.VehicleTypeId = vehicle.VehicleTypeId;
+               existingVehicle.DriverId = vehicle.DriverId;
+               existingVehicle.SupplierId = vehicle.SupplierId;
+
+               await Task.CompletedTask;
           }
      }
 }

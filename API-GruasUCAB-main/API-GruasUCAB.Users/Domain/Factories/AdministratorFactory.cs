@@ -2,6 +2,13 @@ namespace API_GruasUCAB.Users.Domain.Factories
 {
      public class AdministratorFactory : IAdministratorFactory
      {
+          private readonly IAdministratorRepository _administratorRepository;
+
+          public AdministratorFactory(IAdministratorRepository administratorRepository)
+          {
+               _administratorRepository = administratorRepository;
+          }
+
           public Administrator CreateAdministrator(
               UserId id,
               UserName name,
@@ -12,23 +19,20 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Administrator(id, name, email, phone, cedula, birthDate);
           }
-<<<<<<< HEAD
 
           public async Task<Administrator> GetAdministratorById(UserId id)
           {
-               // Implementa la lógica para obtener el administrador por su ID
-               // Esto puede involucrar una llamada a un repositorio o una base de datos
-               // Aquí se usa Task.FromResult como un ejemplo de implementación asincrónica
-               return await Task.FromResult(new Administrator(
-                   id,
-                   new UserName("Example Name"),
-                   new UserEmail("example@example.com"),
-                   new UserPhone("04240000000"),
-                   new UserCedula("V-12345678"),
-                   new UserBirthDate("01-01-2000")
-               ));
+               var administratorDTO = await _administratorRepository.GetAdministratorByIdAsync(id.Id);
+               return new Administrator(
+                   new UserId(administratorDTO.UserId),
+                   new UserName(administratorDTO.Name),
+                   new UserEmail(administratorDTO.Email),
+                   new UserPhone(administratorDTO.Phone),
+                   new UserCedula(administratorDTO.Cedula),
+                   new UserBirthDate(administratorDTO.BirthDate)
+               );
           }
-=======
->>>>>>> origin/Development
+
+
      }
 }

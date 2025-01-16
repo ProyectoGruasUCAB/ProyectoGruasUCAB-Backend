@@ -14,8 +14,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     Name = "Admin1",
                     Email = "admin1@example.com",
-                    Phone = "1234567890",
-                    Cedula = "12345678",
+                    Phone = "0416567890",
+                    Cedula = "V-12345678",
                     BirthDate = "01-01-2000"
                 },
                 new AdministratorDTO
@@ -23,8 +23,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
                     Name = "Admin2",
                     Email = "admin2@example.com",
-                    Phone = "0987654321",
-                    Cedula = "87654321",
+                    Phone = "0416654321",
+                    Cedula = "E-87654321",
                     BirthDate = "01-01-2000"
                 },
                 new AdministratorDTO
@@ -32,8 +32,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     UserId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                     Name = "Admin3",
                     Email = "admin3@example.com",
-                    Phone = "1122334455",
-                    Cedula = "11223344",
+                    Phone = "0416334455",
+                    Cedula = "V-11223344",
                     BirthDate = "01-01-2000"
                 }
             };
@@ -65,6 +65,31 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     throw new KeyNotFoundException($"No administrators with name containing '{name}' found.");
                }
                return await Task.FromResult(admins);
+          }
+
+          public async Task AddAdministratorAsync(AdministratorDTO administrator)
+          {
+               // Simulación de una llamada a la base de datos
+               _administrators.Add(administrator);
+               await Task.CompletedTask;
+          }
+
+          public async Task UpdateAdministratorAsync(AdministratorDTO administrator)
+          {
+               // Simulación de una llamada a la base de datos
+               var existingAdministrator = _administrators.FirstOrDefault(a => a.UserId == administrator.UserId);
+               if (existingAdministrator == null)
+               {
+                    throw new KeyNotFoundException($"Administrator with ID {administrator.UserId} not found.");
+               }
+
+               existingAdministrator.Name = administrator.Name;
+               existingAdministrator.Email = administrator.Email;
+               existingAdministrator.Phone = administrator.Phone;
+               existingAdministrator.Cedula = administrator.Cedula;
+               existingAdministrator.BirthDate = administrator.BirthDate;
+
+               await Task.CompletedTask;
           }
      }
 }

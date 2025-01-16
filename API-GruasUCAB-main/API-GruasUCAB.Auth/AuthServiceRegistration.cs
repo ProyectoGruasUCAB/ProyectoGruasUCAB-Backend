@@ -56,6 +56,13 @@ namespace API_GruasUCAB.Auth
                services.AddScoped<IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>, AuthRecoverPasswordValidate>();
                services.AddScoped<IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>, AuthHandleIncompleteAccountValidator>();
 
+               // Decorators
+               services.Decorate<IService<CreateUserRequestDTO, CreateUserResponseDTO>>(
+                   (inner, provider) => new RoleValidationDecorator<CreateUserRequestDTO, CreateUserResponseDTO>(
+                       inner,
+                       provider.GetRequiredService<IKeycloakRepository>(),
+                       provider.GetRequiredService<IHttpClientFactory>(),
+                       provider.GetRequiredService<IHttpContextAccessor>()));
           }
      }
 }

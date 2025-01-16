@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.6.0" />
+    <PackageReference Include="Scrutor" Version="3.3.0" />
     <PackageReference Include="Keycloak.AuthServices.Common" Version="2.6.0" />
+    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.6.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 

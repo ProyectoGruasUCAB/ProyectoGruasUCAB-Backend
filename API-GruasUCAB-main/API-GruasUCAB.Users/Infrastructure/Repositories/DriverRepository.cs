@@ -11,45 +11,45 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
             {
                 new DriverDTO
                 {
-                    Id = Guid.Parse("123e4567-e89b-12d3-a456-426614174001"),
-                    Name = "Jane Doe",
-                    UserEmail = "jane.doe@example.com",
-                    Phone = "04248765432",
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Name = "Driver1",
+                    UserEmail = "driver1@example.com",
+                    Phone = "0414567890",
+                    Cedula = "V-12345678",
+                    BirthDate = "01-01-2000",
+                    CedulaExpirationDate = "01-01-2025",
+                    MedicalCertificate = "Cert1",
+                    MedicalCertificateExpirationDate = "01-01-2025",
+                    DriverLicense = "License1",
+                    DriverLicenseExpirationDate = "01-01-2025"
+                },
+                new DriverDTO
+                {
+                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    Name = "Driver2",
+                    UserEmail = "driver2@example.com",
+                    Phone = "0424654321",
                     Cedula = "V-87654321",
-                    BirthDate = "12-12-2000",
-                    CedulaExpirationDate = "12-12-2025",
-                    MedicalCertificate = "Valid",
-                    MedicalCertificateExpirationDate = "12-12-2030",
-                    DriverLicense = "B1234567",
-                    DriverLicenseExpirationDate = "27-12-2025"
+                    BirthDate = "01-01-2000",
+                    CedulaExpirationDate = "01-01-2025",
+                    MedicalCertificate = "Cert2",
+                    MedicalCertificateExpirationDate = "01-01-2025",
+                    DriverLicense = "License2",
+                    DriverLicenseExpirationDate = "01-01-2025"
                 },
                 new DriverDTO
                 {
-                    Id = Guid.Parse("123e4567-e89b-12d3-a456-426614174002"),
-                    Name = "John Smith",
-                    UserEmail = "john.smith@example.com",
-                    Phone = "04248765433",
-                    Cedula = "V-87654322",
-                    BirthDate = "10-10-1995",
-                    CedulaExpirationDate = "10-10-2025",
-                    MedicalCertificate = "Valid",
-                    MedicalCertificateExpirationDate = "10-10-2030",
-                    DriverLicense = "B1234568",
-                    DriverLicenseExpirationDate = "10-10-2025"
-                },
-                new DriverDTO
-                {
-                    Id = Guid.Parse("123e4567-e89b-12d3-a456-426614174003"),
-                    Name = "Alice Johnson",
-                    UserEmail = "alice.johnson@example.com",
-                    Phone = "04248765434",
-                    Cedula = "V-87654323",
-                    BirthDate = "05-05-1990",
-                    CedulaExpirationDate = "05-05-2025",
-                    MedicalCertificate = "Valid",
-                    MedicalCertificateExpirationDate = "05-05-2030",
-                    DriverLicense = "B1234569",
-                    DriverLicenseExpirationDate = "05-05-2025"
+                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    Name = "Driver3",
+                    UserEmail = "driver3@example.com",
+                    Phone = "04123344555",
+                    Cedula = "V-11223344",
+                    BirthDate = "01-01-2000",
+                    CedulaExpirationDate = "01-01-2026",
+                    MedicalCertificate = "Cert3",
+                    MedicalCertificateExpirationDate = "01-01-2026",
+                    DriverLicense = "License3",
+                    DriverLicenseExpirationDate = "01-01-2026"
                 }
             };
           }
@@ -80,6 +80,36 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     throw new KeyNotFoundException($"No drivers with name containing '{name}' found.");
                }
                return await Task.FromResult(drivers);
+          }
+
+          public async Task AddDriverAsync(DriverDTO driver)
+          {
+               // Simulación de una llamada a la base de datos
+               _drivers.Add(driver);
+               await Task.CompletedTask;
+          }
+
+          public async Task UpdateDriverAsync(DriverDTO driver)
+          {
+               // Simulación de una llamada a la base de datos
+               var existingDriver = _drivers.FirstOrDefault(d => d.Id == driver.Id);
+               if (existingDriver == null)
+               {
+                    throw new KeyNotFoundException($"Driver with ID {driver.Id} not found.");
+               }
+
+               existingDriver.Name = driver.Name;
+               existingDriver.UserEmail = driver.UserEmail;
+               existingDriver.Phone = driver.Phone;
+               existingDriver.Cedula = driver.Cedula;
+               existingDriver.BirthDate = driver.BirthDate;
+               existingDriver.CedulaExpirationDate = driver.CedulaExpirationDate;
+               existingDriver.MedicalCertificate = driver.MedicalCertificate;
+               existingDriver.MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate;
+               existingDriver.DriverLicense = driver.DriverLicense;
+               existingDriver.DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate;
+
+               await Task.CompletedTask;
           }
      }
 }

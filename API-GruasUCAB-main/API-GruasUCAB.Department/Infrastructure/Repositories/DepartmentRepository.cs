@@ -12,13 +12,13 @@ namespace API_GruasUCAB.Department.Infrastructure.Repositories
                 new DepartmentDTO
                 {
                     DepartmentId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "HR",
+                    Name = "HRd",
                     Descripcion = "Human Resources"
                 },
                 new DepartmentDTO
                 {
                     DepartmentId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "IT",
+                    Name = "ITd",
                     Descripcion = "Information Technology"
                 },
                 new DepartmentDTO
@@ -56,6 +56,28 @@ namespace API_GruasUCAB.Department.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Department with name {name} not found.");
                }
                return await Task.FromResult(department);
+          }
+
+          public async Task AddDepartmentAsync(DepartmentDTO department)
+          {
+               // Simulación de una llamada a la base de datos
+               _departments.Add(department);
+               await Task.CompletedTask;
+          }
+
+          public async Task UpdateDepartmentAsync(DepartmentDTO department)
+          {
+               // Simulación de una llamada a la base de datos
+               var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == department.DepartmentId);
+               if (existingDepartment == null)
+               {
+                    throw new KeyNotFoundException($"Department with ID {department.DepartmentId} not found.");
+               }
+
+               existingDepartment.Name = department.Name;
+               existingDepartment.Descripcion = department.Descripcion;
+
+               await Task.CompletedTask;
           }
      }
 }

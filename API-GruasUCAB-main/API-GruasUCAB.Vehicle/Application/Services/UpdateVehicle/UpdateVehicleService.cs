@@ -2,22 +2,36 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
 {
      public class UpdateVehicleService : IService<UpdateVehicleRequestDTO, UpdateVehicleResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IVehicleRepository _vehicleRepository;
           private readonly IVehicleFactory _vehicleFactory;
 
-          public UpdateVehicleService(IEventStore eventStore, IVehicleFactory vehicleFactory)
+          public UpdateVehicleService(IVehicleRepository vehicleRepository, IVehicleFactory vehicleFactory)
           {
-               _eventStore = eventStore;
+               _vehicleRepository = vehicleRepository;
                _vehicleFactory = vehicleFactory;
           }
 
           public async Task<UpdateVehicleResponseDTO> Execute(UpdateVehicleRequestDTO request)
           {
-               var vehicle = await _vehicleFactory.GetVehicleById(new VehicleId(request.VehicleId));
-               if (vehicle == null)
+               var vehicleDTO = await _vehicleRepository.GetVehicleByIdAsync(request.VehicleId);
+               if (vehicleDTO == null)
                {
                     throw new VehicleNotFoundException(request.VehicleId);
                }
+
+               var vehicle = _vehicleFactory.CreateVehicle(
+                   new VehicleId(vehicleDTO.VehicleId),
+                   new VehicleCivilLiability(vehicleDTO.CivilLiability),
+                   new VehicleCivilLiabilityExpirationDate(vehicleDTO.CivilLiabilityExpirationDate),
+                   new VehicleTrafficLicense(vehicleDTO.TrafficLicense),
+                   new VehicleLicensePlate(vehicleDTO.LicensePlate),
+                   new VehicleBrand(vehicleDTO.Brand),
+                   new VehicleColor(vehicleDTO.Color),
+                   new VehicleModel(vehicleDTO.Model),
+                   new VehicleTypeId(vehicleDTO.VehicleTypeId),
+                   new UserId(vehicleDTO.DriverId),
+                   new SupplierId(vehicleDTO.SupplierId)
+               );
 
                if (!string.IsNullOrEmpty(request.CivilLiability))
                {
@@ -55,8 +69,6 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                }
 
                if (request.VehicleTypeId.HasValue)
-<<<<<<< HEAD
-=======
                {
                     vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
                }
@@ -71,26 +83,18 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
                }
 
-               List<IDomainEvent> domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
-               foreach (var domainEvent in vehicle.GetEvents())
->>>>>>> origin/Development
-               {
-                    vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
-               }
+               vehicleDTO.CivilLiability = vehicle.CivilLiability.Value;
+               vehicleDTO.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("yyyy-MM-dd");
+               vehicleDTO.TrafficLicense = vehicle.TrafficLicense.Value;
+               vehicleDTO.LicensePlate = vehicle.LicensePlate.Value;
+               vehicleDTO.Brand = vehicle.Brand.Value;
+               vehicleDTO.Color = vehicle.Color.Value;
+               vehicleDTO.Model = vehicle.Model.Value;
+               vehicleDTO.VehicleTypeId = vehicle.VehicleTypeId.Id;
+               vehicleDTO.DriverId = vehicle.DriverId.Id;
+               vehicleDTO.SupplierId = vehicle.SupplierId.Id;
 
-               if (request.DriverId.HasValue)
-               {
-                    vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
-               }
-
-               if (request.SupplierId.HasValue)
-               {
-                    vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
-               }
-
-               var domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
-
-               await _eventStore.AppendEvents(vehicle.Id.ToString(), domainEvents);
+               await _vehicleRepository.UpdateVehicleAsync(vehicleDTO);
 
                return new UpdateVehicleResponseDTO
                {

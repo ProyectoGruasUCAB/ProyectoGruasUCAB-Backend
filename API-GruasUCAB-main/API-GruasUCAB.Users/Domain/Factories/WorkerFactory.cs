@@ -2,6 +2,13 @@ namespace API_GruasUCAB.Users.Domain.Factories
 {
      public class WorkerFactory : IWorkerFactory
      {
+          private readonly IWorkerRepository _workerRepository;
+
+          public WorkerFactory(IWorkerRepository workerRepository)
+          {
+               _workerRepository = workerRepository;
+          }
+
           public Worker CreateWorker(
               UserId id,
               UserName name,
@@ -13,24 +20,19 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Worker(id, name, email, phone, cedula, birthDate, position);
           }
-<<<<<<< HEAD
 
           public async Task<Worker> GetWorkerById(UserId id)
           {
-               // Implementa la lógica para obtener el trabajador por su ID
-               // Esto puede involucrar una llamada a un repositorio o una base de datos
-               // Aquí se usa Task.FromResult como un ejemplo de implementación asincrónica
-               return await Task.FromResult(new Worker(
-                   id,
-                   new UserName("Example Name"),
-                   new UserEmail("example@example.com"),
-                   new UserPhone("04240000000"),
-                   new UserCedula("V-12345678"),
-                   new UserBirthDate("01-01-2000"),
-                   new UserPosition("Example Position")
-               ));
+               var workerDTO = await _workerRepository.GetWorkerByIdAsync(id.Id);
+               return new Worker(
+                   new UserId(workerDTO.Id),
+                   new UserName(workerDTO.Name),
+                   new UserEmail(workerDTO.UserEmail),
+                   new UserPhone(workerDTO.Phone),
+                   new UserCedula(workerDTO.Cedula),
+                   new UserBirthDate(workerDTO.BirthDate),
+                   new UserPosition(workerDTO.Position)
+               );
           }
-=======
->>>>>>> origin/Development
      }
 }

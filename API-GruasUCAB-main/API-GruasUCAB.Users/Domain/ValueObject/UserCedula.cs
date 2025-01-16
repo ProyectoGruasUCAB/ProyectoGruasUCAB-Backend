@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Cedula { get; }
 
+          public string Value => Cedula;
+
           public UserCedula(string cedula)
           {
                if (!IsValid(cedula))

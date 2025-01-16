@@ -4,6 +4,8 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
      {
           public string Email { get; }
 
+          public string Value => Email;
+
           public UserEmail(string email)
           {
                if (!IsValid(email))

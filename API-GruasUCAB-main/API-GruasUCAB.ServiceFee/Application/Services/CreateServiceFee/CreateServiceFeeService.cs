@@ -2,12 +2,12 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
 {
      public class CreateServiceFeeService : IService<CreateServiceFeeRequestDTO, CreateServiceFeeResponseDTO>
      {
-          private readonly IEventStore _eventStore;
+          private readonly IServiceFeeRepository _serviceFeeRepository;
           private readonly IServiceFeeFactory _serviceFeeFactory;
 
-          public CreateServiceFeeService(IEventStore eventStore, IServiceFeeFactory serviceFeeFactory)
+          public CreateServiceFeeService(IServiceFeeRepository serviceFeeRepository, IServiceFeeFactory serviceFeeFactory)
           {
-               _eventStore = eventStore;
+               _serviceFeeRepository = serviceFeeRepository;
                _serviceFeeFactory = serviceFeeFactory;
           }
 
@@ -21,9 +21,16 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                    new ServiceFeeRadius(request.Radius)
                );
 
-               var domainEvents = new List<IDomainEvent>(serviceFee.GetEvents());
+               var serviceFeeDTO = new ServiceFeeDTO
+               {
+                    ServiceFeeId = serviceFee.Id.Id,
+                    Name = serviceFee.Name.Value,
+                    Price = serviceFee.Price.Value,
+                    PriceKm = serviceFee.PriceKm.Value,
+                    Radius = serviceFee.Radius.Value
+               };
 
-               await _eventStore.AppendEvents(serviceFee.Id.ToString(), domainEvents);
+               await _serviceFeeRepository.AddServiceFeeAsync(serviceFeeDTO);
 
                return new CreateServiceFeeResponseDTO
                {

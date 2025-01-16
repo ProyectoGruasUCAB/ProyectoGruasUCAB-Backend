@@ -6,15 +6,24 @@ using API_GruasUCAB.Users.Application.Queries.GetAdministratorsByName;
 using API_GruasUCAB.Users.Application.Queries.GetAllDrivers;
 using API_GruasUCAB.Users.Application.Queries.GetDriverById;
 using API_GruasUCAB.Users.Application.Queries.GetDriversByName;
+using API_GruasUCAB.Users.Application.Queries.GetAllWorkers;
+using API_GruasUCAB.Users.Application.Queries.GetWorkerById;
+using API_GruasUCAB.Users.Application.Queries.GetWorkersByName;
+using API_GruasUCAB.Users.Application.Queries.GetWorkersByPosition;
+using API_GruasUCAB.Users.Application.Queries.GetAllProviders;
+using API_GruasUCAB.Users.Application.Queries.GetProviderById;
+using API_GruasUCAB.Users.Application.Queries.GetProvidersByName;
 using API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData;
 using API_GruasUCAB.Users.Infrastructure.DTOs.UpdateUser;
 using API_GruasUCAB.Users.Infrastructure.DTOs.AdministratorQueries;
 using API_GruasUCAB.Users.Infrastructure.DTOs.DriverQueries;
+using API_GruasUCAB.Users.Infrastructure.DTOs.WorkerQueries;
+using API_GruasUCAB.Users.Infrastructure.DTOs.ProviderQueries;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using MediatR;
+using System.Security.Claims;
 
 namespace API_GruasUCAB.Controllers
 {
@@ -147,6 +156,132 @@ namespace API_GruasUCAB.Controllers
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetDriversByName");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetAllWorkers")]
+          [ProducesResponseType(typeof(GetAllWorkersResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetAllWorkers()
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetAllWorkersQuery(userId);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetAllWorkers");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetWorkerById/{id}")]
+          [ProducesResponseType(typeof(GetWorkerByIdResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetWorkerById(Guid id)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetWorkerByIdQuery(userId, id);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetWorkerById");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetWorkersByName/{name}")]
+          [ProducesResponseType(typeof(GetWorkersByNameResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetWorkersByName(string name)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetWorkersByNameQuery(userId, name);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetWorkersByName");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetWorkersByPosition/{position}")]
+          [ProducesResponseType(typeof(GetWorkersByPositionResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetWorkersByPosition(string position)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetWorkersByPositionQuery(userId, position);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetWorkersByPosition");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetAllProviders")]
+          [ProducesResponseType(typeof(GetAllProvidersResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetAllProviders()
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetAllProvidersQuery(userId);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetAllProviders");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetProviderById/{id}")]
+          [ProducesResponseType(typeof(GetProviderByIdResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetProviderById(Guid id)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetProviderByIdQuery(userId, id);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetProviderById");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetProvidersByName/{name}")]
+          [ProducesResponseType(typeof(GetProvidersByNameResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetProvidersByName(string name)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetProvidersByNameQuery(userId, name);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetProvidersByName");
           }
 
           [HttpPost]

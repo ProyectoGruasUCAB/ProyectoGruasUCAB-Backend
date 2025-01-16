@@ -5,5 +5,7 @@ namespace API_GruasUCAB.Supplier.Domain.Repositories
           Task<List<SupplierDTO>> GetAllSuppliersAsync();
           Task<SupplierDTO> GetSupplierByIdAsync(Guid id);
           Task<List<SupplierDTO>> GetSuppliersByTypeAsync(string type);
+          Task AddSupplierAsync(SupplierDTO supplier);
+          Task UpdateSupplierAsync(SupplierDTO supplier);
      }
 }

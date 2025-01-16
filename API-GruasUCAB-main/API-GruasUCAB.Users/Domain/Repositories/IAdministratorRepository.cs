@@ -5,5 +5,7 @@ namespace API_GruasUCAB.Users.Domain.Repositories
           Task<List<AdministratorDTO>> GetAllAdministratorsAsync();
           Task<AdministratorDTO> GetAdministratorByIdAsync(Guid id);
           Task<List<AdministratorDTO>> GetAdministratorsByNameAsync(string name);
+          Task AddAdministratorAsync(AdministratorDTO administrator);
+          Task UpdateAdministratorAsync(AdministratorDTO administrator);
      }
 }

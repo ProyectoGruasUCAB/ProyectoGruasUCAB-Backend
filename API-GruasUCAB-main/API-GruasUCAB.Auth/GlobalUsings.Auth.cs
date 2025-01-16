@@ -12,3 +12,4 @@ global using System.Net.Mail;
 global using System.Text;
 global using System.Net;
 global using MediatR;
+global using API_GruasUCAB.Auth.Infrastructure.Decorators;

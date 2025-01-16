@@ -2,7 +2,6 @@ global using API_GruasUCAB.Core.Domain.DomainEvent;
 global using API_GruasUCAB.Core.Domain.ValueObject;
 global using API_GruasUCAB.Core.Utilities.Logger;
 global using API_GruasUCAB.Core.Domain.Entity;
-global using API_GruasUCAB.Core.Domain.conf;
 global using API_GruasUCAB.Commons.Exceptions;
 global using Newtonsoft.Json.Serialization;
 global using Newtonsoft.Json;

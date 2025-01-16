@@ -9,10 +9,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate);
-<<<<<<< HEAD
 
           Task<Administrator> GetAdministratorById(UserId id);
-=======
->>>>>>> origin/Development
+
      }
 }

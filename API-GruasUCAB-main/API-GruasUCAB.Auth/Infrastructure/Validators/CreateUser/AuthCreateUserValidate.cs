@@ -9,7 +9,13 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
           private readonly IService<AssignRoleRequestDTO, AssignRoleResponseDTO> _assignRoleService;
           private readonly EmailProcessor _emailProcessor;
 
-          public AuthCreateUserValidate(IHttpClientFactory httpClientFactory, HeadersToken headersToken, IKeycloakRepository keycloakRepository, IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService, IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService, EmailProcessor emailProcessor)
+          public AuthCreateUserValidate(
+              IHttpClientFactory httpClientFactory,
+              HeadersToken headersToken,
+              IKeycloakRepository keycloakRepository,
+              IService<DeleteUserRequestDTO, DeleteUserResponseDTO> deleteUserService,
+              IService<AssignRoleRequestDTO, AssignRoleResponseDTO> assignRoleService,
+              EmailProcessor emailProcessor)
           {
                _httpClientFactory = httpClientFactory;
                _headersToken = headersToken;
@@ -25,38 +31,30 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
 
                try
                {
-                    //   Headers Token
+                    // Headers Token
                     var token = _headersToken.GetToken();
                     _headersToken.SetAuthorizationHeader(client);
 
-                    //   Introspect Token
-                    var (UserEmail, role, email) = await _keycloakRepository.IntrospectTokenAsync(client, token);
-
-                    if (!string.Equals(email, request.UserEmail, StringComparison.OrdinalIgnoreCase))
+                    // Validate WorkplaceId
+                    if ((request.NameRole == "Trabajador" || request.NameRole == "Conductor" || request.NameRole == "Proveedor") && !request.WorkplaceId.HasValue)
                     {
-                         return new CreateUserResponseDTO { Success = false, Message = "Email does not match.", Time = DateTime.UtcNow, UserEmail = request.UserEmail };
+                         return new CreateUserResponseDTO { Success = false, Message = "WorkplaceId is required for the specified role.", Time = DateTime.UtcNow, UserEmail = request.UserEmail };
                     }
 
-                    // Validate Role
-                    if (!RoleValidator.CanPerformAction(role, request.NameRole))
-                    {
-                         throw new UnauthorizedAccessException("You do not have permissions to create this type of user.");
-                    }
-
-                    //   Password Temporary
+                    // Password Temporary
                     var password = PasswordGenerator.GeneratePassword();
 
-                    //   Create User
+                    // Create User
                     var userCreated = await _keycloakRepository.CreateUserAsync(client, request.EmailToCreate, password);
                     if (!userCreated)
                     {
                          return new CreateUserResponseDTO { Success = false, Message = "Error creating user", Time = DateTime.UtcNow, UserEmail = request.UserEmail, EmailToCreate = request.EmailToCreate };
                     }
 
-                    //   Email => UserID
+                    // Email => UserID
                     var (userId, _) = await _keycloakRepository.GetUserByEmailAsync(client, request.EmailToCreate, string.Empty);
 
-                    //   Assign Role
+                    // Assign Role
                     var assignRoleResponse = await _assignRoleService.Execute(new AssignRoleRequestDTO
                     {
                          EmailAssignedRole = request.EmailToCreate,
@@ -74,7 +72,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
                          return new CreateUserResponseDTO { Success = false, Message = "Error assigning role", Time = DateTime.UtcNow, UserEmail = request.UserEmail };
                     }
 
-                    //   Send Email
+                    // Send Email
                     var emailResponse = await _emailProcessor.SendEmailAsync(request.EmailToCreate, "Cuenta creada", "new-user.ftl", new Dictionary<string, string> { { "password", password } });
                     if (!emailResponse.Success)
                     {
@@ -94,7 +92,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.Validators.CreateUser
                          EmailToCreate = request.EmailToCreate,
                          Time = DateTime.UtcNow,
                          UserEmail = request.UserEmail,
-                         NameRole = request.NameRole
+                         NameRole = request.NameRole,
+                         WorkplaceId = request.WorkplaceId
                     };
                }
                catch (UnauthorizedAccessException ex)
