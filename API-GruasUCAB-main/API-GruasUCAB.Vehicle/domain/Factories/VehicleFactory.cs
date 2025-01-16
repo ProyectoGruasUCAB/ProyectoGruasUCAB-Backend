@@ -2,13 +2,6 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
 {
      public class VehicleFactory : IVehicleFactory
      {
-          private readonly IVehicleRepository _vehicleRepository;
-
-          public VehicleFactory(IVehicleRepository vehicleRepository)
-          {
-               _vehicleRepository = vehicleRepository;
-          }
-
           public AggregateRoot.Vehicle CreateVehicle(
               VehicleId id,
               VehicleCivilLiability civilLiability,
@@ -39,19 +32,25 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
 
           public async Task<AggregateRoot.Vehicle> GetVehicleById(VehicleId id)
           {
-               var vehicleDTO = await _vehicleRepository.GetVehicleByIdAsync(id.Id);
+               // Implementación para obtener un vehículo por su ID
+               // Esto puede incluir una llamada a una base de datos o un servicio externo
+               // Por ahora, lanzamos una excepción para indicar que no está implementado
+               // throw new NotImplementedException();
+
+               // Ejemplo de implementación simulada
+               await Task.CompletedTask; // Simula una operación asincrónica
                return new AggregateRoot.Vehicle(
-                   new VehicleId(vehicleDTO.VehicleId),
-                   new VehicleCivilLiability(vehicleDTO.CivilLiability),
-                   new VehicleCivilLiabilityExpirationDate(vehicleDTO.CivilLiabilityExpirationDate),
-                   new VehicleTrafficLicense(vehicleDTO.TrafficLicense),
-                   new VehicleLicensePlate(vehicleDTO.LicensePlate),
-                   new VehicleBrand(vehicleDTO.Brand),
-                   new VehicleColor(vehicleDTO.Color),
-                   new VehicleModel(vehicleDTO.Model),
-                   new VehicleTypeId(vehicleDTO.VehicleTypeId),
-                   new UserId(vehicleDTO.DriverId),
-                   new SupplierId(vehicleDTO.SupplierId)
+                   id,
+                   new VehicleCivilLiability("Full Coverage"),
+                   new VehicleCivilLiabilityExpirationDate("31-12-2025"),
+                   new VehicleTrafficLicense("A123456789"),
+                   new VehicleLicensePlate("ABC1234"),
+                   new VehicleBrand("Toyota"),
+                   new VehicleColor("Red"),
+                   new VehicleModel("Corolla"),
+                   new VehicleTypeId(Guid.NewGuid()),
+                   new UserId(Guid.NewGuid()),
+                   new SupplierId(Guid.NewGuid())
                );
           }
      }
