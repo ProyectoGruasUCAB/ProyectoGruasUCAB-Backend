@@ -13,6 +13,16 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IDriverFactory, DriverFactory>();
             services.AddScoped<IWorkerFactory, WorkerFactory>();
             services.AddScoped<ISupplierFactory, SupplierFactory>();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            services.AddScoped<IEventStore, InMemoryEventStore>();
+            services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
+            services.AddScoped<IKeycloakRepository, KeycloakRepository>();
+            services.AddHttpClient();
+>>>>>>> origin/Development
+>>>>>>> origin/Development
 
             // Repositories
             services.AddScoped<IAdministratorRepository, AdministratorRepository>();
