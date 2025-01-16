@@ -17,7 +17,6 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Driver(id, name, email, phone, cedula, birthDate, cedulaExpirationDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate);
           }
-<<<<<<< HEAD
 
           public async Task<Driver> GetDriverById(UserId id)
           {
@@ -38,7 +37,5 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserDriverLicenseExpirationDate("01-01-2025")
                ));
           }
-=======
->>>>>>> origin/Development
      }
 }

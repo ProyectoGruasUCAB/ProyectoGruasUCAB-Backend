@@ -13,7 +13,6 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Worker(id, name, email, phone, cedula, birthDate, position);
           }
-<<<<<<< HEAD
 
           public async Task<Worker> GetWorkerById(UserId id)
           {
@@ -30,7 +29,5 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserPosition("Example Position")
                ));
           }
-=======
->>>>>>> origin/Development
      }
 }

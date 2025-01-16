@@ -12,7 +12,6 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Administrator(id, name, email, phone, cedula, birthDate);
           }
-<<<<<<< HEAD
 
           public async Task<Administrator> GetAdministratorById(UserId id)
           {
@@ -28,7 +27,5 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserBirthDate("01-01-2000")
                ));
           }
-=======
->>>>>>> origin/Development
      }
 }
