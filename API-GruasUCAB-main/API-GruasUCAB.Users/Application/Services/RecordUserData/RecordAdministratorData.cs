@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
-     public class RecordAdministratorData : IRecordUserData
+     public class RecordAdministratorData : IRecordAdministratorData
      {
           private readonly IAdministratorFactory _administratorFactory;
           private readonly IAdministratorRepository _administratorRepository;

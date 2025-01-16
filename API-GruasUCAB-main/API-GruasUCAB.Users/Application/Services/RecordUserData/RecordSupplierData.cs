@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
-     public class RecordSupplierData : IRecordUserData
+     public class RecordSupplierData : IRecordSupplierData
      {
           private readonly ISupplierFactory _supplierFactory;
           private readonly IProviderRepository _providerRepository;

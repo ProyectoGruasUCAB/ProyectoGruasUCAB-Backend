@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 {
-     public class UpdateRecordSupplierData : IUpdateRecordUserData
+     public class UpdateRecordSupplierData : IUpdateRecordSupplierData
      {
           private readonly ISupplierFactory _supplierFactory;
           private readonly IProviderRepository _providerRepository;

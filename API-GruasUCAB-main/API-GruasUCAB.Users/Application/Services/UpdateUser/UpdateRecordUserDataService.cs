@@ -2,16 +2,16 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 {
      public class UpdateRecordUserDataService : IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>
      {
-          private readonly IUpdateRecordUserData _updateRecordAdministratorData;
-          private readonly IUpdateRecordUserData _updateRecordDriverData;
-          private readonly IUpdateRecordUserData _updateRecordWorkerData;
-          private readonly IUpdateRecordUserData _updateRecordSupplierData;
+          private readonly IUpdateRecordAdministratorData _updateRecordAdministratorData;
+          private readonly IUpdateRecordDriverData _updateRecordDriverData;
+          private readonly IUpdateRecordWorkerData _updateRecordWorkerData;
+          private readonly IUpdateRecordSupplierData _updateRecordSupplierData;
 
           public UpdateRecordUserDataService(
-              IUpdateRecordUserData updateRecordAdministratorData,
-              IUpdateRecordUserData updateRecordDriverData,
-              IUpdateRecordUserData updateRecordWorkerData,
-              IUpdateRecordUserData updateRecordSupplierData)
+              IUpdateRecordAdministratorData updateRecordAdministratorData,
+              IUpdateRecordDriverData updateRecordDriverData,
+              IUpdateRecordWorkerData updateRecordWorkerData,
+              IUpdateRecordSupplierData updateRecordSupplierData)
           {
                _updateRecordAdministratorData = updateRecordAdministratorData;
                _updateRecordDriverData = updateRecordDriverData;
@@ -34,18 +34,25 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 
                try
                {
-                    switch (userRole)
+                    if (userRole == UserRole.Administrador)
                     {
-                         case UserRole.Administrador:
-                              return await _updateRecordAdministratorData.Execute(request);
-                         case UserRole.Conductor:
-                              return await _updateRecordDriverData.Execute(request);
-                         case UserRole.Trabajador:
-                              return await _updateRecordWorkerData.Execute(request);
-                         case UserRole.Proveedor:
-                              return await _updateRecordSupplierData.Execute(request);
-                         default:
-                              throw new InvalidOperationException("Invalid user role");
+                         return await _updateRecordAdministratorData.Execute(request);
+                    }
+                    else if (userRole == UserRole.Conductor)
+                    {
+                         return await _updateRecordDriverData.Execute(request);
+                    }
+                    else if (userRole == UserRole.Trabajador)
+                    {
+                         return await _updateRecordWorkerData.Execute(request);
+                    }
+                    else if (userRole == UserRole.Proveedor)
+                    {
+                         return await _updateRecordSupplierData.Execute(request);
+                    }
+                    else
+                    {
+                         throw new InvalidOperationException("Invalid user role");
                     }
                }
                catch (Exception ex)

@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 {
-     public class UpdateRecordDriverData : IUpdateRecordUserData
+     public class UpdateRecordDriverData : IUpdateRecordDriverData
      {
           private readonly IDriverFactory _driverFactory;
           private readonly IDriverRepository _driverRepository;

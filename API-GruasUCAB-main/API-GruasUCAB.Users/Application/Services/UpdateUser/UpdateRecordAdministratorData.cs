@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 {
-     public class UpdateRecordAdministratorData : IUpdateRecordUserData
+     public class UpdateRecordAdministratorData : IUpdateRecordAdministratorData
      {
           private readonly IAdministratorFactory _administratorFactory;
           private readonly IAdministratorRepository _administratorRepository;

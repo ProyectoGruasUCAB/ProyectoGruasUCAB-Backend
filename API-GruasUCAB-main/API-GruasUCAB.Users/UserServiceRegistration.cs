@@ -14,6 +14,12 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IWorkerFactory, WorkerFactory>();
             services.AddScoped<ISupplierFactory, SupplierFactory>();
 
+
+            services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
+            services.AddScoped<IKeycloakRepository, KeycloakRepository>();
+            services.AddHttpClient();
+
+
             // Repositories
             services.AddScoped<IAdministratorRepository, AdministratorRepository>();
             services.AddScoped<IDriverRepository, DriverRepository>();
@@ -21,16 +27,16 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IProviderRepository, ProviderRepository>();
 
             // Record User Data Services
-            services.AddScoped<IRecordUserData, RecordAdministratorData>();
-            services.AddScoped<IRecordUserData, RecordDriverData>();
-            services.AddScoped<IRecordUserData, RecordWorkerData>();
-            services.AddScoped<IRecordUserData, RecordSupplierData>();
+            services.AddScoped<IRecordAdministratorData, RecordAdministratorData>();
+            services.AddScoped<IRecordDriverData, RecordDriverData>();
+            services.AddScoped<IRecordWorkerData, RecordWorkerData>();
+            services.AddScoped<IRecordSupplierData, RecordSupplierData>();
 
             // Update User Data Services
-            services.AddScoped<IUpdateRecordUserData, UpdateRecordAdministratorData>();
-            services.AddScoped<IUpdateRecordUserData, UpdateRecordDriverData>();
-            services.AddScoped<IUpdateRecordUserData, UpdateRecordWorkerData>();
-            services.AddScoped<IUpdateRecordUserData, UpdateRecordSupplierData>();
+            services.AddScoped<IUpdateRecordAdministratorData, UpdateRecordAdministratorData>();
+            services.AddScoped<IUpdateRecordDriverData, UpdateRecordDriverData>();
+            services.AddScoped<IUpdateRecordWorkerData, UpdateRecordWorkerData>();
+            services.AddScoped<IUpdateRecordSupplierData, UpdateRecordSupplierData>();
 
             // Queries
             services.AddScoped<IRequestHandler<GetAllAdministratorsQuery, GetAllAdministratorsResponseDTO>, GetAllAdministratorsQueryHandler>();

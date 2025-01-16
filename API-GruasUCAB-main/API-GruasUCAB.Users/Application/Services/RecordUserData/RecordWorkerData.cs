@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
-     public class RecordWorkerData : IRecordUserData
+     public class RecordWorkerData : IRecordWorkerData
      {
           private readonly IWorkerFactory _workerFactory;
           private readonly IWorkerRepository _workerRepository;

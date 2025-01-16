@@ -1,6 +1,6 @@
 namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 {
-     public class RecordDriverData : IRecordUserData
+     public class RecordDriverData : IRecordDriverData
      {
           private readonly IDriverFactory _driverFactory;
           private readonly IDriverRepository _driverRepository;
