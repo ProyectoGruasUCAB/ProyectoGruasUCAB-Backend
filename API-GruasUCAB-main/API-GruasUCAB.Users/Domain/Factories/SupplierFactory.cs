@@ -12,6 +12,7 @@ namespace API_GruasUCAB.Users.Domain.Factories
           {
                return new Supplier(id, name, email, phone, cedula, birthDate);
           }
+<<<<<<< HEAD
 
           public async Task<Supplier> GetSupplierById(UserId id)
           {
@@ -27,5 +28,7 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserBirthDate("01-01-2000")
                ));
           }
+=======
+>>>>>>> origin/Development
      }
 }

@@ -10,7 +10,10 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserCedula cedula,
               UserBirthDate birthDate,
               UserPosition position);
+<<<<<<< HEAD
 
           Task<Worker> GetWorkerById(UserId id);
+=======
+>>>>>>> origin/Development
      }
 }

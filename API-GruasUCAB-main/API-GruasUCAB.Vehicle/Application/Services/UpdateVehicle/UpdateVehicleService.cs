@@ -55,6 +55,25 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                }
 
                if (request.VehicleTypeId.HasValue)
+<<<<<<< HEAD
+=======
+               {
+                    vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
+               }
+
+               if (request.DriverId.HasValue)
+               {
+                    vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
+               }
+
+               if (request.SupplierId.HasValue)
+               {
+                    vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
+               }
+
+               List<IDomainEvent> domainEvents = new List<IDomainEvent>(vehicle.GetEvents());
+               foreach (var domainEvent in vehicle.GetEvents())
+>>>>>>> origin/Development
                {
                     vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
                }

@@ -1,4 +1,4 @@
-﻿global using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
+global using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository;
 global using API_GruasUCAB.Auth.Application.Decorators;
 global using API_GruasUCAB.Supplier.Domain.ValueObject;
 global using API_GruasUCAB.Users.Domain.ValueObject;

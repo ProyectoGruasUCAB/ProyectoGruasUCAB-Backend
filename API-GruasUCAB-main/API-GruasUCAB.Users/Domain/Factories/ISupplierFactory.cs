@@ -9,7 +9,10 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate);
+<<<<<<< HEAD
 
           Task<Supplier> GetSupplierById(UserId id);
+=======
+>>>>>>> origin/Development
      }
 }
