@@ -8,6 +8,7 @@ namespace API_GruasUCAB.Users.Domain.Entities
           public UserCedula Cedula { get; private set; }
           public UserBirthDate BirthDate { get; private set; }
 
+
           public Administrator(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula, UserBirthDate birthDate)
               : base(id)
           {
