@@ -6,40 +6,28 @@ namespace API_GruasUCAB.Policy.Infrastructure.DTOs.CreatePolicy
           [JsonPropertyOrder(2)]
           public Guid UserId { get; set; }
 
-          [Required(ErrorMessage = "Policy number is required.")]
-          [JsonPropertyOrder(1)]
-          public string PolicyNumber { get; set; } = string.Empty;
-
-          [Required(ErrorMessage = "Policy name is required.")]
+          [Required(ErrorMessage = "Name is required.")]
           [JsonPropertyOrder(2)]
-          public string PolicyName { get; set; } = string.Empty;
+          public string Name { get; set; } = string.Empty;
 
-          [Required(ErrorMessage = "Policy coverage amount is required.")]
+          [Required(ErrorMessage = "Coverage amount is required.")]
           [JsonPropertyOrder(2)]
-          public float PolicyCoverageAmount { get; set; }
+          public float CoverageAmount { get; set; }
 
-          [Required(ErrorMessage = "Policy coverage kilometers is required.")]
+          [Required(ErrorMessage = "Coverage kilometers is required.")]
           [JsonPropertyOrder(2)]
-          public int PolicyCoverageKm { get; set; }
+          public int CoverageKm { get; set; }
 
-          [Required(ErrorMessage = "Policy base amount is required.")]
+          [Required(ErrorMessage = "Base amount is required.")]
           [JsonPropertyOrder(2)]
-          public float PolicyBaseAmount { get; set; }
+          public float BaseAmount { get; set; }
 
-          [Required(ErrorMessage = "Policy price per kilometer is required.")]
+          [Required(ErrorMessage = "Price per kilometer is required.")]
           [JsonPropertyOrder(2)]
-          public float PolicyPriceKm { get; set; }
+          public float PriceKm { get; set; }
 
-          [Required(ErrorMessage = "Policy issue date is required.")]
+          [Required(ErrorMessage = "Client ID is required.")]
           [JsonPropertyOrder(2)]
-          public string PolicyIssueDate { get; set; } = string.Empty;
-
-          [Required(ErrorMessage = "Policy expiration date is required.")]
-          [JsonPropertyOrder(2)]
-          public string PolicyExpirationDate { get; set; } = string.Empty;
-
-          [Required(ErrorMessage = "Policy client ID is required.")]
-          [JsonPropertyOrder(2)]
-          public Guid PolicyClientId { get; set; }
+          public Guid ClientId { get; set; }
      }
 }
