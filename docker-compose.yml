@@ -11,3 +11,8 @@ services:
       - KC_BOOTSTRAP_ADMIN_PASSWORD=1234
       - KEYCLOAK_IMPORT=/opt/keycloak/data/import/keycloak-config.json
     command: start-dev
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+volumes:
+  keycloak_data:

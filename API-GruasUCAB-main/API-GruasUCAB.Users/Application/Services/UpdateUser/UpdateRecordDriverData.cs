@@ -46,12 +46,6 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     driver.AddDomainEvent(new UserBirthDateChangedEvent(driver.Id, new UserBirthDate(request.BirthDate)));
                }
 
-               if (!string.IsNullOrEmpty(request.CedulaExpirationDate))
-               {
-                    driver.ChangeCedulaExpirationDate(new UserCedulaExpirationDate(request.CedulaExpirationDate));
-                    driver.AddDomainEvent(new UserCedulaExpirationDateChangedEvent(driver.Id, new UserCedulaExpirationDate(request.CedulaExpirationDate)));
-               }
-
                if (!string.IsNullOrEmpty(request.MedicalCertificate))
                {
                     driver.ChangeMedicalCertificate(new UserMedicalCertificate(request.MedicalCertificate));

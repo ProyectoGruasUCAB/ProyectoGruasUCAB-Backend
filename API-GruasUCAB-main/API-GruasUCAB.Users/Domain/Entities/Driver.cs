@@ -7,14 +7,13 @@ namespace API_GruasUCAB.Users.Domain.Entities
           public UserPhone Phone { get; private set; }
           public UserCedula Cedula { get; private set; }
           public UserBirthDate BirthDate { get; private set; }
-          public UserCedulaExpirationDate CedulaExpirationDate { get; private set; }
           public UserMedicalCertificate MedicalCertificate { get; private set; }
           public UserMedicalCertificateExpirationDate MedicalCertificateExpirationDate { get; private set; }
           public UserDriverLicense DriverLicense { get; private set; }
           public UserDriverLicenseExpirationDate DriverLicenseExpirationDate { get; private set; }
 
           public Driver(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula,
-                        UserBirthDate birthDate, UserCedulaExpirationDate cedulaExpirationDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
+                        UserBirthDate birthDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
                         UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate)
               : base(id)
           {
@@ -23,14 +22,13 @@ namespace API_GruasUCAB.Users.Domain.Entities
                Phone = phone ?? throw new ArgumentNullException(nameof(phone), "Driver must have a phone.");
                Cedula = cedula ?? throw new ArgumentNullException(nameof(cedula), "Driver must have a cedula.");
                BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "Driver must have a birth date.");
-               CedulaExpirationDate = cedulaExpirationDate ?? throw new ArgumentNullException(nameof(cedulaExpirationDate), "Driver must have a cedula expiration date.");
                MedicalCertificate = medicalCertificate ?? throw new ArgumentNullException(nameof(medicalCertificate), "Driver must have a medical certificate.");
                MedicalCertificateExpirationDate = medicalCertificateExpirationDate ?? throw new ArgumentNullException(nameof(medicalCertificateExpirationDate), "Driver must have a medical certificate expiration date.");
                DriverLicense = driverLicense ?? throw new ArgumentNullException(nameof(driverLicense), "Driver must have a driver license.");
                DriverLicenseExpirationDate = driverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(driverLicenseExpirationDate), "Driver must have a driver license expiration date.");
 
                ValidateState();
-               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, cedulaExpirationDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate));
+               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate));
           }
 
           protected override void ValidateState()
@@ -40,7 +38,6 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidatePhone();
                ValidateCedula();
                ValidateBirthDate();
-               ValidateCedulaExpirationDate();
                ValidateMedicalCertificate();
                ValidateDriverLicense();
           }
@@ -75,12 +72,6 @@ namespace API_GruasUCAB.Users.Domain.Entities
                     throw new InvalidUserException("Driver must have a birth date.");
           }
 
-          private void ValidateCedulaExpirationDate()
-          {
-               if (CedulaExpirationDate == null)
-                    throw new InvalidUserException("Driver must have a cedula expiration date.");
-          }
-
           private void ValidateMedicalCertificate()
           {
                if (MedicalCertificate == null)
@@ -112,13 +103,6 @@ namespace API_GruasUCAB.Users.Domain.Entities
                BirthDate = newBirthDate ?? throw new ArgumentNullException(nameof(newBirthDate), "New birth date cannot be null.");
                ValidateState();
                AddDomainEvent(new UserBirthDateChangedEvent(Id, newBirthDate));
-          }
-
-          public void ChangeCedulaExpirationDate(UserCedulaExpirationDate newDate)
-          {
-               CedulaExpirationDate = newDate ?? throw new ArgumentNullException(nameof(newDate), "New cedula expiration date cannot be null.");
-               ValidateState();
-               AddDomainEvent(new UserCedulaExpirationDateChangedEvent(Id, newDate));
           }
 
           public void ChangeMedicalCertificate(UserMedicalCertificate newMedicalCertificate)
