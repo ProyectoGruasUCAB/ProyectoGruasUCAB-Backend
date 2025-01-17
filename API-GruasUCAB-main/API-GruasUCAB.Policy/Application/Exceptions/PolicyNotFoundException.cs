@@ -1,9 +1,9 @@
-namespace API_GruasUCAB.Department.Application.Exceptions
+namespace API_GruasUCAB.Policy.Application.Exceptions
 {
-     public class DepartmentNotFoundException : Exception
+     public class PolicyNotFoundException : Exception
      {
-          public DepartmentNotFoundException(Guid departmentId)
-              : base($"Department with ID {departmentId} not found.")
+          public PolicyNotFoundException(Guid PolicyId)
+              : base($"Policy with ID {PolicyId} not found.")
           {
           }
      }

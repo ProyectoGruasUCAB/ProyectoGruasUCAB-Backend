@@ -27,17 +27,18 @@ namespace API_GruasUCAB.Policy.Domain.Factories
           public async Task<AggregateRoot.Policy> GetPolicyById(PolicyId id)
           {
                var policyDTO = await _policyRepository.GetPolicyByIdAsync(id.Id);
+               var issueDate = new PolicyIssueDate(policyDTO.IssueDate);
                return new AggregateRoot.Policy(
                    new PolicyId(policyDTO.PolicyId),
-                   new PolicyNumber(policyDTO.PolicyNumber),
-                   new PolicyName(policyDTO.PolicyName),
-                   new PolicyCoverageAmount(policyDTO.PolicyCoverageAmount),
-                   new PolicyCoverageKm(policyDTO.PolicyCoverageKm),
-                   new PolicyBaseAmount(policyDTO.PolicyBaseAmount),
-                   new PolicyPriceKm(policyDTO.PolicyPriceKm),
-                   new PolicyIssueDate(policyDTO.PolicyIssueDate),
-                   new PolicyExpirationDate(policyDTO.PolicyExpirationDate.ToString(), DateTime.ParseExact(policyDTO.PolicyIssueDate, "dd-MM-yyyy", null)),
-                   new PolicyClient(policyDTO.PolicyClientId)
+                   new PolicyNumber(policyDTO.Number),
+                   new PolicyName(policyDTO.Name),
+                   new PolicyCoverageAmount(policyDTO.CoverageAmount),
+                   new PolicyCoverageKm(policyDTO.CoverageKm),
+                   new PolicyBaseAmount(policyDTO.BaseAmount),
+                   new PolicyPriceKm(policyDTO.PriceKm),
+                   issueDate,
+                   new PolicyExpirationDate(policyDTO.ExpirationDate, issueDate.Value),
+                   new PolicyClient(policyDTO.ClientId)
                );
           }
      }

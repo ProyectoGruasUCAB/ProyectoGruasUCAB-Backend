@@ -7,4 +7,21 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\API-GruasUCAB.Commons\API-GruasUCAB.Commons.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Auth\API-GruasUCAB.Auth.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Users\API-GruasUCAB.Users.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Vehicle\API-GruasUCAB.Vehicle.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Policy\API-GruasUCAB.Policy.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.ServiceFee\API-GruasUCAB.ServiceFee.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scrutor" Version="3.3.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
+  </ItemGroup>
+
 </Project>
