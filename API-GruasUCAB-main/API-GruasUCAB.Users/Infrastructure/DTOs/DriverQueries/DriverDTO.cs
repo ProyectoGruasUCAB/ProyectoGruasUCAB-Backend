@@ -8,7 +8,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.DriverQueries
           public string Phone { get; set; } = string.Empty;
           public string Cedula { get; set; } = string.Empty;
           public string BirthDate { get; set; } = string.Empty;
-          public string CedulaExpirationDate { get; set; } = string.Empty;
           public string MedicalCertificate { get; set; } = string.Empty;
           public string MedicalCertificateExpirationDate { get; set; } = string.Empty;
           public string DriverLicense { get; set; } = string.Empty;

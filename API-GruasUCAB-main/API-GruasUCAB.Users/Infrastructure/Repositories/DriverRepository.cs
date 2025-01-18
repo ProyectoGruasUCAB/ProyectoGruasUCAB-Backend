@@ -2,99 +2,121 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 {
      public class DriverRepository : IDriverRepository
      {
-          private readonly List<DriverDTO> _drivers;
+          private readonly UserDbContext _context;
 
-          public DriverRepository()
+          public DriverRepository(UserDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _drivers = new List<DriverDTO>
-            {
-                new DriverDTO
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Driver1",
-                    UserEmail = "driver1@example.com",
-                    Phone = "0414567890",
-                    Cedula = "V-12345678",
-                    BirthDate = "01-01-2000",
-                    MedicalCertificate = "Cert1",
-                    MedicalCertificateExpirationDate = "01-01-2025",
-                    DriverLicense = "License1",
-                    DriverLicenseExpirationDate = "01-01-2025"
-                },
-                new DriverDTO
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Driver2",
-                    UserEmail = "driver2@example.com",
-                    Phone = "0424654321",
-                    Cedula = "V-87654321",
-                    BirthDate = "01-01-2000",
-                    MedicalCertificate = "Cert2",
-                    MedicalCertificateExpirationDate = "01-01-2025",
-                    DriverLicense = "License2",
-                    DriverLicenseExpirationDate = "01-01-2025"
-                },
-                new DriverDTO
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Driver3",
-                    UserEmail = "driver3@example.com",
-                    Phone = "04123344555",
-                    Cedula = "V-11223344",
-                    BirthDate = "01-01-2000",
-                    MedicalCertificate = "Cert3",
-                    MedicalCertificateExpirationDate = "01-01-2026",
-                    DriverLicense = "License3",
-                    DriverLicenseExpirationDate = "01-01-2026"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<DriverDTO>> GetAllDriversAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_drivers);
+               return await _context.Drivers
+                   .Select(d => new DriverDTO
+                   {
+                        Id = d.Id.Value,
+                        Name = d.Name.Value,
+                        UserEmail = d.Email.Value,
+                        Phone = d.Phone.Value,
+                        Cedula = d.Cedula.Value,
+                        BirthDate = d.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        MedicalCertificate = d.MedicalCertificate.Value,
+                        MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
+                        DriverLicense = d.DriverLicense.Value,
+                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToListAsync();
           }
 
           public async Task<DriverDTO> GetDriverByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var driver = _drivers.FirstOrDefault(d => d.Id == id);
+               var driver = await _context.Drivers.FindAsync(new UserId(id));
                if (driver == null)
                {
                     throw new KeyNotFoundException($"Driver with ID {id} not found.");
                }
-               return await Task.FromResult(driver);
+
+               return new DriverDTO
+               {
+                    Id = driver.Id.Value,
+                    Name = driver.Name.Value,
+                    UserEmail = driver.Email.Value,
+                    Phone = driver.Phone.Value,
+                    Cedula = driver.Cedula.Value,
+                    BirthDate = driver.BirthDate.Value.ToString("dd-MM-yyyy"),
+                    MedicalCertificate = driver.MedicalCertificate.Value,
+                    MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
+                    DriverLicense = driver.DriverLicense.Value,
+                    DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+               };
           }
 
           public async Task<List<DriverDTO>> GetDriversByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var drivers = _drivers.Where(d => d.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!drivers.Any())
+               var drivers = await _context.Drivers
+                   .ToListAsync();
+
+               var filteredDrivers = drivers
+                   .Where(d => d.Name.Value.ToLower().Contains(name.ToLower()))
+                   .Select(d => new DriverDTO
+                   {
+                        Id = d.Id.Value,
+                        Name = d.Name.Value,
+                        UserEmail = d.Email.Value,
+                        Phone = d.Phone.Value,
+                        Cedula = d.Cedula.Value,
+                        BirthDate = d.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        MedicalCertificate = d.MedicalCertificate.Value,
+                        MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
+                        DriverLicense = d.DriverLicense.Value,
+                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToList();
+
+               if (!filteredDrivers.Any())
                {
                     throw new KeyNotFoundException($"No drivers with name containing '{name}' found.");
                }
-               return await Task.FromResult(drivers);
+
+               return filteredDrivers;
           }
 
-          public async Task AddDriverAsync(DriverDTO driver)
+          public async Task AddDriverAsync(DriverDTO driverDto)
           {
-               // Simulación de una llamada a la base de datos
-               _drivers.Add(driver);
-               await Task.CompletedTask;
+               var driver = new Driver(
+                   new UserId(driverDto.Id),
+                   new UserName(driverDto.Name),
+                   new UserEmail(driverDto.UserEmail),
+                   new UserPhone(driverDto.Phone),
+                   new UserCedula(driverDto.Cedula),
+                   new UserBirthDate(driverDto.BirthDate),
+                   new UserMedicalCertificate(driverDto.MedicalCertificate),
+                   new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate),
+                   new UserDriverLicense(driverDto.DriverLicense),
+                   new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate)
+               );
+
+               _context.Drivers.Add(driver);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateDriverAsync(DriverDTO driver)
+          public async Task UpdateDriverAsync(DriverDTO driverDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingDriver = _drivers.FirstOrDefault(d => d.Id == driver.Id);
+               var existingDriver = await _context.Drivers.FindAsync(new UserId(driverDto.Id));
                if (existingDriver == null)
                {
-                    throw new KeyNotFoundException($"Driver with ID {driver.Id} not found.");
+                    throw new KeyNotFoundException($"Driver with ID {driverDto.Id} not found.");
                }
 
+<<<<<<< HEAD
+               existingDriver.ChangeName(new UserName(driverDto.Name));
+               existingDriver.ChangePhone(new UserPhone(driverDto.Phone));
+               existingDriver.ChangeBirthDate(new UserBirthDate(driverDto.BirthDate));
+               existingDriver.ChangeMedicalCertificate(new UserMedicalCertificate(driverDto.MedicalCertificate));
+               existingDriver.ChangeDriverLicense(new UserDriverLicense(driverDto.DriverLicense));
+               existingDriver.ChangeMedicalCertificateExpirationDate(new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate));
+               existingDriver.ChangeDriverLicenseExpirationDate(new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate));
+=======
                existingDriver.Name = driver.Name;
                existingDriver.UserEmail = driver.UserEmail;
                existingDriver.Phone = driver.Phone;
@@ -104,8 +126,9 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate;
                existingDriver.DriverLicense = driver.DriverLicense;
                existingDriver.DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate;
+>>>>>>> 90b61217960af628a2e2c3b94675655e8268338f
 
-               await Task.CompletedTask;
+               await _context.SaveChangesAsync();
           }
      }
 }
