@@ -15,3 +15,8 @@ global using System;
 global using MediatR;
 global using API_GruasUCAB.Users.Infrastructure.Repositories;
 global using API_GruasUCAB.Users.Infrastructure.Mappers;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
+global using API_GruasUCAB.Users.Infrastructure.Database;
+global using Microsoft.EntityFrameworkCore.Design;

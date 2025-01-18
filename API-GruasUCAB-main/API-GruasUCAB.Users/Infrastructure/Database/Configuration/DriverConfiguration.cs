@@ -1,10 +1,4 @@
-using API_GruasUCAB.Users.Domain.Entities;
-using API_GruasUCAB.Users.Domain.ValueObject;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-
-namespace API_GruasUCAB.Users.Infrastructure.Configuration
+namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
 {
     public class DriverConfiguration : IEntityTypeConfiguration<Driver>
     {
@@ -39,13 +33,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Configuration
                 .HasConversion(
                     birthDate => birthDate.Value.ToString("dd-MM-yyyy"),
                     str => new UserBirthDate(str)
-                )
-                .IsRequired();
-
-            builder.Property(a => a.CedulaExpirationDate)
-                .HasConversion(
-                    cedulaExpirationDate => cedulaExpirationDate.Value.ToString("dd-MM-yyyy"),
-                    str => new UserCedulaExpirationDate(str)
                 )
                 .IsRequired();
 

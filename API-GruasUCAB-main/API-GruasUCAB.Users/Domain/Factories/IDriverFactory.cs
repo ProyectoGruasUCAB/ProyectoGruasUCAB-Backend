@@ -9,7 +9,6 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate,
-              UserCedulaExpirationDate cedulaExpirationDate,
               UserMedicalCertificate medicalCertificate,
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,

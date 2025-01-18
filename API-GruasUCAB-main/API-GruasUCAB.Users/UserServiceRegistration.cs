@@ -2,8 +2,13 @@ namespace API_GruasUCAB.Users
 {
     public static class UserServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            // Configurar DbContext
+            services.AddDbContext<UserDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddMediatR(typeof(RecordUserDataCommandHandler).Assembly);
             services.AddScoped<IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>, RecordUserDataService>();
             services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();

@@ -2,94 +2,101 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 {
      public class ProviderRepository : IProviderRepository
      {
-          private readonly List<ProviderDTO> _providers;
+          private readonly UserDbContext _context;
 
-          public ProviderRepository()
+          public ProviderRepository(UserDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _providers = new List<ProviderDTO>
-            {
-                new ProviderDTO
-                {
-                    Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                    Name = "aaaaa",
-                    UserEmail = "aaa@aaa.com",
-                    Phone = "04140834357",
-                    Cedula = "V-28686611",
-                    BirthDate = "12-12-2000"
-                },
-                new ProviderDTO
-                {
-                    Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"),
-                    Name = "bbbb",
-                    UserEmail = "bbb@bbb.com",
-                    Phone = "04140834358",
-                    Cedula = "V-28686612",
-                    BirthDate = "10-10-1995"
-                },
-                new ProviderDTO
-                {
-                    Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
-                    Name = "cccc",
-                    UserEmail = "ccc@ccc.com",
-                    Phone = "04140834359",
-                    Cedula = "V-28686613",
-                    BirthDate = "05-05-1990"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<ProviderDTO>> GetAllProvidersAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_providers);
+               return await _context.Suppliers
+                   .Select(p => new ProviderDTO
+                   {
+                        Id = p.Id.Value,
+                        Name = p.Name.Value,
+                        UserEmail = p.Email.Value,
+                        Phone = p.Phone.Value,
+                        Cedula = p.Cedula.Value,
+                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToListAsync();
           }
 
           public async Task<ProviderDTO> GetProviderByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var provider = _providers.FirstOrDefault(p => p.Id == id);
+               var provider = await _context.Suppliers.FindAsync(new UserId(id));
                if (provider == null)
                {
                     throw new KeyNotFoundException($"Provider with ID {id} not found.");
                }
-               return await Task.FromResult(provider);
+
+               return new ProviderDTO
+               {
+                    Id = provider.Id.Value,
+                    Name = provider.Name.Value,
+                    UserEmail = provider.Email.Value,
+                    Phone = provider.Phone.Value,
+                    Cedula = provider.Cedula.Value,
+                    BirthDate = provider.BirthDate.Value.ToString("dd-MM-yyyy")
+               };
           }
 
           public async Task<List<ProviderDTO>> GetProvidersByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var providers = _providers.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!providers.Any())
+               var providers = await _context.Suppliers
+                   .ToListAsync();
+
+               var filteredProviders = providers
+                   .Where(p => p.Name.Value.ToLower().Contains(name.ToLower()))
+                   .Select(p => new ProviderDTO
+                   {
+                        Id = p.Id.Value,
+                        Name = p.Name.Value,
+                        UserEmail = p.Email.Value,
+                        Phone = p.Phone.Value,
+                        Cedula = p.Cedula.Value,
+                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToList();
+
+               if (!filteredProviders.Any())
                {
                     throw new KeyNotFoundException($"No providers with name containing '{name}' found.");
                }
-               return await Task.FromResult(providers);
+
+               return filteredProviders;
           }
 
-          public async Task AddProviderAsync(ProviderDTO provider)
+          public async Task AddProviderAsync(ProviderDTO providerDto)
           {
-               // Simulación de una llamada a la base de datos
-               _providers.Add(provider);
-               await Task.CompletedTask;
+               var provider = new Supplier(
+                   new UserId(providerDto.Id),
+                   new UserName(providerDto.Name),
+                   new UserEmail(providerDto.UserEmail),
+                   new UserPhone(providerDto.Phone),
+                   new UserCedula(providerDto.Cedula),
+                   new UserBirthDate(providerDto.BirthDate)
+               );
+
+               _context.Suppliers.Add(provider);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateProviderAsync(ProviderDTO provider)
+          public async Task UpdateProviderAsync(ProviderDTO providerDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingProvider = _providers.FirstOrDefault(p => p.Id == provider.Id);
+               var existingProvider = await _context.Suppliers.FindAsync(new UserId(providerDto.Id));
                if (existingProvider == null)
                {
-                    throw new KeyNotFoundException($"Provider with ID {provider.Id} not found.");
+                    throw new KeyNotFoundException($"Provider with ID {providerDto.Id} not found.");
                }
 
-               existingProvider.Name = provider.Name;
-               existingProvider.UserEmail = provider.UserEmail;
-               existingProvider.Phone = provider.Phone;
-               existingProvider.Cedula = provider.Cedula;
-               existingProvider.BirthDate = provider.BirthDate;
+               existingProvider.ChangeName(new UserName(providerDto.Name));
+               existingProvider.ChangePhone(new UserPhone(providerDto.Phone));
+               existingProvider.ChangeBirthDate(new UserBirthDate(providerDto.BirthDate));
 
-               await Task.CompletedTask;
+               await _context.SaveChangesAsync();
           }
      }
 }

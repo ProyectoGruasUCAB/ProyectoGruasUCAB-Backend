@@ -1,9 +1,8 @@
+using API_GruasUCAB.Core.Infrastructure.Database;
+using API_GruasUCAB.Users.Infrastructure.Database.Configuration;
 using API_GruasUCAB.Users.Domain.Entities;
-using API_GruasUCAB.Users.Core.Database;
-using API_GruasUCAB.Users.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API_GruasUCAB.Users.Infrastructure.Database
 {
@@ -18,12 +17,12 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
         public DbSet<Supplier> Suppliers { get; set; } = null!;
         public DbSet<Worker> Workers { get; set; } = null!;
 
-        public IDbContextTransactionProxy BeginTransaction()
+        public IDbContextTransaction BeginTransaction()
         {
-            return new DbContextTransactionProxy(this);
+            return Database.BeginTransaction();
         }
 
-        public virtual void ChangeEntityState<TEntity>(TEntity entity, EntityState state)
+        public void ChangeEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
         {
             if (entity != null)
             {
@@ -65,7 +64,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
             // Configuración de clave primaria de Worker
             modelBuilder.Entity<Worker>()
                 .HasKey(c => c.Id);
-
         }
     }
 }

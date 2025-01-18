@@ -1,9 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using API_GruasUCAB.Users.Infrastructure.Database;
-using API_GruasUCAB.Users.Core.Database;
-
-namespace API_GruasUCAB.Users.Infrastructure.Database
+namespace API_GruasUCAB.Core.Infrastructure.Database
 {
     public class DbContextTransactionProxy : IDbContextTransactionProxy
     {

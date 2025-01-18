@@ -1,14 +1,8 @@
-using API_GruasUCAB.Users.Domain.Entities;
-using API_GruasUCAB.Users.Domain.ValueObject;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-
-namespace API_GruasUCAB.Users.Infrastructure.Configuration
+namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
 {
-    public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
+    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
     {
-        public void Configure(EntityTypeBuilder<Worker> builder)
+        public void Configure(EntityTypeBuilder<Supplier> builder)
         {
             builder.HasKey(a => a.Id);
 
@@ -41,11 +35,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Configuration
                     str => new UserBirthDate(str)
                 )
                 .IsRequired();
-
-            builder.Property(a => a.Position)
-                .HasConversion(position => position.Value, str => new UserPosition(str))
-                .IsRequired()
-                .HasMaxLength(50);
 
         }
     }

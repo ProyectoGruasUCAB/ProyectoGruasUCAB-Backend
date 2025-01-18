@@ -12,7 +12,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Mappers
                     Phone = driver.Phone.Value,
                     Cedula = driver.Cedula.Value,
                     BirthDate = driver.BirthDate.Value.ToString("dd-MM-yyyy"),
-                    CedulaExpirationDate = driver.CedulaExpirationDate.Value.ToString("dd-MM-yyyy"),
                     MedicalCertificate = driver.MedicalCertificate.Value,
                     MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                     DriverLicense = driver.DriverLicense.Value,

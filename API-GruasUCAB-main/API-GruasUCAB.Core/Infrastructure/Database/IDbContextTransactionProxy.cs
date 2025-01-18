@@ -1,4 +1,4 @@
-namespace API_GruasUCAB.Users.Core.Database
+namespace API_GruasUCAB.Core.Infrastructure.Database
 {
     public interface IDbContextTransactionProxy : IDisposable
     {

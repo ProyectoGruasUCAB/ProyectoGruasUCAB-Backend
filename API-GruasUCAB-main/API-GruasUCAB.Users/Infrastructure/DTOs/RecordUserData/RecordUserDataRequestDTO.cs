@@ -27,9 +27,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData
           public required string BirthDate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public string? CedulaExpirationDate { get; set; } = string.Empty;
-
-          [JsonPropertyOrder(2)]
           public string? MedicalCertificate { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]

@@ -16,13 +16,12 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate,
-              UserCedulaExpirationDate cedulaExpirationDate,
               UserMedicalCertificate medicalCertificate,
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,
               UserDriverLicenseExpirationDate driverLicenseExpirationDate)
           {
-               return new Driver(id, name, email, phone, cedula, birthDate, cedulaExpirationDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate);
+               return new Driver(id, name, email, phone, cedula, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate);
           }
 
           public async Task<Driver> GetDriverById(UserId id)
@@ -35,7 +34,6 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserPhone(driverDTO.Phone),
                    new UserCedula(driverDTO.Cedula),
                    new UserBirthDate(driverDTO.BirthDate),
-                   new UserCedulaExpirationDate(driverDTO.CedulaExpirationDate),
                    new UserMedicalCertificate(driverDTO.MedicalCertificate),
                    new UserMedicalCertificateExpirationDate(driverDTO.MedicalCertificateExpirationDate),
                    new UserDriverLicense(driverDTO.DriverLicense),

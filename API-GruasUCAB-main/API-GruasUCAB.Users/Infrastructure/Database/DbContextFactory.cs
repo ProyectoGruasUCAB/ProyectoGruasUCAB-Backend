@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using API_GruasUCAB.Users.Infrastructure.Database;
-
 namespace API_GruasUCAB.Users.Infrastructure.Database
 {
     public class UserDbContextFactory : IDesignTimeDbContextFactory<UserDbContext>
@@ -10,7 +5,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
         public UserDbContext CreateDbContext(string[] args)
         {
             IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../API-GruasUCAB"))
                 .AddJsonFile("appsettings.json")
                 .Build();
 
@@ -18,6 +13,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             builder.UseNpgsql(connectionString);
+
             return new UserDbContext(builder.Options);
         }
     }

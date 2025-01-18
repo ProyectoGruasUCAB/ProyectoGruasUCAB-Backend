@@ -1,14 +1,8 @@
-using API_GruasUCAB.Users.Domain.Entities;
-using API_GruasUCAB.Users.Domain.ValueObject;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-
-namespace API_GruasUCAB.Users.Infrastructure.Configuration
+namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
 {
-    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
+    public class AdministratorConfiguration : IEntityTypeConfiguration<Administrator>
     {
-        public void Configure(EntityTypeBuilder<Supplier> builder)
+        public void Configure(EntityTypeBuilder<Administrator> builder)
         {
             builder.HasKey(a => a.Id);
 
@@ -41,7 +35,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Configuration
                     str => new UserBirthDate(str)
                 )
                 .IsRequired();
-
         }
     }
 }
