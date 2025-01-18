@@ -13,8 +13,6 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               if (request.CedulaExpirationDate == null)
-                    throw new ArgumentNullException(nameof(request.CedulaExpirationDate));
                if (request.MedicalCertificate == null)
                     throw new ArgumentNullException(nameof(request.MedicalCertificate));
                if (request.MedicalCertificateExpirationDate == null)
@@ -31,7 +29,6 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserPhone(request.Phone),
                    new UserCedula(request.Cedula),
                    new UserBirthDate(request.BirthDate),
-                   new UserCedulaExpirationDate(request.CedulaExpirationDate),
                    new UserMedicalCertificate(request.MedicalCertificate),
                    new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate),
                    new UserDriverLicense(request.DriverLicense),
@@ -46,7 +43,6 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     Phone = request.Phone,
                     Cedula = request.Cedula,
                     BirthDate = request.BirthDate,
-                    CedulaExpirationDate = request.CedulaExpirationDate,
                     MedicalCertificate = request.MedicalCertificate,
                     MedicalCertificateExpirationDate = request.MedicalCertificateExpirationDate,
                     DriverLicense = request.DriverLicense,

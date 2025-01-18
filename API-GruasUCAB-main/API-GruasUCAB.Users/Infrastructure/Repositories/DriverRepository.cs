@@ -17,7 +17,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     Phone = "0414567890",
                     Cedula = "V-12345678",
                     BirthDate = "01-01-2000",
-                    CedulaExpirationDate = "01-01-2025",
                     MedicalCertificate = "Cert1",
                     MedicalCertificateExpirationDate = "01-01-2025",
                     DriverLicense = "License1",
@@ -31,7 +30,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     Phone = "0424654321",
                     Cedula = "V-87654321",
                     BirthDate = "01-01-2000",
-                    CedulaExpirationDate = "01-01-2025",
                     MedicalCertificate = "Cert2",
                     MedicalCertificateExpirationDate = "01-01-2025",
                     DriverLicense = "License2",
@@ -45,7 +43,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     Phone = "04123344555",
                     Cedula = "V-11223344",
                     BirthDate = "01-01-2000",
-                    CedulaExpirationDate = "01-01-2026",
                     MedicalCertificate = "Cert3",
                     MedicalCertificateExpirationDate = "01-01-2026",
                     DriverLicense = "License3",
@@ -103,7 +100,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.Phone = driver.Phone;
                existingDriver.Cedula = driver.Cedula;
                existingDriver.BirthDate = driver.BirthDate;
-               existingDriver.CedulaExpirationDate = driver.CedulaExpirationDate;
                existingDriver.MedicalCertificate = driver.MedicalCertificate;
                existingDriver.MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate;
                existingDriver.DriverLicense = driver.DriverLicense;
