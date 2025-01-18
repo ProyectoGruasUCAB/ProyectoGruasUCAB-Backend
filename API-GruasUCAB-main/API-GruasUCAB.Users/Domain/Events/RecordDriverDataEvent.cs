@@ -12,8 +12,7 @@ namespace API_GruasUCAB.Users.Domain.Events
           public UserDriverLicense DriverLicense { get; }
           public UserDriverLicenseExpirationDate DriverLicenseExpirationDate { get; }
 
-          public RecordDriverDataEvent(UserId userId, UserName userName, UserEmail email, UserPhone phone, UserBirthDate birthDate,
-                                       UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
+          public RecordDriverDataEvent(UserId userId, UserName userName, UserEmail email, UserPhone phone, UserBirthDate birthDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
                                        UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate)
           {
                UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");

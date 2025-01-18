@@ -20,7 +20,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 AuthServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-UserServiceRegistration.RegisterServices(builder.Services);
+UserServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 ServiceFeeServiceRegistration.RegisterServices(builder.Services);
 DepartmentServiceRegistration.RegisterServices(builder.Services);
 SupplierServiceRegistration.RegisterServices(builder.Services);

@@ -2,109 +2,133 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 {
      public class WorkerRepository : IWorkerRepository
      {
-          private readonly List<WorkerDTO> _workers;
+          private readonly UserDbContext _context;
 
-          public WorkerRepository()
+          public WorkerRepository(UserDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _workers = new List<WorkerDTO>
-            {
-                new WorkerDTO
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Worker1",
-                    UserEmail = "worker1@example.com",
-                    Phone = "1234567890",
-                    Cedula = "12345678",
-                    BirthDate = "01-01-2000",
-                    Position = "Position1"
-                },
-                new WorkerDTO
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Worker2",
-                    UserEmail = "worker2@example.com",
-                    Phone = "0987654321",
-                    Cedula = "87654321",
-                    BirthDate = "01-01-2000",
-                    Position = "Position2"
-                },
-                new WorkerDTO
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Worker3",
-                    UserEmail = "worker3@example.com",
-                    Phone = "1122334455",
-                    Cedula = "11223344",
-                    BirthDate = "01-01-2000",
-                    Position = "Position3"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<WorkerDTO>> GetAllWorkersAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_workers);
+               return await _context.Workers
+                   .Select(w => new WorkerDTO
+                   {
+                        Id = w.Id.Value,
+                        Name = w.Name.Value,
+                        UserEmail = w.Email.Value,
+                        Phone = w.Phone.Value,
+                        Cedula = w.Cedula.Value,
+                        BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        Position = w.Position.Value
+                   })
+                   .ToListAsync();
           }
 
           public async Task<WorkerDTO> GetWorkerByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var worker = _workers.FirstOrDefault(w => w.Id == id);
+               var worker = await _context.Workers.FindAsync(new UserId(id));
                if (worker == null)
                {
                     throw new KeyNotFoundException($"Worker with ID {id} not found.");
                }
-               return await Task.FromResult(worker);
+
+               return new WorkerDTO
+               {
+                    Id = worker.Id.Value,
+                    Name = worker.Name.Value,
+                    UserEmail = worker.Email.Value,
+                    Phone = worker.Phone.Value,
+                    Cedula = worker.Cedula.Value,
+                    BirthDate = worker.BirthDate.Value.ToString("dd-MM-yyyy"),
+                    Position = worker.Position.Value
+               };
           }
 
           public async Task<List<WorkerDTO>> GetWorkersByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var workers = _workers.Where(w => w.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!workers.Any())
+               var workers = await _context.Workers
+                   .ToListAsync();
+
+               var filteredWorkers = workers
+                   .Where(w => w.Name.Value.ToLower().Contains(name.ToLower()))
+                   .Select(w => new WorkerDTO
+                   {
+                        Id = w.Id.Value,
+                        Name = w.Name.Value,
+                        UserEmail = w.Email.Value,
+                        Phone = w.Phone.Value,
+                        Cedula = w.Cedula.Value,
+                        BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        Position = w.Position.Value
+                   })
+                   .ToList();
+
+               if (!filteredWorkers.Any())
                {
                     throw new KeyNotFoundException($"No workers with name containing '{name}' found.");
                }
-               return await Task.FromResult(workers);
+
+               return filteredWorkers;
           }
 
           public async Task<List<WorkerDTO>> GetWorkersByPositionAsync(string position)
           {
-               // Simulación de una llamada a la base de datos
-               var workers = _workers.Where(w => w.Position.Equals(position, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!workers.Any())
+               var workers = await _context.Workers
+                   .ToListAsync();
+
+               var filteredWorkers = workers
+                   .Where(w => w.Position.Value.Equals(position, StringComparison.OrdinalIgnoreCase))
+                   .Select(w => new WorkerDTO
+                   {
+                        Id = w.Id.Value,
+                        Name = w.Name.Value,
+                        UserEmail = w.Email.Value,
+                        Phone = w.Phone.Value,
+                        Cedula = w.Cedula.Value,
+                        BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        Position = w.Position.Value
+                   })
+                   .ToList();
+
+               if (!filteredWorkers.Any())
                {
                     throw new KeyNotFoundException($"No workers with position '{position}' found.");
                }
-               return await Task.FromResult(workers);
+
+               return filteredWorkers;
           }
 
-          public async Task AddWorkerAsync(WorkerDTO worker)
+          public async Task AddWorkerAsync(WorkerDTO workerDto)
           {
-               // Simulación de una llamada a la base de datos
-               _workers.Add(worker);
-               await Task.CompletedTask;
+               var worker = new Worker(
+                   new UserId(workerDto.Id),
+                   new UserName(workerDto.Name),
+                   new UserEmail(workerDto.UserEmail),
+                   new UserPhone(workerDto.Phone),
+                   new UserCedula(workerDto.Cedula),
+                   new UserBirthDate(workerDto.BirthDate),
+                   new UserPosition(workerDto.Position)
+               );
+
+               _context.Workers.Add(worker);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateWorkerAsync(WorkerDTO worker)
+          public async Task UpdateWorkerAsync(WorkerDTO workerDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingWorker = _workers.FirstOrDefault(w => w.Id == worker.Id);
+               var existingWorker = await _context.Workers.FindAsync(new UserId(workerDto.Id));
                if (existingWorker == null)
                {
-                    throw new KeyNotFoundException($"Worker with ID {worker.Id} not found.");
+                    throw new KeyNotFoundException($"Worker with ID {workerDto.Id} not found.");
                }
 
-               existingWorker.Name = worker.Name;
-               existingWorker.UserEmail = worker.UserEmail;
-               existingWorker.Phone = worker.Phone;
-               existingWorker.Cedula = worker.Cedula;
-               existingWorker.BirthDate = worker.BirthDate;
-               existingWorker.Position = worker.Position;
+               existingWorker.ChangeName(new UserName(workerDto.Name));
+               existingWorker.ChangePhone(new UserPhone(workerDto.Phone));
+               existingWorker.ChangeBirthDate(new UserBirthDate(workerDto.BirthDate));
+               existingWorker.ChangePosition(new UserPosition(workerDto.Position));
 
-               await Task.CompletedTask;
+               await _context.SaveChangesAsync();
           }
      }
 }

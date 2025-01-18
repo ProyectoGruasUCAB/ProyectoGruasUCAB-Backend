@@ -2,94 +2,101 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 {
      public class AdministratorRepository : IAdministratorRepository
      {
-          private readonly List<AdministratorDTO> _administrators;
+          private readonly UserDbContext _context;
 
-          public AdministratorRepository()
+          public AdministratorRepository(UserDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _administrators = new List<AdministratorDTO>
-            {
-                new AdministratorDTO
-                {
-                    UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Admin1",
-                    Email = "admin1@example.com",
-                    Phone = "0416567890",
-                    Cedula = "V-12345678",
-                    BirthDate = "01-01-2000"
-                },
-                new AdministratorDTO
-                {
-                    UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Admin2",
-                    Email = "admin2@example.com",
-                    Phone = "0416654321",
-                    Cedula = "E-87654321",
-                    BirthDate = "01-01-2000"
-                },
-                new AdministratorDTO
-                {
-                    UserId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Admin3",
-                    Email = "admin3@example.com",
-                    Phone = "0416334455",
-                    Cedula = "V-11223344",
-                    BirthDate = "01-01-2000"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<AdministratorDTO>> GetAllAdministratorsAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_administrators);
+               return await _context.Administrators
+                   .Select(a => new AdministratorDTO
+                   {
+                        UserId = a.Id.Value,
+                        Name = a.Name.Value,
+                        Email = a.Email.Value,
+                        Phone = a.Phone.Value,
+                        Cedula = a.Cedula.Value,
+                        BirthDate = a.BirthDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToListAsync();
           }
 
           public async Task<AdministratorDTO> GetAdministratorByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var admin = _administrators.FirstOrDefault(a => a.UserId == id);
+               var admin = await _context.Administrators.FindAsync(new UserId(id));
                if (admin == null)
                {
                     throw new KeyNotFoundException($"Administrator with ID {id} not found.");
                }
-               return await Task.FromResult(admin);
+
+               return new AdministratorDTO
+               {
+                    UserId = admin.Id.Value,
+                    Name = admin.Name.Value,
+                    Email = admin.Email.Value,
+                    Phone = admin.Phone.Value,
+                    Cedula = admin.Cedula.Value,
+                    BirthDate = admin.BirthDate.Value.ToString("dd-MM-yyyy")
+               };
           }
 
           public async Task<List<AdministratorDTO>> GetAdministratorsByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var admins = _administrators.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!admins.Any())
+               var admins = await _context.Administrators
+                   .ToListAsync();
+
+               var filteredAdmins = admins
+                   .Where(a => a.Name.Value.ToLower().Contains(name.ToLower()))
+                   .Select(a => new AdministratorDTO
+                   {
+                        UserId = a.Id.Value,
+                        Name = a.Name.Value,
+                        Email = a.Email.Value,
+                        Phone = a.Phone.Value,
+                        Cedula = a.Cedula.Value,
+                        BirthDate = a.BirthDate.Value.ToString("dd-MM-yyyy")
+                   })
+                   .ToList();
+
+               if (!filteredAdmins.Any())
                {
                     throw new KeyNotFoundException($"No administrators with name containing '{name}' found.");
                }
-               return await Task.FromResult(admins);
+
+               return filteredAdmins;
           }
 
-          public async Task AddAdministratorAsync(AdministratorDTO administrator)
+          public async Task AddAdministratorAsync(AdministratorDTO administratorDto)
           {
-               // Simulación de una llamada a la base de datos
-               _administrators.Add(administrator);
-               await Task.CompletedTask;
+               var administrator = new Administrator(
+                   new UserId(administratorDto.UserId),
+                   new UserName(administratorDto.Name),
+                   new UserEmail(administratorDto.Email),
+                   new UserPhone(administratorDto.Phone),
+                   new UserCedula(administratorDto.Cedula),
+                   new UserBirthDate(administratorDto.BirthDate)
+               );
+
+               _context.Administrators.Add(administrator);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateAdministratorAsync(AdministratorDTO administrator)
+          public async Task UpdateAdministratorAsync(AdministratorDTO administratorDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingAdministrator = _administrators.FirstOrDefault(a => a.UserId == administrator.UserId);
+               var existingAdministrator = await _context.Administrators.FindAsync(new UserId(administratorDto.UserId));
                if (existingAdministrator == null)
                {
-                    throw new KeyNotFoundException($"Administrator with ID {administrator.UserId} not found.");
+                    throw new KeyNotFoundException($"Administrator with ID {administratorDto.UserId} not found.");
                }
 
-               existingAdministrator.Name = administrator.Name;
-               existingAdministrator.Email = administrator.Email;
-               existingAdministrator.Phone = administrator.Phone;
-               existingAdministrator.Cedula = administrator.Cedula;
-               existingAdministrator.BirthDate = administrator.BirthDate;
+               existingAdministrator.ChangeName(new UserName(administratorDto.Name));
+               existingAdministrator.ChangePhone(new UserPhone(administratorDto.Phone));
+               existingAdministrator.ChangeBirthDate(new UserBirthDate(administratorDto.BirthDate));
 
-               await Task.CompletedTask;
+               await _context.SaveChangesAsync();
           }
      }
 }
