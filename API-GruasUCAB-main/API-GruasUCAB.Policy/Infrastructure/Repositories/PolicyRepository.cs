@@ -12,28 +12,28 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
                 new PolicyDTO
                 {
                     PolicyId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    PolicyNumber = "123456",
-                    PolicyName = "Basic Coverage",
-                    PolicyCoverageAmount = 10000,
-                    PolicyCoverageKm = 100,
-                    PolicyBaseAmount = 500,
-                    PolicyPriceKm = 5,
-                    PolicyIssueDate = "01-01-2023",
-                    PolicyExpirationDate = "01-01-2024",
-                    PolicyClientId = Guid.Parse("22222222-2222-2222-2222-222222222222")
+                    Number = "123456",
+                    Name = "Basic Coverage",
+                    CoverageAmount = 10000,
+                    CoverageKm = 100,
+                    BaseAmount = 500,
+                    PriceKm = 5,
+                    IssueDate = "01-01-2023",
+                    ExpirationDate = "01-01-2024",
+                    ClientId = Guid.Parse("22222222-2222-2222-2222-222222222222")
                 },
                 new PolicyDTO
                 {
                     PolicyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    PolicyNumber = "654321",
-                    PolicyName = "Premium Coverage",
-                    PolicyCoverageAmount = 50000,
-                    PolicyCoverageKm = 500,
-                    PolicyBaseAmount = 2000,
-                    PolicyPriceKm = 10,
-                    PolicyIssueDate = "01-01-2023",
-                    PolicyExpirationDate = "01-01-2025",
-                    PolicyClientId = Guid.Parse("44444444-4444-4444-4444-444444444444")
+                    Number = "654321",
+                    Name = "Premium Coverage",
+                    CoverageAmount = 50000,
+                    CoverageKm = 500,
+                    BaseAmount = 2000,
+                    PriceKm = 10,
+                    IssueDate = "01-01-2023",
+                    ExpirationDate = "01-01-2025",
+                    ClientId = Guid.Parse("44444444-4444-4444-4444-444444444444")
                 }
             };
           }
@@ -58,7 +58,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
           public async Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber)
           {
                // Simulación de una llamada a la base de datos
-               var policy = _policies.FirstOrDefault(p => p.PolicyNumber == policyNumber);
+               var policy = _policies.FirstOrDefault(p => p.Number == policyNumber);
                if (policy == null)
                {
                     throw new KeyNotFoundException($"Policy with number {policyNumber} not found.");
@@ -82,15 +82,15 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Policy with ID {policy.PolicyId} not found.");
                }
 
-               existingPolicy.PolicyNumber = policy.PolicyNumber;
-               existingPolicy.PolicyName = policy.PolicyName;
-               existingPolicy.PolicyCoverageAmount = policy.PolicyCoverageAmount;
-               existingPolicy.PolicyCoverageKm = policy.PolicyCoverageKm;
-               existingPolicy.PolicyBaseAmount = policy.PolicyBaseAmount;
-               existingPolicy.PolicyPriceKm = policy.PolicyPriceKm;
-               existingPolicy.PolicyIssueDate = policy.PolicyIssueDate;
-               existingPolicy.PolicyExpirationDate = policy.PolicyExpirationDate;
-               existingPolicy.PolicyClientId = policy.PolicyClientId;
+               existingPolicy.Number = policy.Number;
+               existingPolicy.Name = policy.Name;
+               existingPolicy.CoverageAmount = policy.CoverageAmount;
+               existingPolicy.CoverageKm = policy.CoverageKm;
+               existingPolicy.BaseAmount = policy.BaseAmount;
+               existingPolicy.PriceKm = policy.PriceKm;
+               existingPolicy.IssueDate = policy.IssueDate;
+               existingPolicy.ExpirationDate = policy.ExpirationDate;
+               existingPolicy.ClientId = policy.ClientId;
 
                await Task.CompletedTask;
           }

@@ -108,6 +108,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Driver with ID {driverDto.Id} not found.");
                }
 
+<<<<<<< HEAD
                existingDriver.ChangeName(new UserName(driverDto.Name));
                existingDriver.ChangePhone(new UserPhone(driverDto.Phone));
                existingDriver.ChangeBirthDate(new UserBirthDate(driverDto.BirthDate));
@@ -115,6 +116,17 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.ChangeDriverLicense(new UserDriverLicense(driverDto.DriverLicense));
                existingDriver.ChangeMedicalCertificateExpirationDate(new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate));
                existingDriver.ChangeDriverLicenseExpirationDate(new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate));
+=======
+               existingDriver.Name = driver.Name;
+               existingDriver.UserEmail = driver.UserEmail;
+               existingDriver.Phone = driver.Phone;
+               existingDriver.Cedula = driver.Cedula;
+               existingDriver.BirthDate = driver.BirthDate;
+               existingDriver.MedicalCertificate = driver.MedicalCertificate;
+               existingDriver.MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate;
+               existingDriver.DriverLicense = driver.DriverLicense;
+               existingDriver.DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate;
+>>>>>>> 90b61217960af628a2e2c3b94675655e8268338f
 
                await _context.SaveChangesAsync();
           }

@@ -5,6 +5,7 @@ using API_GruasUCAB.Department;
 using API_GruasUCAB.Supplier;
 using API_GruasUCAB.Vehicle;
 using API_GruasUCAB.Policy;
+using API_GruasUCAB.ServiceOrder;
 using API_GruasUCAB.Core;
 using API_GruasUCAB.Core.Utilities.Logger;
 using API_GruasUCAB.Swagger;
@@ -25,6 +26,7 @@ DepartmentServiceRegistration.RegisterServices(builder.Services);
 SupplierServiceRegistration.RegisterServices(builder.Services);
 VehicleServiceRegistration.RegisterServices(builder.Services);
 PolicyServiceRegistration.RegisterServices(builder.Services);
+ServiceOrderServiceRegistration.RegisterServices(builder.Services);
 
 // Agregar YARP
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

@@ -1,0 +1,3 @@
+global using API_GruasUCAB.ServiceOrder.Application.Queries.GetServiceOrdersByStatus;
+global using API_GruasUCAB.ServiceOrder.Application.Queries.GetServiceOrderById;
+global using API_GruasUCAB.ServiceOrder.Application.Queries.GetAllServiceOrders;
