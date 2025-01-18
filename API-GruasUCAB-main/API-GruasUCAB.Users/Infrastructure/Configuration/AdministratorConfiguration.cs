@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace API_GruasUCAB.Users.Infrastructure.Configuration
 {
-
     public class AdministratorConfiguration : IEntityTypeConfiguration<Administrator>
     {
         public void Configure(EntityTypeBuilder<Administrator> builder)

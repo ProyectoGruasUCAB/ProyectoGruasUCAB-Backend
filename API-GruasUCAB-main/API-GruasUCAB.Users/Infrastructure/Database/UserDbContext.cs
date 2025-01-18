@@ -8,7 +8,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
 {
     public class UserDbContext : DbContext, IUserDbContext
     {
-
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
 
         public DbContext DbContext
@@ -46,7 +45,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
         {
             return await SaveChangesAsync(cancellationToken) >= 0;
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
