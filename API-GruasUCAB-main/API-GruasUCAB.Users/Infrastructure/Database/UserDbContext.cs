@@ -1,8 +1,9 @@
 using API_GruasUCAB.Users.Domain.Entities;
 using API_GruasUCAB.Users.Core.Database;
+using API_GruasUCAB.Users.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace API_GruasUCAB.Users.Infrastructure.Database
 {
@@ -10,15 +11,12 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
     {
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
 
-        public DbContext DbContext
-        {
-            get { return this; }
-        }
+        public DbContext DbContext => this;
 
         public DbSet<Administrator> Administrators { get; set; } = null!;
-        //public DbSet<Driver> Drivers { get; set; } = null!;
-        //public DbSet<Supplier> Suppliers { get; set; } = null!;
-        //public DbSet<Worker> Workers { get; set; } = null!;
+        public DbSet<Driver> Drivers { get; set; } = null!;
+        public DbSet<Supplier> Suppliers { get; set; } = null!;
+        public DbSet<Worker> Workers { get; set; } = null!;
 
         public IDbContextTransactionProxy BeginTransaction()
         {
@@ -38,10 +36,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
             return await SaveChangesAsync(cancellationToken) >= 0;
         }
 
-        public async Task<bool> SaveEfContextChanges(
-            string user,
-            CancellationToken cancellationToken = default
-        )
+        public async Task<bool> SaveEfContextChanges(string user, CancellationToken cancellationToken = default)
         {
             return await SaveChangesAsync(cancellationToken) >= 0;
         }
@@ -50,26 +45,26 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuración de clave primaria de Conductor
+            modelBuilder.ApplyConfiguration(new AdministratorConfiguration());
+            modelBuilder.ApplyConfiguration(new DriverConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.ApplyConfiguration(new WorkerConfiguration());
+
+            // Configuración de clave primaria de Administrador
             modelBuilder.Entity<Administrator>()
                 .HasKey(c => c.Id);
 
-
-            // Configuración de clave primaria de Rol
+            // Configuración de clave primaria de Driver
             modelBuilder.Entity<Driver>()
                 .HasKey(c => c.Id);
 
-
-            // Configuración de clave primaria de Trabajador
+            // Configuración de clave primaria de Supplier
             modelBuilder.Entity<Supplier>()
                 .HasKey(c => c.Id);
 
-            // Configuración de clave primaria de Usuario
+            // Configuración de clave primaria de Worker
             modelBuilder.Entity<Worker>()
                 .HasKey(c => c.Id);
-
-            base.OnModelCreating(modelBuilder);
-
 
         }
     }

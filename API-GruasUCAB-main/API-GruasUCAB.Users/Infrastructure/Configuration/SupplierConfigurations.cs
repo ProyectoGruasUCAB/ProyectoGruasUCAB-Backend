@@ -6,9 +6,9 @@ using System;
 
 namespace API_GruasUCAB.Users.Infrastructure.Configuration
 {
-    public class AdministratorConfiguration : IEntityTypeConfiguration<Administrator>
+    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
     {
-        public void Configure(EntityTypeBuilder<Administrator> builder)
+        public void Configure(EntityTypeBuilder<Supplier> builder)
         {
             builder.HasKey(a => a.Id);
 
@@ -41,6 +41,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Configuration
                     str => new UserBirthDate(str)
                 )
                 .IsRequired();
+
         }
     }
 }

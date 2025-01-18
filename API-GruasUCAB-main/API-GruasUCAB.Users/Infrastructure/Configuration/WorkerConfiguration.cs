@@ -6,9 +6,9 @@ using System;
 
 namespace API_GruasUCAB.Users.Infrastructure.Configuration
 {
-    public class AdministratorConfiguration : IEntityTypeConfiguration<Administrator>
+    public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
     {
-        public void Configure(EntityTypeBuilder<Administrator> builder)
+        public void Configure(EntityTypeBuilder<Worker> builder)
         {
             builder.HasKey(a => a.Id);
 
@@ -41,6 +41,12 @@ namespace API_GruasUCAB.Users.Infrastructure.Configuration
                     str => new UserBirthDate(str)
                 )
                 .IsRequired();
+
+            builder.Property(a => a.Position)
+                .HasConversion(position => position.Value, str => new UserPosition(str))
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
     }
 }
