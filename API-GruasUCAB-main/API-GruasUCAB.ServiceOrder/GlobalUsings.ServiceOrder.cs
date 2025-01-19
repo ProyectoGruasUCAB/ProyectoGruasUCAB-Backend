@@ -5,7 +5,6 @@ global using API_GruasUCAB.Core.Domain.DomainException;
 global using API_GruasUCAB.Core.Domain.AggregateRoot;
 global using API_GruasUCAB.Core.Domain.ValueObject;
 global using API_GruasUCAB.Core.Domain.DomainEvent;
-global using API_GruasUCAB.Common.Calculate;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.AspNetCore.Http;
 global using System.Threading.Tasks;

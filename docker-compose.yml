@@ -1,9 +1,5 @@
 version: '3.8'
 
-networks:
-  gruas_network:
-    driver: bridge
-
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.5
@@ -15,23 +11,8 @@ services:
       - KC_BOOTSTRAP_ADMIN_PASSWORD=1234
       - KEYCLOAK_IMPORT=/opt/keycloak/data/import/keycloak-config.json
     command: start-dev
-
-  postgres:
-    image: postgres:14
-    container_name: main_postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=common_user
-      - POSTGRES_PASSWORD=common_password
     volumes:
-      - main_postgres_data:/var/lib/postgresql/data
-    command: >
-      bash -c " for dbname in departmentMS policyMS serviceFeeMS serviceOrderMS supplierMS usersMS vehicleMS; do
-        psql -U common_user -c \"CREATE DATABASE \\\"$dbname\\\";\" || true;
-      done"
-    networks:
-      - gruas_network
+      - proyectogruasucab-backend_keycloak_data:/opt/keycloak/data
 
 volumes:
-  main_postgres_data:
+  proyectogruasucab-backend_keycloak_data:

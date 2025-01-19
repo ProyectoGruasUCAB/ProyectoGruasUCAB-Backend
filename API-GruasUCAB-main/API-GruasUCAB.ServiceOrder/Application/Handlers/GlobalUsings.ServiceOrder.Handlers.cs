@@ -1,5 +1,5 @@
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.CreateServiceOrder;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.UpdateServiceOrder;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetServiceOrdersByStatus;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetServiceOrderById;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetAllServiceOrders;
-global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetServiceOrdersByStatus;

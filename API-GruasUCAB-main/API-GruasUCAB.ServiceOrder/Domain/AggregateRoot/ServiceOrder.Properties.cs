@@ -2,8 +2,6 @@ namespace API_GruasUCAB.ServiceOrder.Domain.AggregateRoot
 {
      public partial class ServiceOrder : AggregateRoot<ServiceOrderId>
      {
-          private IServiceOrderState _state;
-
           public IncidentDescription IncidentDescription { get; private set; }
           public Coordinates InitialLocationDriver { get; private set; }
           public Coordinates IncidentLocation { get; private set; }
@@ -53,10 +51,6 @@ namespace API_GruasUCAB.ServiceOrder.Domain.AggregateRoot
                CustomerId = customerId ?? throw new ArgumentNullException(nameof(customerId));
                OperatorId = operatorId ?? throw new ArgumentNullException(nameof(operatorId));
                ServiceFeeId = serviceFeeId ?? throw new ArgumentNullException(nameof(serviceFeeId));
-
-               // Inicializar _state con un valor predeterminado
-               _state = new PorAceptadoState();
-               _state.SetContext(this);
 
                ValidateState();
                AddDomainEvent(new ServiceOrderCreatedEvent(serviceOrderId));

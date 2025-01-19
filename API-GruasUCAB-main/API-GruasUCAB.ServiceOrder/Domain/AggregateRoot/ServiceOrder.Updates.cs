@@ -2,46 +2,13 @@ namespace API_GruasUCAB.ServiceOrder.Domain.AggregateRoot
 {
      public partial class ServiceOrder
      {
-          public void SetState(IServiceOrderState state)
+
+          public void ApplyEvent(IDomainEvent domainEvent)
           {
-               _state = state;
-               _state.SetContext(this);
+               Apply(domainEvent);
+               Console.WriteLine($"Evento aplicado: {domainEvent.GetType().Name}");
           }
 
-          public void ChangeState(string newState)
-          {
-               switch (newState)
-               {
-                    case "PorAceptado":
-                         _state.PorAceptado();
-                         break;
-                    case "Aceptado":
-                         _state.Aceptado();
-                         break;
-                    case "Cancelado":
-                         _state.Cancelado();
-                         break;
-                    case "Localizado":
-                         _state.Localizado();
-                         break;
-                    case "CanceladoPorCobrar":
-                         _state.CanceladoPorCobrar();
-                         break;
-                    case "EnProceso":
-                         _state.EnProceso();
-                         break;
-                    case "Finalizado":
-                         _state.Finalizado();
-                         break;
-                    case "Pagado":
-                         _state.Pagado();
-                         break;
-                    default:
-                         throw new InvalidStatusServiceOrderException();
-               }
-          }
-
-          // Métodos públicos para cambiar las propiedades
           public void UpdateIncidentDescription(IncidentDescription newDescription)
           {
                IncidentDescription = newDescription ?? throw new ArgumentNullException(nameof(newDescription));

@@ -11,6 +11,8 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.DTOs.UpdateServiceOrder
 
           public string? IncidentDescription { get; set; } = string.Empty;
 
+          public string? State { get; set; } = string.Empty;
+
           public double? InitialLocationDriverLat { get; set; }
 
           public double? InitialLocationDriverLon { get; set; }

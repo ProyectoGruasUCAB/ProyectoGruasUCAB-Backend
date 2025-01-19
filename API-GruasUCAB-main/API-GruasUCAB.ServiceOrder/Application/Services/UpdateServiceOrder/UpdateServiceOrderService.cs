@@ -4,11 +4,13 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
      {
           private readonly IServiceOrderRepository _serviceOrderRepository;
           private readonly IServiceOrderFactory _serviceOrderFactory;
+          private readonly IEnumerable<IStateTransition> _stateTransitions;
 
-          public UpdateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory)
+          public UpdateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory, IEnumerable<IStateTransition> stateTransitions)
           {
                _serviceOrderRepository = serviceOrderRepository;
                _serviceOrderFactory = serviceOrderFactory;
+               _stateTransitions = stateTransitions;
           }
 
           public async Task<UpdateServiceOrderResponseDTO> Execute(UpdateServiceOrderRequestDTO request)
@@ -17,7 +19,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                    ?? throw new ServiceOrderNotFoundException(request.ServiceOrderId);
 
                var serviceOrder = _serviceOrderFactory.CreateServiceOrder(
-                   new ServiceOrderId(serviceOrderDTO.ServiceOrderId), // Convert Guid to ServiceOrderId
+                   new ServiceOrderId(serviceOrderDTO.ServiceOrderId),
                    new IncidentDescription(serviceOrderDTO.IncidentDescription),
                    new Coordinates(serviceOrderDTO.InitialLocationDriverLat, serviceOrderDTO.InitialLocationDriverLon),
                    new Coordinates(serviceOrderDTO.IncidentLocationLat, serviceOrderDTO.IncidentLocationLon),
@@ -98,6 +100,43 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                if (request.ServiceFeeId.HasValue)
                {
                     serviceOrder.UpdateServiceFeeId(new ServiceFeeId(request.ServiceFeeId.Value));
+               }
+
+               if (!string.IsNullOrEmpty(request.State))
+               {
+                    var newState = Enum.Parse<ServiceOrderStatus>(request.State);
+                    switch (newState)
+                    {
+                         case ServiceOrderStatus.PorAsignar:
+                              serviceOrder.StatusServiceOrder.Assign();
+                              break;
+                         case ServiceOrderStatus.PorAceptado:
+                              serviceOrder.StatusServiceOrder.Assign();
+                              break;
+                         case ServiceOrderStatus.Aceptado:
+                              serviceOrder.StatusServiceOrder.Accept();
+                              break;
+                         case ServiceOrderStatus.Localizado:
+                              serviceOrder.StatusServiceOrder.Locate();
+                              break;
+                         case ServiceOrderStatus.EnProceso:
+                              serviceOrder.StatusServiceOrder.Process();
+                              break;
+                         case ServiceOrderStatus.Finalizado:
+                              serviceOrder.StatusServiceOrder.Finish();
+                              break;
+                         case ServiceOrderStatus.Cancelado:
+                              serviceOrder.StatusServiceOrder.Cancel();
+                              break;
+                         case ServiceOrderStatus.CanceladoPorCobrar:
+                              serviceOrder.StatusServiceOrder.CancelForCharge();
+                              break;
+                         case ServiceOrderStatus.Pagado:
+                              serviceOrder.StatusServiceOrder.Pay();
+                              break;
+                         default:
+                              throw new InvalidOperationException("Invalid state transition.");
+                    }
                }
 
                serviceOrderDTO.IncidentDescription = serviceOrder.IncidentDescription.Value;

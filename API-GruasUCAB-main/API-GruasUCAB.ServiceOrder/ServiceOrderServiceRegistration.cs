@@ -12,6 +12,16 @@ namespace API_GruasUCAB.ServiceOrder
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
             services.AddHttpClient();
 
+            //  State Transitions
+            services.AddScoped<IStateTransition, AssignStateTransition>();
+            services.AddScoped<IStateTransition, AcceptStateTransition>();
+            services.AddScoped<IStateTransition, LocateStateTransition>();
+            services.AddScoped<IStateTransition, ProcessStateTransition>();
+            services.AddScoped<IStateTransition, FinishStateTransition>();
+            services.AddScoped<IStateTransition, PayStateTransition>();
+            services.AddScoped<IStateTransition, CancelStateTransition>();
+            services.AddScoped<IStateTransition, CancelForChargeStateTransition>();
+
             // SecurityDecorator for CreateServiceOrder
             services.Decorate<IService<CreateServiceOrderRequestDTO, CreateServiceOrderResponseDTO>>(
                 (inner, provider) => new SecurityDecorator<CreateServiceOrderRequestDTO, CreateServiceOrderResponseDTO>(
