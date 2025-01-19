@@ -1,24 +1,26 @@
 namespace API_GruasUCAB.Users.Domain.Entities
 {
-     public class Supplier : AggregateRoot<UserId>
+     public class Provider : AggregateRoot<UserId>
      {
           public UserName Name { get; private set; }
           public UserEmail Email { get; private set; }
           public UserPhone Phone { get; private set; }
           public UserCedula Cedula { get; private set; }
           public UserBirthDate BirthDate { get; private set; }
+          public SupplierId SupplierId { get; private set; }
 
-          public Supplier(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula, UserBirthDate birthDate)
+          public Provider(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula, UserBirthDate birthDate, SupplierId supplierId)
               : base(id)
           {
-               Name = name ?? throw new ArgumentNullException(nameof(name), "Supplier must have a name.");
-               Email = email ?? throw new ArgumentNullException(nameof(email), "Supplier must have an email.");
-               Phone = phone ?? throw new ArgumentNullException(nameof(phone), "Supplier must have a phone.");
-               Cedula = cedula ?? throw new ArgumentNullException(nameof(cedula), "Supplier must have a cedula.");
-               BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "Supplier must have a birth date.");
+               Name = name ?? throw new ArgumentNullException(nameof(name), "Provider must have a name.");
+               Email = email ?? throw new ArgumentNullException(nameof(email), "Provider must have an email.");
+               Phone = phone ?? throw new ArgumentNullException(nameof(phone), "Provider must have a phone.");
+               Cedula = cedula ?? throw new ArgumentNullException(nameof(cedula), "Provider must have a cedula.");
+               BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "Provider must have a birth date.");
+               SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "Provider must have a supplier.");
 
                ValidateState();
-               AddDomainEvent(new RecordSupplierDataEvent(id, name, email, phone, birthDate));
+               AddDomainEvent(new RecordProviderDataEvent(id, name, email, phone, birthDate, supplierId));
           }
 
           protected override void ValidateState()
@@ -28,36 +30,43 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidatePhone();
                ValidateCedula();
                ValidateBirthDate();
+               ValidateSupplierId();
           }
 
           private void ValidateName()
           {
                if (Name == null)
-                    throw new InvalidUserException("Supplier must have a name.");
+                    throw new InvalidUserException("Provider must have a name.");
           }
 
           private void ValidateEmail()
           {
                if (Email == null)
-                    throw new InvalidUserException("Supplier must have an email.");
+                    throw new InvalidUserException("Provider must have an email.");
           }
 
           private void ValidatePhone()
           {
                if (Phone == null)
-                    throw new InvalidUserException("Supplier must have a phone.");
+                    throw new InvalidUserException("Provider must have a phone.");
           }
 
           private void ValidateCedula()
           {
                if (Cedula == null)
-                    throw new InvalidUserException("Supplier must have a cedula.");
+                    throw new InvalidUserException("Provider must have a cedula.");
           }
 
           private void ValidateBirthDate()
           {
                if (BirthDate == null)
-                    throw new InvalidUserException("Supplier must have a birth date.");
+                    throw new InvalidUserException("Provider must have a birth date.");
+          }
+
+          private void ValidateSupplierId()
+          {
+               if (SupplierId == null)
+                    throw new InvalidUserException("Provider must have a supplier.");
           }
 
           public void ChangeName(UserName newName)
@@ -79,6 +88,13 @@ namespace API_GruasUCAB.Users.Domain.Entities
                BirthDate = newBirthDate ?? throw new ArgumentNullException(nameof(newBirthDate), "New birth date cannot be null.");
                ValidateState();
                AddDomainEvent(new UserBirthDateChangedEvent(Id, newBirthDate));
+          }
+
+          public void ChangeSupplierId(SupplierId newSupplierId)
+          {
+               SupplierId = newSupplierId ?? throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
+               ValidateState();
+               AddDomainEvent(new SupplierIdChangedEvent(Id, newSupplierId));
           }
      }
 }

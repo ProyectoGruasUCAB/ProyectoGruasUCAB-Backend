@@ -6,17 +6,19 @@ namespace API_GruasUCAB.ServiceFee.Domain.AggregateRoot
           public ServiceFeePrice Price { get; private set; }
           public ServiceFeePriceKm PriceKm { get; private set; }
           public ServiceFeeRadius Radius { get; private set; }
+          public ServiceFeeDescription Description { get; private set; }
 
-          public ServiceFee(ServiceFeeId id, ServiceFeeName name, ServiceFeePrice price, ServiceFeePriceKm priceKm, ServiceFeeRadius radius)
+          public ServiceFee(ServiceFeeId id, ServiceFeeName name, ServiceFeePrice price, ServiceFeePriceKm priceKm, ServiceFeeRadius radius, ServiceFeeDescription description)
               : base(id)
           {
                Name = name ?? throw new ArgumentNullException(nameof(name), "Service fee must have a name.");
                Price = price ?? throw new ArgumentNullException(nameof(price), "Service fee must have a price.");
                PriceKm = priceKm ?? throw new ArgumentNullException(nameof(priceKm), "Service fee must have a price per km.");
                Radius = radius ?? throw new ArgumentNullException(nameof(radius), "Service fee must have a radius.");
+               Description = description ?? throw new ArgumentNullException(nameof(description), "Service fee must have a description.");
 
                ValidateState();
-               AddDomainEvent(new ServiceFeeCreatedEvent(id, name, price, priceKm, radius));
+               AddDomainEvent(new ServiceFeeCreatedEvent(id, name, price, priceKm, radius, description));
           }
 
           protected override void ValidateState()
@@ -25,6 +27,7 @@ namespace API_GruasUCAB.ServiceFee.Domain.AggregateRoot
                ValidatePrice();
                ValidatePriceKm();
                ValidateRadius();
+               ValidateDescription();
           }
 
           private void ValidateName()
@@ -49,6 +52,12 @@ namespace API_GruasUCAB.ServiceFee.Domain.AggregateRoot
           {
                if (Radius == null)
                     throw new InvalidServiceFeeRadiusException();
+          }
+
+          private void ValidateDescription()
+          {
+               if (Description == null)
+                    throw new InvalidServiceFeeDescriptionException();
           }
 
           public void ChangeName(ServiceFeeName newName)
@@ -85,6 +94,15 @@ namespace API_GruasUCAB.ServiceFee.Domain.AggregateRoot
                Radius = newRadius;
                ValidateState();
                AddDomainEvent(new ServiceFeeRadiusChangedEvent(Id, newRadius));
+          }
+
+          public void ChangeDescription(ServiceFeeDescription newDescription)
+          {
+               if (newDescription == null)
+                    throw new ArgumentNullException(nameof(newDescription), "New description cannot be null.");
+               Description = newDescription;
+               ValidateState();
+               AddDomainEvent(new ServiceFeeDescriptionChangedEvent(Id, newDescription));
           }
      }
 }

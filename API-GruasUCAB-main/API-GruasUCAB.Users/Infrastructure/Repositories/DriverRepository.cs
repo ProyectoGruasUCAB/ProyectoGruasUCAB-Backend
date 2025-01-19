@@ -23,7 +23,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         MedicalCertificate = d.MedicalCertificate.Value,
                         MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                         DriverLicense = d.DriverLicense.Value,
-                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
+                        SupplierId = d.SupplierId.Value
                    })
                    .ToListAsync();
           }
@@ -47,7 +48,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     MedicalCertificate = driver.MedicalCertificate.Value,
                     MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                     DriverLicense = driver.DriverLicense.Value,
-                    DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+                    DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
+                    SupplierId = driver.SupplierId.Value
                };
           }
 
@@ -69,7 +71,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         MedicalCertificate = d.MedicalCertificate.Value,
                         MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                         DriverLicense = d.DriverLicense.Value,
-                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy")
+                        DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
+                        SupplierId = d.SupplierId.Value
                    })
                    .ToList();
 
@@ -93,7 +96,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                    new UserMedicalCertificate(driverDto.MedicalCertificate),
                    new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate),
                    new UserDriverLicense(driverDto.DriverLicense),
-                   new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate)
+                   new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate),
+                   new SupplierId(driverDto.SupplierId)
                );
 
                _context.Drivers.Add(driver);
@@ -115,6 +119,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.ChangeDriverLicense(new UserDriverLicense(driverDto.DriverLicense));
                existingDriver.ChangeMedicalCertificateExpirationDate(new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate));
                existingDriver.ChangeDriverLicenseExpirationDate(new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate));
+               existingDriver.ChangeSupplierId(new SupplierId(driverDto.SupplierId));
 
                await _context.SaveChangesAsync();
           }

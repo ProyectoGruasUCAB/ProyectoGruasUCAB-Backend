@@ -1,15 +1,16 @@
 namespace API_GruasUCAB.Users.Domain.Factories
 {
-     public interface ISupplierFactory
+     public interface IProviderFactory
      {
-          Supplier CreateSupplier(
+          Provider CreateProvider(
               UserId id,
               UserName name,
               UserEmail email,
               UserPhone phone,
               UserCedula cedula,
-              UserBirthDate birthDate);
+              UserBirthDate birthDate,
+              SupplierId supplierId);
 
-          Task<Supplier> GetSupplierById(UserId id);
+          Task<Provider> GetProviderById(UserId id);
      }
 }

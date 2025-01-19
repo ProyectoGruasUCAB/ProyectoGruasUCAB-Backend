@@ -11,7 +11,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
           public VehicleColor VehicleColor { get; }
           public VehicleModel VehicleModel { get; }
           public VehicleTypeId VehicleTypeId { get; }
-          public UserId UserId { get; }
+          public UserId? UserId { get; }
           public SupplierId SupplierId { get; }
           public DateTime Timestamp { get; }
 
@@ -25,7 +25,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
               VehicleColor vehicleColor,
               VehicleModel vehicleModel,
               VehicleTypeId vehicleTypeId,
-              UserId userId,
+              UserId? userId,
               SupplierId supplierId)
           {
                VehicleId = vehicleId ?? throw new ArgumentNullException(nameof(vehicleId), "VehicleId cannot be null.");
@@ -37,7 +37,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Events
                VehicleColor = vehicleColor ?? throw new ArgumentNullException(nameof(vehicleColor), "VehicleColor cannot be null.");
                VehicleModel = vehicleModel ?? throw new ArgumentNullException(nameof(vehicleModel), "VehicleModel cannot be null.");
                VehicleTypeId = vehicleTypeId ?? throw new ArgumentNullException(nameof(vehicleTypeId), "VehicleTypeId cannot be null.");
-               UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
+               UserId = userId;
                SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "SupplierId cannot be null.");
                Timestamp = DateTime.UtcNow;
           }

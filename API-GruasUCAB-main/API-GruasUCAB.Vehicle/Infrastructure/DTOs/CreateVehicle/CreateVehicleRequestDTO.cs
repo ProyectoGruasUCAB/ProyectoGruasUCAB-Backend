@@ -8,7 +8,7 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.DTOs.CreateVehicle
 
           [Required(ErrorMessage = "Driver ID is required.")]
           [JsonPropertyOrder(2)]
-          public Guid DriverId { get; set; }
+          public Guid? DriverId { get; set; }
 
           [Required(ErrorMessage = "Supplier ID is required.")]
           [JsonPropertyOrder(2)]

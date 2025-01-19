@@ -9,7 +9,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate,
-              UserPosition position);
+              UserPosition position,
+              DepartmentId departmentId);
 
           Task<Worker> GetWorkerById(UserId id);
      }

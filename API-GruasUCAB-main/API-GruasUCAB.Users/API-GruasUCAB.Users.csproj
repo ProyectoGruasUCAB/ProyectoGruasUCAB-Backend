@@ -11,6 +11,8 @@
     <ProjectReference Include="..\API-GruasUCAB.Commons\API-GruasUCAB.Commons.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
     <ProjectReference Include="..\API-GruasUCAB.Auth\API-GruasUCAB.Auth.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Department\API-GruasUCAB.Department.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Supplier\API-GruasUCAB.Supplier.csproj" />
   </ItemGroup>
 
   <ItemGroup>

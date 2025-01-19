@@ -11,7 +11,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 
           public async Task<List<ProviderDTO>> GetAllProvidersAsync()
           {
-               return await _context.Suppliers
+               return await _context.Providers
                    .Select(p => new ProviderDTO
                    {
                         Id = p.Id.Value,
@@ -19,14 +19,15 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         UserEmail = p.Email.Value,
                         Phone = p.Phone.Value,
                         Cedula = p.Cedula.Value,
-                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy")
+                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        SupplierId = p.SupplierId.Value
                    })
                    .ToListAsync();
           }
 
           public async Task<ProviderDTO> GetProviderByIdAsync(Guid id)
           {
-               var provider = await _context.Suppliers.FindAsync(new UserId(id));
+               var provider = await _context.Providers.FindAsync(new UserId(id));
                if (provider == null)
                {
                     throw new KeyNotFoundException($"Provider with ID {id} not found.");
@@ -39,13 +40,14 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     UserEmail = provider.Email.Value,
                     Phone = provider.Phone.Value,
                     Cedula = provider.Cedula.Value,
-                    BirthDate = provider.BirthDate.Value.ToString("dd-MM-yyyy")
+                    BirthDate = provider.BirthDate.Value.ToString("dd-MM-yyyy"),
+                    SupplierId = provider.SupplierId.Value
                };
           }
 
           public async Task<List<ProviderDTO>> GetProvidersByNameAsync(string name)
           {
-               var providers = await _context.Suppliers
+               var providers = await _context.Providers
                    .ToListAsync();
 
                var filteredProviders = providers
@@ -57,7 +59,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         UserEmail = p.Email.Value,
                         Phone = p.Phone.Value,
                         Cedula = p.Cedula.Value,
-                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy")
+                        BirthDate = p.BirthDate.Value.ToString("dd-MM-yyyy"),
+                        SupplierId = p.SupplierId.Value
                    })
                    .ToList();
 
@@ -71,22 +74,23 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
 
           public async Task AddProviderAsync(ProviderDTO providerDto)
           {
-               var provider = new Supplier(
+               var provider = new Provider(
                    new UserId(providerDto.Id),
                    new UserName(providerDto.Name),
                    new UserEmail(providerDto.UserEmail),
                    new UserPhone(providerDto.Phone),
                    new UserCedula(providerDto.Cedula),
-                   new UserBirthDate(providerDto.BirthDate)
+                   new UserBirthDate(providerDto.BirthDate),
+                   new SupplierId(providerDto.SupplierId)
                );
 
-               _context.Suppliers.Add(provider);
+               _context.Providers.Add(provider);
                await _context.SaveChangesAsync();
           }
 
           public async Task UpdateProviderAsync(ProviderDTO providerDto)
           {
-               var existingProvider = await _context.Suppliers.FindAsync(new UserId(providerDto.Id));
+               var existingProvider = await _context.Providers.FindAsync(new UserId(providerDto.Id));
                if (existingProvider == null)
                {
                     throw new KeyNotFoundException($"Provider with ID {providerDto.Id} not found.");
@@ -95,6 +99,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingProvider.ChangeName(new UserName(providerDto.Name));
                existingProvider.ChangePhone(new UserPhone(providerDto.Phone));
                existingProvider.ChangeBirthDate(new UserBirthDate(providerDto.BirthDate));
+               existingProvider.ChangeSupplierId(new SupplierId(providerDto.SupplierId));
 
                await _context.SaveChangesAsync();
           }

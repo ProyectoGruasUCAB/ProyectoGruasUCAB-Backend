@@ -12,7 +12,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Mappers
                     Phone = worker.Phone.Value,
                     Cedula = worker.Cedula.Value,
                     BirthDate = worker.BirthDate.Value.ToString("dd-MM-yyyy"),
-                    Position = worker.Position.Value
+                    Position = worker.Position.Value,
+                    DepartmentId = worker.DepartmentId.Id
                };
           }
      }

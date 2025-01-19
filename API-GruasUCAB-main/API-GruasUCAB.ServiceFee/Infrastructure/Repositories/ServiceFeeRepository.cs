@@ -15,7 +15,8 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
                     Name = "Basic Service",
                     Price = 50.0f,
                     PriceKm = 5.0f,
-                    Radius = 10
+                    Radius = 10,
+                    Description = "Basic service description"
                 },
                 new ServiceFeeDTO
                 {
@@ -23,7 +24,8 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
                     Name = "Premium Service",
                     Price = 100.0f,
                     PriceKm = 10.0f,
-                    Radius = 20
+                    Radius = 20,
+                    Description = "Premium service description"
                 },
                 new ServiceFeeDTO
                 {
@@ -31,7 +33,8 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
                     Name = "VIP Service",
                     Price = 200.0f,
                     PriceKm = 20.0f,
-                    Radius = 30
+                    Radius = 30,
+                    Description = "VIP service description"
                 }
             };
           }
@@ -84,6 +87,7 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
                existingServiceFee.Price = serviceFee.Price;
                existingServiceFee.PriceKm = serviceFee.PriceKm;
                existingServiceFee.Radius = serviceFee.Radius;
+               existingServiceFee.Description = serviceFee.Description;
 
                await Task.CompletedTask;
           }

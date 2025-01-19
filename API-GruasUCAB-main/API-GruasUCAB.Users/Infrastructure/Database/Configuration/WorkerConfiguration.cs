@@ -41,6 +41,12 @@ namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(a => a.DepartmentId)
+                .HasConversion(
+                    departmentId => departmentId.Value.ToString(),
+                    str => new DepartmentId(Guid.Parse(str))
+                )
+                .IsRequired();
         }
     }
 }

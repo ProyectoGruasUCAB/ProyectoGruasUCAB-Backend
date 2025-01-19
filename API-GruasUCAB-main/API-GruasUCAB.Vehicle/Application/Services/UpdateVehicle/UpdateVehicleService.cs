@@ -29,7 +29,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                    new VehicleColor(vehicleDTO.Color),
                    new VehicleModel(vehicleDTO.Model),
                    new VehicleTypeId(vehicleDTO.VehicleTypeId),
-                   new UserId(vehicleDTO.DriverId),
+                   vehicleDTO.DriverId.HasValue ? new UserId(vehicleDTO.DriverId.Value) : (UserId?)null,
                    new SupplierId(vehicleDTO.SupplierId)
                );
 
@@ -77,6 +77,10 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                {
                     vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
                }
+               else
+               {
+                    vehicle.ChangeDriverId(null);
+               }
 
                if (request.SupplierId.HasValue)
                {
@@ -91,7 +95,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                vehicleDTO.Color = vehicle.Color.Value;
                vehicleDTO.Model = vehicle.Model.Value;
                vehicleDTO.VehicleTypeId = vehicle.VehicleTypeId.Id;
-               vehicleDTO.DriverId = vehicle.DriverId.Id;
+               vehicleDTO.DriverId = vehicle.DriverId?.Id;
                vehicleDTO.SupplierId = vehicle.SupplierId.Id;
 
                await _vehicleRepository.UpdateVehicleAsync(vehicleDTO);
@@ -110,7 +114,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     Color = vehicle.Color.Value,
                     Model = vehicle.Model.Value,
                     VehicleTypeId = vehicle.VehicleTypeId.Id,
-                    DriverId = vehicle.DriverId.Id,
+                    DriverId = vehicle.DriverId?.Id,
                     SupplierId = vehicle.SupplierId.Id
                };
           }

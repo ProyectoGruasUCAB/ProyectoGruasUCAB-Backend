@@ -13,16 +13,6 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
                     throw new InvalidUserDriverLicenseExpirationDateFormatException(expirationDate);
                }
 
-               if (parsedDate < DateTime.UtcNow)
-               {
-                    throw new InvalidUserDriverLicenseExpirationDateExpiredException(parsedDate);
-               }
-
-               if (parsedDate > DateTime.UtcNow.AddYears(10))
-               {
-                    throw new InvalidUserDriverLicenseExpirationDateTooFarException(parsedDate);
-               }
-
                ExpirationDate = parsedDate;
           }
 

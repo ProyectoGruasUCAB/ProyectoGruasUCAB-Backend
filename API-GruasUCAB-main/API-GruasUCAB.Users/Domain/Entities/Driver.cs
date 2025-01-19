@@ -11,10 +11,11 @@ namespace API_GruasUCAB.Users.Domain.Entities
           public UserMedicalCertificateExpirationDate MedicalCertificateExpirationDate { get; private set; }
           public UserDriverLicense DriverLicense { get; private set; }
           public UserDriverLicenseExpirationDate DriverLicenseExpirationDate { get; private set; }
+          public SupplierId SupplierId { get; private set; }
 
           public Driver(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula,
                         UserBirthDate birthDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
-                        UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate)
+                        UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate, SupplierId supplierId)
               : base(id)
           {
                Name = name ?? throw new ArgumentNullException(nameof(name), "Driver must have a name.");
@@ -26,9 +27,10 @@ namespace API_GruasUCAB.Users.Domain.Entities
                MedicalCertificateExpirationDate = medicalCertificateExpirationDate ?? throw new ArgumentNullException(nameof(medicalCertificateExpirationDate), "Driver must have a medical certificate expiration date.");
                DriverLicense = driverLicense ?? throw new ArgumentNullException(nameof(driverLicense), "Driver must have a driver license.");
                DriverLicenseExpirationDate = driverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(driverLicenseExpirationDate), "Driver must have a driver license expiration date.");
+               SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "Driver must have a supplier.");
 
                ValidateState();
-               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate));
+               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId));
           }
 
           protected override void ValidateState()
@@ -40,6 +42,7 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidateBirthDate();
                ValidateMedicalCertificate();
                ValidateDriverLicense();
+               ValidateSupplierId();
           }
 
           private void ValidateName()
@@ -82,6 +85,12 @@ namespace API_GruasUCAB.Users.Domain.Entities
           {
                if (DriverLicense == null)
                     throw new InvalidUserException("Driver must have a driver license.");
+          }
+
+          private void ValidateSupplierId()
+          {
+               if (SupplierId == null)
+                    throw new InvalidSupplierIdException();
           }
 
           public void ChangeName(UserName newName)
@@ -131,6 +140,13 @@ namespace API_GruasUCAB.Users.Domain.Entities
                DriverLicenseExpirationDate = newDate ?? throw new ArgumentNullException(nameof(newDate), "New driver license expiration date cannot be null.");
                ValidateState();
                AddDomainEvent(new UserDriverLicenseExpirationDateChangedEvent(Id, newDate));
+          }
+
+          public void ChangeSupplierId(SupplierId newSupplierId)
+          {
+               SupplierId = newSupplierId ?? throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
+               ValidateState();
+               AddDomainEvent(new SupplierIdChangedEvent(Id, newSupplierId));
           }
      }
 }

@@ -14,9 +14,10 @@ namespace API_GruasUCAB.ServiceFee.Domain.Factories
               ServiceFeeName name,
               ServiceFeePrice price,
               ServiceFeePriceKm priceKm,
-              ServiceFeeRadius radius)
+              ServiceFeeRadius radius,
+              ServiceFeeDescription description)
           {
-               return new AggregateRoot.ServiceFee(id, name, price, priceKm, radius);
+               return new AggregateRoot.ServiceFee(id, name, price, priceKm, radius, description);
           }
 
           public async Task<AggregateRoot.ServiceFee> GetServiceFeeById(ServiceFeeId id)
@@ -27,7 +28,8 @@ namespace API_GruasUCAB.ServiceFee.Domain.Factories
                    new ServiceFeeName(serviceFeeDTO.Name),
                    new ServiceFeePrice(serviceFeeDTO.Price),
                    new ServiceFeePriceKm(serviceFeeDTO.PriceKm),
-                   new ServiceFeeRadius(serviceFeeDTO.Radius)
+                   new ServiceFeeRadius(serviceFeeDTO.Radius),
+                   new ServiceFeeDescription(serviceFeeDTO.Description)
                );
           }
      }

@@ -21,9 +21,11 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     throw new ArgumentNullException(nameof(request.DriverLicense));
                if (request.DriverLicenseExpirationDate == null)
                     throw new ArgumentNullException(nameof(request.DriverLicenseExpirationDate));
+               if (!request.WorkplaceId.HasValue)
+                    throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for drivers.");
 
                var driver = _driverFactory.CreateDriver(
-                   new UserId(request.UserId.ToString()),
+                   new UserId(request.UserId),
                    new UserName(request.Name),
                    new UserEmail(request.UserEmail),
                    new UserPhone(request.Phone),
@@ -32,23 +34,11 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserMedicalCertificate(request.MedicalCertificate),
                    new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate),
                    new UserDriverLicense(request.DriverLicense),
-                   new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate)
+                   new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate),
+                   new SupplierId(request.WorkplaceId.Value)
                );
 
-               var driverDTO = new DriverDTO
-               {
-                    Id = request.UserId,
-                    Name = request.Name,
-                    UserEmail = request.UserEmail,
-                    Phone = request.Phone,
-                    Cedula = request.Cedula,
-                    BirthDate = request.BirthDate,
-                    MedicalCertificate = request.MedicalCertificate,
-                    MedicalCertificateExpirationDate = request.MedicalCertificateExpirationDate,
-                    DriverLicense = request.DriverLicense,
-                    DriverLicenseExpirationDate = request.DriverLicenseExpirationDate
-               };
-
+               var driverDTO = driver.ToDTO();
                await _driverRepository.AddDriverAsync(driverDTO);
 
                return new RecordUserDataResponseDTO

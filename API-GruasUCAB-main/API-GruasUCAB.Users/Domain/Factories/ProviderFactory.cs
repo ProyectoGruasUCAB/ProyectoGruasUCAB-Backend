@@ -1,35 +1,37 @@
 namespace API_GruasUCAB.Users.Domain.Factories
 {
-     public class SupplierFactory : ISupplierFactory
+     public class ProviderFactory : IProviderFactory
      {
           private readonly IProviderRepository _providerRepository;
 
-          public SupplierFactory(IProviderRepository providerRepository)
+          public ProviderFactory(IProviderRepository providerRepository)
           {
                _providerRepository = providerRepository;
           }
 
-          public Supplier CreateSupplier(
+          public Provider CreateProvider(
               UserId id,
               UserName name,
               UserEmail email,
               UserPhone phone,
               UserCedula cedula,
-              UserBirthDate birthDate)
+              UserBirthDate birthDate,
+              SupplierId supplierId)
           {
-               return new Supplier(id, name, email, phone, cedula, birthDate);
+               return new Provider(id, name, email, phone, cedula, birthDate, supplierId);
           }
 
-          public async Task<Supplier> GetSupplierById(UserId id)
+          public async Task<Provider> GetProviderById(UserId id)
           {
                var providerDTO = await _providerRepository.GetProviderByIdAsync(id.Id);
-               return new Supplier(
+               return new Provider(
                    new UserId(providerDTO.Id),
                    new UserName(providerDTO.Name),
                    new UserEmail(providerDTO.UserEmail),
                    new UserPhone(providerDTO.Phone),
                    new UserCedula(providerDTO.Cedula),
-                   new UserBirthDate(providerDTO.BirthDate)
+                   new UserBirthDate(providerDTO.BirthDate),
+                   new SupplierId(providerDTO.SupplierId)
                );
           }
      }

@@ -64,6 +64,12 @@ namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
                 )
                 .IsRequired();
 
+            builder.Property(a => a.SupplierId)
+                .HasConversion(
+                    supplierId => supplierId.Value.ToString(),
+                    str => new SupplierId(Guid.Parse(str))
+                )
+                .IsRequired();
         }
     }
 }

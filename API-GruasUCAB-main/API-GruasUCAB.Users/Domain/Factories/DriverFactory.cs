@@ -19,9 +19,10 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserMedicalCertificate medicalCertificate,
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,
-              UserDriverLicenseExpirationDate driverLicenseExpirationDate)
+              UserDriverLicenseExpirationDate driverLicenseExpirationDate,
+              SupplierId supplierId)
           {
-               return new Driver(id, name, email, phone, cedula, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate);
+               return new Driver(id, name, email, phone, cedula, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId);
           }
 
           public async Task<Driver> GetDriverById(UserId id)
@@ -37,7 +38,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserMedicalCertificate(driverDTO.MedicalCertificate),
                    new UserMedicalCertificateExpirationDate(driverDTO.MedicalCertificateExpirationDate),
                    new UserDriverLicense(driverDTO.DriverLicense),
-                   new UserDriverLicenseExpirationDate(driverDTO.DriverLicenseExpirationDate)
+                   new UserDriverLicenseExpirationDate(driverDTO.DriverLicenseExpirationDate),
+                   new SupplierId(driverDTO.SupplierId)
                );
           }
      }

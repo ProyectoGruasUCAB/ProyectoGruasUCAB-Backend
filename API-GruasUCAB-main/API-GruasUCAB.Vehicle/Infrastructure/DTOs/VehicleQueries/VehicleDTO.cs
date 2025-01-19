@@ -3,7 +3,7 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.DTOs.VehicleQueries
      public class VehicleDTO
      {
           public Guid VehicleId { get; set; }
-          public Guid DriverId { get; set; }
+          public Guid? DriverId { get; set; }
           public Guid SupplierId { get; set; }
           public string CivilLiability { get; set; } = string.Empty;
           public string CivilLiabilityExpirationDate { get; set; } = string.Empty;

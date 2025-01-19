@@ -9,8 +9,18 @@ namespace API_GruasUCAB.Users.Domain.Events
 
           public UserMedicalCertificateExpirationDateChangedEvent(UserId userId, UserMedicalCertificateExpirationDate newMedicalCertificateExpirationDate)
           {
-               UserId = userId;
-               NewMedicalCertificateExpirationDate = newMedicalCertificateExpirationDate;
+               if (newMedicalCertificateExpirationDate.Value < DateTime.UtcNow)
+               {
+                    throw new InvalidUserMedicalCertificateExpirationDateExpiredException(newMedicalCertificateExpirationDate.Value);
+               }
+
+               if (newMedicalCertificateExpirationDate.Value > DateTime.UtcNow.AddYears(10))
+               {
+                    throw new InvalidUserMedicalCertificateExpirationDateTooFarException(newMedicalCertificateExpirationDate.Value);
+               }
+
+               UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
+               NewMedicalCertificateExpirationDate = newMedicalCertificateExpirationDate ?? throw new ArgumentNullException(nameof(newMedicalCertificateExpirationDate), "NewMedicalCertificateExpirationDate cannot be null.");
                Timestamp = DateTime.UtcNow;
           }
 
