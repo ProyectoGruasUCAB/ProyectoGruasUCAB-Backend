@@ -8,8 +8,9 @@ namespace API_GruasUCAB.Users.Domain.Events
           public UserPhone Phone { get; }
           public UserBirthDate BirthDate { get; }
           public UserPosition Position { get; }
+          public DepartmentId DepartmentId { get; }
 
-          public RecordWorkerDataEvent(UserId userId, UserName userName, UserEmail email, UserPhone phone, UserBirthDate birthDate, UserPosition position)
+          public RecordWorkerDataEvent(UserId userId, UserName userName, UserEmail email, UserPhone phone, UserBirthDate birthDate, UserPosition position, DepartmentId departmentId)
           {
                UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
                UserName = userName ?? throw new ArgumentNullException(nameof(userName), "UserName cannot be null.");
@@ -17,6 +18,7 @@ namespace API_GruasUCAB.Users.Domain.Events
                Phone = phone ?? throw new ArgumentNullException(nameof(phone), "Phone cannot be null.");
                BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "BirthDate cannot be null.");
                Position = position ?? throw new ArgumentNullException(nameof(position), "Position cannot be null.");
+               DepartmentId = departmentId ?? throw new ArgumentNullException(nameof(departmentId), "DepartmentId cannot be null.");
                Timestamp = DateTime.UtcNow;
           }
 

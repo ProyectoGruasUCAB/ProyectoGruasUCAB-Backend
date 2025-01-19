@@ -1,8 +1,8 @@
 namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
 {
-    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
+    public class ProviderConfiguration : IEntityTypeConfiguration<Provider>
     {
-        public void Configure(EntityTypeBuilder<Supplier> builder)
+        public void Configure(EntityTypeBuilder<Provider> builder)
         {
             builder.HasKey(a => a.Id);
 
@@ -33,6 +33,13 @@ namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
                 .HasConversion(
                     birthDate => birthDate.Value.ToString("dd-MM-yyyy"),
                     str => new UserBirthDate(str)
+                )
+                .IsRequired();
+
+            builder.Property(a => a.SupplierId)
+                .HasConversion(
+                    supplierId => supplierId.Value.ToString(),
+                    str => new SupplierId(Guid.Parse(str))
                 )
                 .IsRequired();
 

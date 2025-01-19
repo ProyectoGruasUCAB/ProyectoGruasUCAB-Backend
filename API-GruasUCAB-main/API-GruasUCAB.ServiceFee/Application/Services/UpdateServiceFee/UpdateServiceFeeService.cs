@@ -24,7 +24,8 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
                    new ServiceFeeName(serviceFeeDTO.Name),
                    new ServiceFeePrice(serviceFeeDTO.Price),
                    new ServiceFeePriceKm(serviceFeeDTO.PriceKm),
-                   new ServiceFeeRadius(serviceFeeDTO.Radius)
+                   new ServiceFeeRadius(serviceFeeDTO.Radius),
+                   new ServiceFeeDescription(serviceFeeDTO.Description)
                );
 
                if (!string.IsNullOrEmpty(request.Name))
@@ -47,10 +48,16 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
                     serviceFee.ChangeRadius(new ServiceFeeRadius(request.Radius.Value));
                }
 
+               if (!string.IsNullOrEmpty(request.Description))
+               {
+                    serviceFee.ChangeDescription(new ServiceFeeDescription(request.Description));
+               }
+
                serviceFeeDTO.Name = serviceFee.Name.Value;
                serviceFeeDTO.Price = serviceFee.Price.Value;
                serviceFeeDTO.PriceKm = serviceFee.PriceKm.Value;
                serviceFeeDTO.Radius = serviceFee.Radius.Value;
+               serviceFeeDTO.Description = serviceFee.Description.Value;
 
                await _serviceFeeRepository.UpdateServiceFeeAsync(serviceFeeDTO);
 
@@ -64,7 +71,8 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
                     Name = serviceFee.Name.Value,
                     Price = serviceFee.Price.Value,
                     PriceKm = serviceFee.PriceKm.Value,
-                    Radius = serviceFee.Radius.Value
+                    Radius = serviceFee.Radius.Value,
+                    Description = serviceFee.Description.Value
                };
           }
      }

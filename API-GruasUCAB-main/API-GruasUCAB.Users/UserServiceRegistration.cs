@@ -17,7 +17,7 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IAdministratorFactory, AdministratorFactory>();
             services.AddScoped<IDriverFactory, DriverFactory>();
             services.AddScoped<IWorkerFactory, WorkerFactory>();
-            services.AddScoped<ISupplierFactory, SupplierFactory>();
+            services.AddScoped<IProviderFactory, ProviderFactory>();
 
             services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
@@ -37,13 +37,13 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IRecordAdministratorData, RecordAdministratorData>();
             services.AddScoped<IRecordDriverData, RecordDriverData>();
             services.AddScoped<IRecordWorkerData, RecordWorkerData>();
-            services.AddScoped<IRecordSupplierData, RecordSupplierData>();
+            services.AddScoped<IRecordProviderData, RecordProviderData>();
 
             // Update User Data Services
             services.AddScoped<IUpdateRecordAdministratorData, UpdateRecordAdministratorData>();
             services.AddScoped<IUpdateRecordDriverData, UpdateRecordDriverData>();
             services.AddScoped<IUpdateRecordWorkerData, UpdateRecordWorkerData>();
-            services.AddScoped<IUpdateRecordSupplierData, UpdateRecordSupplierData>();
+            services.AddScoped<IUpdateRecordProviderData, UpdateRecordProviderData>();
 
             // Queries
             services.AddScoped<IRequestHandler<GetAllAdministratorsQuery, GetAllAdministratorsResponseDTO>, GetAllAdministratorsQueryHandler>();

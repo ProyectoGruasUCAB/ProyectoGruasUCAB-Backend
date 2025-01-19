@@ -12,5 +12,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.DriverQueries
           public string MedicalCertificateExpirationDate { get; set; } = string.Empty;
           public string DriverLicense { get; set; } = string.Empty;
           public string DriverLicenseExpirationDate { get; set; } = string.Empty;
+          public Guid SupplierId { get; set; }
      }
 }

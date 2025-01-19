@@ -5,18 +5,18 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
           private readonly IUpdateRecordAdministratorData _updateRecordAdministratorData;
           private readonly IUpdateRecordDriverData _updateRecordDriverData;
           private readonly IUpdateRecordWorkerData _updateRecordWorkerData;
-          private readonly IUpdateRecordSupplierData _updateRecordSupplierData;
+          private readonly IUpdateRecordProviderData _updateRecordProviderData;
 
           public UpdateRecordUserDataService(
               IUpdateRecordAdministratorData updateRecordAdministratorData,
               IUpdateRecordDriverData updateRecordDriverData,
               IUpdateRecordWorkerData updateRecordWorkerData,
-              IUpdateRecordSupplierData updateRecordSupplierData)
+              IUpdateRecordProviderData updateRecordProviderData)
           {
                _updateRecordAdministratorData = updateRecordAdministratorData;
                _updateRecordDriverData = updateRecordDriverData;
                _updateRecordWorkerData = updateRecordWorkerData;
-               _updateRecordSupplierData = updateRecordSupplierData;
+               _updateRecordProviderData = updateRecordProviderData;
           }
 
           public async Task<UpdateRecordUserDataResponseDTO> Execute(UpdateRecordUserDataRequestDTO request)
@@ -48,7 +48,7 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     }
                     else if (userRole == UserRole.Proveedor)
                     {
-                         return await _updateRecordSupplierData.Execute(request);
+                         return await _updateRecordProviderData.Execute(request);
                     }
                     else
                     {

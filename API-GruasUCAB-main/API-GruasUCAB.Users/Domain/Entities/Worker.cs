@@ -8,8 +8,9 @@ namespace API_GruasUCAB.Users.Domain.Entities
           public UserCedula Cedula { get; private set; }
           public UserBirthDate BirthDate { get; private set; }
           public UserPosition Position { get; private set; }
+          public DepartmentId DepartmentId { get; private set; }
 
-          public Worker(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula, UserBirthDate birthDate, UserPosition position)
+          public Worker(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula, UserBirthDate birthDate, UserPosition position, DepartmentId departmentId)
               : base(id)
           {
                Name = name ?? throw new ArgumentNullException(nameof(name), "Worker must have a name.");
@@ -18,9 +19,10 @@ namespace API_GruasUCAB.Users.Domain.Entities
                Cedula = cedula ?? throw new ArgumentNullException(nameof(cedula), "Worker must have a cedula.");
                BirthDate = birthDate ?? throw new ArgumentNullException(nameof(birthDate), "Worker must have a birth date.");
                Position = position ?? throw new ArgumentNullException(nameof(position), "Worker must have a position.");
+               DepartmentId = departmentId ?? throw new ArgumentNullException(nameof(departmentId), "Worker must have a department.");
 
                ValidateState();
-               AddDomainEvent(new RecordWorkerDataEvent(id, name, email, phone, birthDate, position));
+               AddDomainEvent(new RecordWorkerDataEvent(id, name, email, phone, birthDate, position, departmentId));
           }
 
           protected override void ValidateState()
@@ -31,6 +33,7 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidateCedula();
                ValidateBirthDate();
                ValidatePosition();
+               ValidateDepartmentId();
           }
 
           private void ValidateName()
@@ -69,6 +72,12 @@ namespace API_GruasUCAB.Users.Domain.Entities
                     throw new InvalidUserPositionException("Worker must have a position.");
           }
 
+          private void ValidateDepartmentId()
+          {
+               if (DepartmentId == null)
+                    throw new InvalidDepartmentIdException();
+          }
+
           public void ChangeName(UserName newName)
           {
                Name = newName ?? throw new ArgumentNullException(nameof(newName), "New name cannot be null.");
@@ -95,6 +104,13 @@ namespace API_GruasUCAB.Users.Domain.Entities
                Position = newPosition ?? throw new ArgumentNullException(nameof(newPosition), "New position cannot be null.");
                ValidateState();
                AddDomainEvent(new UserPositionChangedEvent(Id, newPosition));
+          }
+
+          public void ChangeDepartmentId(DepartmentId newDepartmentId)
+          {
+               DepartmentId = newDepartmentId ?? throw new ArgumentNullException(nameof(newDepartmentId), "New department cannot be null.");
+               ValidateState();
+               AddDomainEvent(new DepartmentIdChangedEvent(Id, newDepartmentId));
           }
      }
 }

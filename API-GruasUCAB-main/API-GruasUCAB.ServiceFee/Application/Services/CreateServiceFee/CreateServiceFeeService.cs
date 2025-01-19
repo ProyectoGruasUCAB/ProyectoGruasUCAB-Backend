@@ -18,7 +18,8 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                    new ServiceFeeName(request.Name),
                    new ServiceFeePrice(request.Price),
                    new ServiceFeePriceKm(request.PriceKm),
-                   new ServiceFeeRadius(request.Radius)
+                   new ServiceFeeRadius(request.Radius),
+                   new ServiceFeeDescription(request.Description)
                );
 
                var serviceFeeDTO = new ServiceFeeDTO
@@ -27,7 +28,8 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.CreateServiceFee
                     Name = serviceFee.Name.Value,
                     Price = serviceFee.Price.Value,
                     PriceKm = serviceFee.PriceKm.Value,
-                    Radius = serviceFee.Radius.Value
+                    Radius = serviceFee.Radius.Value,
+                    Description = serviceFee.Description.Value
                };
 
                await _serviceFeeRepository.AddServiceFeeAsync(serviceFeeDTO);

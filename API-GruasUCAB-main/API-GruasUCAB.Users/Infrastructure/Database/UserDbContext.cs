@@ -1,7 +1,5 @@
 using API_GruasUCAB.Core.Infrastructure.Database;
 using API_GruasUCAB.Users.Infrastructure.Database.Configuration;
-using API_GruasUCAB.Users.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API_GruasUCAB.Users.Infrastructure.Database
@@ -14,7 +12,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
 
         public DbSet<Administrator> Administrators { get; set; } = null!;
         public DbSet<Driver> Drivers { get; set; } = null!;
-        public DbSet<Supplier> Suppliers { get; set; } = null!;
+        public DbSet<Provider> Providers { get; set; } = null!;
         public DbSet<Worker> Workers { get; set; } = null!;
 
         public IDbContextTransaction BeginTransaction()
@@ -46,7 +44,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
 
             modelBuilder.ApplyConfiguration(new AdministratorConfiguration());
             modelBuilder.ApplyConfiguration(new DriverConfiguration());
-            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+            modelBuilder.ApplyConfiguration(new ProviderConfiguration());
             modelBuilder.ApplyConfiguration(new WorkerConfiguration());
 
             // Configuración de clave primaria de Administrador
@@ -57,8 +55,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Database
             modelBuilder.Entity<Driver>()
                 .HasKey(c => c.Id);
 
-            // Configuración de clave primaria de Supplier
-            modelBuilder.Entity<Supplier>()
+            // Configuración de clave primaria de Provider
+            modelBuilder.Entity<Provider>()
                 .HasKey(c => c.Id);
 
             // Configuración de clave primaria de Worker

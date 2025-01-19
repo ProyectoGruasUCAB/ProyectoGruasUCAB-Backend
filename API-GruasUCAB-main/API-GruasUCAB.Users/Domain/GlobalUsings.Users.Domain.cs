@@ -5,3 +5,5 @@ global using API_GruasUCAB.Users.Domain.Factories;
 global using API_GruasUCAB.Users.Domain.Entities;
 global using API_GruasUCAB.Users.Domain.Events;
 global using System.Text.RegularExpressions;
+global using API_GruasUCAB.Supplier.Domain.ValueObject;
+global using API_GruasUCAB.Department.Domain.ValueObject;

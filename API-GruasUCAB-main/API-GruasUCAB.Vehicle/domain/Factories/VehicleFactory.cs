@@ -19,7 +19,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
               VehicleColor color,
               VehicleModel model,
               VehicleTypeId vehicleTypeId,
-              UserId driverId,
+              UserId? driverId,
               SupplierId supplierId)
           {
                return new AggregateRoot.Vehicle(
@@ -50,7 +50,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
                    new VehicleColor(vehicleDTO.Color),
                    new VehicleModel(vehicleDTO.Model),
                    new VehicleTypeId(vehicleDTO.VehicleTypeId),
-                   new UserId(vehicleDTO.DriverId),
+                   vehicleDTO.DriverId.HasValue ? new UserId(vehicleDTO.DriverId.Value) : (UserId?)null,
                    new SupplierId(vehicleDTO.SupplierId)
                );
           }

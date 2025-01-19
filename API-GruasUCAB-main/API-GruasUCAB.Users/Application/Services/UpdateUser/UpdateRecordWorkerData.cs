@@ -51,6 +51,12 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     worker.ChangePosition(new UserPosition(request.Position));
                     worker.AddDomainEvent(new UserPositionChangedEvent(worker.Id, new UserPosition(request.Position)));
                }
+
+               if (request.WorkplaceId.HasValue)
+               {
+                    worker.ChangeDepartmentId(new DepartmentId(request.WorkplaceId.Value));
+                    worker.AddDomainEvent(new DepartmentIdChangedEvent(worker.Id, new DepartmentId(request.WorkplaceId.Value)));
+               }
           }
      }
 }

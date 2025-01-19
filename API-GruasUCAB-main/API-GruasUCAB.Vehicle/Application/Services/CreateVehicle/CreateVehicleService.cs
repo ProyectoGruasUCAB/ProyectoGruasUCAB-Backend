@@ -23,7 +23,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
                    new VehicleColor(request.Color),
                    new VehicleModel(request.Model),
                    new VehicleTypeId(request.VehicleTypeId),
-                   new UserId(request.DriverId),
+                   request.DriverId.HasValue ? new UserId(request.DriverId.Value) : (UserId?)null,
                    new SupplierId(request.SupplierId)
                );
 
@@ -38,7 +38,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
                     Color = vehicle.Color.Value,
                     Model = vehicle.Model.Value,
                     VehicleTypeId = vehicle.VehicleTypeId.Id,
-                    DriverId = vehicle.DriverId.Id,
+                    DriverId = vehicle.DriverId?.Id,
                     SupplierId = vehicle.SupplierId.Id
                };
 

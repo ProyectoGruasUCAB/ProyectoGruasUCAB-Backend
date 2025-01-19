@@ -20,7 +20,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         Phone = w.Phone.Value,
                         Cedula = w.Cedula.Value,
                         BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
-                        Position = w.Position.Value
+                        Position = w.Position.Value,
+                        DepartmentId = w.DepartmentId.Value
                    })
                    .ToListAsync();
           }
@@ -41,7 +42,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     Phone = worker.Phone.Value,
                     Cedula = worker.Cedula.Value,
                     BirthDate = worker.BirthDate.Value.ToString("dd-MM-yyyy"),
-                    Position = worker.Position.Value
+                    Position = worker.Position.Value,
+                    DepartmentId = worker.DepartmentId.Value
                };
           }
 
@@ -60,7 +62,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         Phone = w.Phone.Value,
                         Cedula = w.Cedula.Value,
                         BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
-                        Position = w.Position.Value
+                        Position = w.Position.Value,
+                        DepartmentId = w.DepartmentId.Value
                    })
                    .ToList();
 
@@ -87,7 +90,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         Phone = w.Phone.Value,
                         Cedula = w.Cedula.Value,
                         BirthDate = w.BirthDate.Value.ToString("dd-MM-yyyy"),
-                        Position = w.Position.Value
+                        Position = w.Position.Value,
+                        DepartmentId = w.DepartmentId.Value
                    })
                    .ToList();
 
@@ -108,7 +112,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                    new UserPhone(workerDto.Phone),
                    new UserCedula(workerDto.Cedula),
                    new UserBirthDate(workerDto.BirthDate),
-                   new UserPosition(workerDto.Position)
+                   new UserPosition(workerDto.Position),
+                   new DepartmentId(workerDto.DepartmentId)
                );
 
                _context.Workers.Add(worker);
@@ -127,6 +132,7 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingWorker.ChangePhone(new UserPhone(workerDto.Phone));
                existingWorker.ChangeBirthDate(new UserBirthDate(workerDto.BirthDate));
                existingWorker.ChangePosition(new UserPosition(workerDto.Position));
+               existingWorker.ChangeDepartmentId(new DepartmentId(workerDto.DepartmentId));
 
                await _context.SaveChangesAsync();
           }

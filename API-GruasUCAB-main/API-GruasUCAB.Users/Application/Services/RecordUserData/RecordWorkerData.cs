@@ -15,28 +15,21 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           {
                if (request.Position == null)
                     throw new ArgumentNullException(nameof(request.Position));
+               if (!request.WorkplaceId.HasValue)
+                    throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for workers.");
 
                var worker = _workerFactory.CreateWorker(
-                   new UserId(request.UserId.ToString()),
+                   new UserId(request.UserId),
                    new UserName(request.Name),
                    new UserEmail(request.UserEmail),
                    new UserPhone(request.Phone),
                    new UserCedula(request.Cedula),
                    new UserBirthDate(request.BirthDate),
-                   new UserPosition(request.Position)
+                   new UserPosition(request.Position),
+                   new DepartmentId(request.WorkplaceId.Value)
                );
 
-               var workerDTO = new WorkerDTO
-               {
-                    Id = request.UserId,
-                    Name = request.Name,
-                    UserEmail = request.UserEmail,
-                    Phone = request.Phone,
-                    Cedula = request.Cedula,
-                    BirthDate = request.BirthDate,
-                    Position = request.Position
-               };
-
+               var workerDTO = worker.ToDTO();
                await _workerRepository.AddWorkerAsync(workerDTO);
 
                return new RecordUserDataResponseDTO

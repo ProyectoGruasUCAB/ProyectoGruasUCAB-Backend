@@ -10,6 +10,10 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.DTOs.CreateServiceFee
           [JsonPropertyOrder(2)]
           public string Name { get; set; } = string.Empty;
 
+          [Required(ErrorMessage = "Description is required.")]
+          [JsonPropertyOrder(2)]
+          public string Description { get; set; } = string.Empty;
+
           [Required(ErrorMessage = "Price is required.")]
           [JsonPropertyOrder(2)]
           public float Price { get; set; }

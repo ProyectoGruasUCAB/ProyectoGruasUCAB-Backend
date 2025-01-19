@@ -8,5 +8,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.ProviderQueries
           public string Phone { get; set; } = string.Empty;
           public string Cedula { get; set; } = string.Empty;
           public string BirthDate { get; set; } = string.Empty;
+          public Guid SupplierId { get; set; }
      }
 }

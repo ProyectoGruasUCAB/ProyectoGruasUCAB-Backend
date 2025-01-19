@@ -7,7 +7,8 @@ namespace API_GruasUCAB.ServiceFee.Domain.Factories
               ServiceFeeName name,
               ServiceFeePrice price,
               ServiceFeePriceKm priceKm,
-              ServiceFeeRadius radius);
+              ServiceFeeRadius radius,
+              ServiceFeeDescription description);
 
           Task<AggregateRoot.ServiceFee> GetServiceFeeById(ServiceFeeId id);
      }

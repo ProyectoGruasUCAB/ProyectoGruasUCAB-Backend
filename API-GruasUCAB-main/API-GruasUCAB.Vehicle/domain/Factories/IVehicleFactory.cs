@@ -12,7 +12,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
               VehicleColor color,
               VehicleModel model,
               VehicleTypeId vehicleTypeId,
-              UserId driverId,
+              UserId? driverId,
               SupplierId supplierId);
 
           Task<AggregateRoot.Vehicle> GetVehicleById(VehicleId id);

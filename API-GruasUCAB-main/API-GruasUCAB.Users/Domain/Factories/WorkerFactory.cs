@@ -16,9 +16,10 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserPhone phone,
               UserCedula cedula,
               UserBirthDate birthDate,
-              UserPosition position)
+              UserPosition position,
+              DepartmentId departmentId)
           {
-               return new Worker(id, name, email, phone, cedula, birthDate, position);
+               return new Worker(id, name, email, phone, cedula, birthDate, position, departmentId);
           }
 
           public async Task<Worker> GetWorkerById(UserId id)
@@ -31,7 +32,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserPhone(workerDTO.Phone),
                    new UserCedula(workerDTO.Cedula),
                    new UserBirthDate(workerDTO.BirthDate),
-                   new UserPosition(workerDTO.Position)
+                   new UserPosition(workerDTO.Position),
+                   new DepartmentId(workerDTO.DepartmentId)
                );
           }
      }

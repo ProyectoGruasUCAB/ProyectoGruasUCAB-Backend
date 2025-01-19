@@ -5,18 +5,18 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           private readonly IRecordAdministratorData _recordAdministratorData;
           private readonly IRecordDriverData _recordDriverData;
           private readonly IRecordWorkerData _recordWorkerData;
-          private readonly IRecordSupplierData _recordSupplierData;
+          private readonly IRecordProviderData _recordProviderData;
 
           public RecordUserDataService(
               IRecordAdministratorData recordAdministratorData,
               IRecordDriverData recordDriverData,
               IRecordWorkerData recordWorkerData,
-              IRecordSupplierData recordSupplierData)
+              IRecordProviderData recordProviderData)
           {
                _recordAdministratorData = recordAdministratorData;
                _recordDriverData = recordDriverData;
                _recordWorkerData = recordWorkerData;
-               _recordSupplierData = recordSupplierData;
+               _recordProviderData = recordProviderData;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -48,7 +48,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     }
                     else if (userRole == UserRole.Proveedor)
                     {
-                         return await _recordSupplierData.Execute(request);
+                         return await _recordProviderData.Execute(request);
                     }
                     else
                     {
