@@ -1,83 +1,81 @@
+using API_GruasUCAB.Department.Domain.AggregateRoot;
+using API_GruasUCAB.Department.Infrastructure.Database;
+using API_GruasUCAB.Department.Infrastructure.DTOs.DepartmentQueries;
+using API_GruasUCAB.Department.Infrastructure.Mappers;
+using Microsoft.EntityFrameworkCore;
+
 namespace API_GruasUCAB.Department.Infrastructure.Repositories
 {
      public class DepartmentRepository : IDepartmentRepository
      {
-          private readonly List<DepartmentDTO> _departments;
+          private readonly DepartmentDbContext _context;
 
-          public DepartmentRepository()
+          public DepartmentRepository(DepartmentDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _departments = new List<DepartmentDTO>
-            {
-                new DepartmentDTO
-                {
-                    DepartmentId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "HRd",
-                    Descripcion = "Human Resources"
-                },
-                new DepartmentDTO
-                {
-                    DepartmentId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "ITd",
-                    Descripcion = "Information Technology"
-                },
-                new DepartmentDTO
-                {
-                    DepartmentId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Finance",
-                    Descripcion = "Finance Department"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<DepartmentDTO>> GetAllDepartmentsAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_departments);
+               return await _context.Departments
+                   .Select(d => d.ToDTO())
+                   .ToListAsync();
           }
 
           public async Task<DepartmentDTO> GetDepartmentByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var department = _departments.FirstOrDefault(d => d.DepartmentId == id);
+               var department = await _context.Departments
+                   .FirstOrDefaultAsync(d => d.Id == new DepartmentId(id));
+
                if (department == null)
                {
                     throw new KeyNotFoundException($"Department with ID {id} not found.");
                }
-               return await Task.FromResult(department);
+
+               return department.ToDTO();
           }
 
           public async Task<DepartmentDTO> GetDepartmentByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var department = _departments.FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+               var departments = await _context.Departments
+                   .ToListAsync();
+
+               var department = departments
+                   .Where(d => d.Name.Value.ToLower().Contains(name.ToLower()))
+                   .Select(d => d.ToDTO())
+                   .FirstOrDefault();
+
                if (department == null)
                {
                     throw new KeyNotFoundException($"Department with name {name} not found.");
                }
-               return await Task.FromResult(department);
+
+               return department;
           }
 
-          public async Task AddDepartmentAsync(DepartmentDTO department)
+          public async Task AddDepartmentAsync(DepartmentDTO departmentDto)
           {
-               // Simulación de una llamada a la base de datos
-               _departments.Add(department);
-               await Task.CompletedTask;
+               var department = departmentDto.ToEntity();
+
+               _context.Departments.Add(department);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateDepartmentAsync(DepartmentDTO department)
+          public async Task UpdateDepartmentAsync(DepartmentDTO departmentDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingDepartment = _departments.FirstOrDefault(d => d.DepartmentId == department.DepartmentId);
-               if (existingDepartment == null)
+               var department = await _context.Departments
+                   .FirstOrDefaultAsync(d => d.Id == new DepartmentId(departmentDto.DepartmentId));
+
+               if (department == null)
                {
-                    throw new KeyNotFoundException($"Department with ID {department.DepartmentId} not found.");
+                    throw new KeyNotFoundException($"Department with ID {departmentDto.DepartmentId} not found.");
                }
 
-               existingDepartment.Name = department.Name;
-               existingDepartment.Descripcion = department.Descripcion;
+               department.ChangeName(new DepartmentName(departmentDto.Name));
+               department.ChangeDescription(new DepartmentDescription(departmentDto.Descripcion));
 
-               await Task.CompletedTask;
+               _context.Departments.Update(department);
+               await _context.SaveChangesAsync();
           }
      }
 }

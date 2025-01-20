@@ -1,9 +1,15 @@
+using API_GruasUCAB.Supplier.Infrastructure.Database;
+
 namespace API_GruasUCAB.Supplier
 {
     public static class SupplierServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<SupplierDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddMediatR(typeof(CreateSupplierCommandHandler).Assembly);
             services.AddScoped<IService<CreateSupplierRequestDTO, CreateSupplierResponseDTO>, CreateSupplierService>();
             services.AddScoped<IService<UpdateSupplierRequestDTO, UpdateSupplierResponseDTO>, UpdateSupplierService>();
