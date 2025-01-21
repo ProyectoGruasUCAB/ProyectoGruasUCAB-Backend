@@ -24,7 +24,7 @@ UserServiceRegistration.RegisterServices(builder.Services, builder.Configuration
 ServiceFeeServiceRegistration.RegisterServices(builder.Services);
 DepartmentServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 SupplierServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-VehicleServiceRegistration.RegisterServices(builder.Services);
+VehicleServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 PolicyServiceRegistration.RegisterServices(builder.Services);
 ServiceOrderServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 

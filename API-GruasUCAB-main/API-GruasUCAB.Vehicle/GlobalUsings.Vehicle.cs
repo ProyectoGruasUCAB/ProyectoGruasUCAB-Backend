@@ -15,3 +15,8 @@ global using System.Threading;
 global using System;
 global using MediatR;
 global using API_GruasUCAB.Vehicle.Infrastructure.Repositories;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using API_GruasUCAB.Vehicle.Infrastructure.Database;
+global using API_GruasUCAB.Vehicle.Infrastructure.Mapping;
+global using AutoMapper;
