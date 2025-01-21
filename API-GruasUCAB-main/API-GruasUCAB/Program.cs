@@ -25,7 +25,7 @@ ServiceFeeServiceRegistration.RegisterServices(builder.Services);
 DepartmentServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 SupplierServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 VehicleServiceRegistration.RegisterServices(builder.Services);
-PolicyServiceRegistration.RegisterServices(builder.Services);
+PolicyServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 ServiceOrderServiceRegistration.RegisterServices(builder.Services);
 
 // Agregar YARP
