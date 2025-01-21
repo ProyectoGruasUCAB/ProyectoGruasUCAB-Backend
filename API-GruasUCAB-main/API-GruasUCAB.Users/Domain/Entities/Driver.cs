@@ -12,10 +12,11 @@ namespace API_GruasUCAB.Users.Domain.Entities
           public UserDriverLicense DriverLicense { get; private set; }
           public UserDriverLicenseExpirationDate DriverLicenseExpirationDate { get; private set; }
           public SupplierId SupplierId { get; private set; }
+          public UserToken? Token { get; private set; }
 
           public Driver(UserId id, UserName name, UserEmail email, UserPhone phone, UserCedula cedula,
                         UserBirthDate birthDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
-                        UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate, SupplierId supplierId)
+                        UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate, SupplierId supplierId, UserToken? token = null)
               : base(id)
           {
                Name = name ?? throw new ArgumentNullException(nameof(name), "Driver must have a name.");
@@ -28,9 +29,10 @@ namespace API_GruasUCAB.Users.Domain.Entities
                DriverLicense = driverLicense ?? throw new ArgumentNullException(nameof(driverLicense), "Driver must have a driver license.");
                DriverLicenseExpirationDate = driverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(driverLicenseExpirationDate), "Driver must have a driver license expiration date.");
                SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "Driver must have a supplier.");
+               Token = token;
 
                ValidateState();
-               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId));
+               AddDomainEvent(new RecordDriverDataEvent(id, name, email, phone, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId, token));
           }
 
           protected override void ValidateState()
@@ -147,6 +149,12 @@ namespace API_GruasUCAB.Users.Domain.Entities
                SupplierId = newSupplierId ?? throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
                ValidateState();
                AddDomainEvent(new SupplierIdChangedEvent(Id, newSupplierId));
+          }
+
+          public void ChangeToken(UserToken newToken)
+          {
+               Token = newToken;
+               AddDomainEvent(new UserTokenChangedEvent(Id, newToken));
           }
      }
 }

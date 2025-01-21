@@ -13,7 +13,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,
               UserDriverLicenseExpirationDate driverLicenseExpirationDate,
-              SupplierId supplierId);
+              SupplierId supplierId,
+              string token = "");
 
           Task<Driver> GetDriverById(UserId id);
      }

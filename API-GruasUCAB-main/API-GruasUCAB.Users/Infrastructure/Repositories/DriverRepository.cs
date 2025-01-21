@@ -24,7 +24,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                         DriverLicense = d.DriverLicense.Value,
                         DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
-                        SupplierId = d.SupplierId.Value
+                        SupplierId = d.SupplierId.Value,
+                        Token = d.Token != null ? d.Token.Value : null
                    })
                    .ToListAsync();
           }
@@ -49,7 +50,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                     MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                     DriverLicense = driver.DriverLicense.Value,
                     DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
-                    SupplierId = driver.SupplierId.Value
+                    SupplierId = driver.SupplierId.Value,
+                    Token = driver.Token?.Value
                };
           }
 
@@ -72,7 +74,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                         MedicalCertificateExpirationDate = d.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                         DriverLicense = d.DriverLicense.Value,
                         DriverLicenseExpirationDate = d.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
-                        SupplierId = d.SupplierId.Value
+                        SupplierId = d.SupplierId.Value,
+                        Token = d.Token?.Value
                    })
                    .ToList();
 
@@ -97,7 +100,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                    new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate),
                    new UserDriverLicense(driverDto.DriverLicense),
                    new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate),
-                   new SupplierId(driverDto.SupplierId)
+                   new SupplierId(driverDto.SupplierId),
+                   driverDto.Token != null ? new UserToken(driverDto.Token) : null
                );
 
                _context.Drivers.Add(driver);
@@ -120,6 +124,11 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.ChangeMedicalCertificateExpirationDate(new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate));
                existingDriver.ChangeDriverLicenseExpirationDate(new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate));
                existingDriver.ChangeSupplierId(new SupplierId(driverDto.SupplierId));
+
+               if (!string.IsNullOrEmpty(driverDto.Token))
+               {
+                    existingDriver.ChangeToken(new UserToken(driverDto.Token));
+               }
 
                await _context.SaveChangesAsync();
           }

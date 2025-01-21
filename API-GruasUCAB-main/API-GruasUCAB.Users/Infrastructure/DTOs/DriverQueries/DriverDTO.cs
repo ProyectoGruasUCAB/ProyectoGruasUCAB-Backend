@@ -13,5 +13,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.DriverQueries
           public string DriverLicense { get; set; } = string.Empty;
           public string DriverLicenseExpirationDate { get; set; } = string.Empty;
           public Guid SupplierId { get; set; }
+          public string? Token { get; set; } = string.Empty;
      }
 }
