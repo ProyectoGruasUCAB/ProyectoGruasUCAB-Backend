@@ -4,6 +4,11 @@ namespace API_GruasUCAB.Policy
     {
         public static void RegisterServices(IServiceCollection services)
         {
+            // Configurar DbContext
+            services.AddDbContext<PolicyDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddMediatR(typeof(CreatePolicyService).Assembly);
             services.AddScoped<IService<CreatePolicyRequestDTO, CreatePolicyResponseDTO>, CreatePolicyService>();
             services.AddScoped<IPolicyRepository, PolicyRepository>();
