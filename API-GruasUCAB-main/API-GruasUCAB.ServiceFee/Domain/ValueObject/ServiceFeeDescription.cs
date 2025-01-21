@@ -6,7 +6,7 @@ namespace API_GruasUCAB.ServiceFee.Domain.ValueObject
 
           public ServiceFeeDescription(string description)
           {
-               if (string.IsNullOrWhiteSpace(description) || description.Length < 10 || description.Length > 100)
+               if (string.IsNullOrWhiteSpace(description) || description.Length < 5 || description.Length > 100)
                     throw new InvalidServiceFeeDescriptionException();
 
                Description = description;

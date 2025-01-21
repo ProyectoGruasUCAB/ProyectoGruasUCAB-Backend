@@ -75,6 +75,12 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     driver.ChangeSupplierId(new SupplierId(request.WorkplaceId.Value));
                     driver.AddDomainEvent(new SupplierIdChangedEvent(driver.Id, new SupplierId(request.WorkplaceId.Value)));
                }
+
+               if (!string.IsNullOrEmpty(request.Token))
+               {
+                    driver.ChangeToken(new UserToken(request.Token));
+                    driver.AddDomainEvent(new UserTokenChangedEvent(driver.Id, new UserToken(request.Token)));
+               }
           }
      }
 }

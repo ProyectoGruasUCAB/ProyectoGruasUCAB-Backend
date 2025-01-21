@@ -12,3 +12,8 @@ global using System.Threading;
 global using System;
 global using MediatR;
 global using API_GruasUCAB.ServiceFee.Infrastructure.Repositories;
+global using API_GruasUCAB.ServiceFee.Infrastructure.Database;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using API_GruasUCAB.ServiceFee.Infrastructure.Mappers;
+global using AutoMapper;

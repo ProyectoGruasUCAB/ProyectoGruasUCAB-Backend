@@ -70,6 +70,13 @@ namespace API_GruasUCAB.Users.Infrastructure.Database.Configuration
                     str => new SupplierId(Guid.Parse(str))
                 )
                 .IsRequired();
+
+            builder.Property(a => a.Token)
+                .HasConversion(
+                    token => token != null ? token.Value : null,
+                    str => str != null ? new UserToken(str) : null
+                )
+                .HasMaxLength(200);
         }
     }
 }
