@@ -4,13 +4,11 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
      {
           private readonly IServiceOrderRepository _serviceOrderRepository;
           private readonly IServiceOrderFactory _serviceOrderFactory;
-          private readonly IEnumerable<IStateTransition> _stateTransitions;
 
-          public UpdateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory, IEnumerable<IStateTransition> stateTransitions)
+          public UpdateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory)
           {
                _serviceOrderRepository = serviceOrderRepository;
                _serviceOrderFactory = serviceOrderFactory;
-               _stateTransitions = stateTransitions;
           }
 
           public async Task<UpdateServiceOrderResponseDTO> Execute(UpdateServiceOrderRequestDTO request)
@@ -21,9 +19,9 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                var serviceOrder = _serviceOrderFactory.CreateServiceOrder(
                    new ServiceOrderId(serviceOrderDTO.ServiceOrderId),
                    new IncidentDescription(serviceOrderDTO.IncidentDescription),
-                   new Coordinates(serviceOrderDTO.InitialLocationDriverLat, serviceOrderDTO.InitialLocationDriverLon),
-                   new Coordinates(serviceOrderDTO.IncidentLocationLat, serviceOrderDTO.IncidentLocationLon),
-                   new Coordinates(serviceOrderDTO.IncidentLocationEndLat, serviceOrderDTO.IncidentLocationEndLon),
+                   new Coordinates(serviceOrderDTO.InitialLocationDriverLatitude, serviceOrderDTO.InitialLocationDriverLongitude),
+                   new Coordinates(serviceOrderDTO.IncidentLocationLatitude, serviceOrderDTO.IncidentLocationLongitude),
+                   new Coordinates(serviceOrderDTO.IncidentLocationEndLatitude, serviceOrderDTO.IncidentLocationEndLongitude),
                    new IncidentDistance(serviceOrderDTO.IncidentDistance),
                    new CustomerVehicleDescription(serviceOrderDTO.CustomerVehicleDescription),
                    new IncidentCost(serviceOrderDTO.IncidentCost),
@@ -139,13 +137,12 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                     }
                }
 
-               serviceOrderDTO.IncidentDescription = serviceOrder.IncidentDescription.Value;
-               serviceOrderDTO.InitialLocationDriverLat = serviceOrder.InitialLocationDriver.Latitude;
-               serviceOrderDTO.InitialLocationDriverLon = serviceOrder.InitialLocationDriver.Longitude;
-               serviceOrderDTO.IncidentLocationLat = serviceOrder.IncidentLocation.Latitude;
-               serviceOrderDTO.IncidentLocationLon = serviceOrder.IncidentLocation.Longitude;
-               serviceOrderDTO.IncidentLocationEndLat = serviceOrder.IncidentLocationEnd.Latitude;
-               serviceOrderDTO.IncidentLocationEndLon = serviceOrder.IncidentLocationEnd.Longitude;
+               serviceOrderDTO.InitialLocationDriverLatitude = (float)serviceOrder.InitialLocationDriver.Latitude;
+               serviceOrderDTO.InitialLocationDriverLongitude = (float)serviceOrder.InitialLocationDriver.Longitude;
+               serviceOrderDTO.IncidentLocationLatitude = (float)serviceOrder.IncidentLocation.Latitude;
+               serviceOrderDTO.IncidentLocationLongitude = (float)serviceOrder.IncidentLocation.Longitude;
+               serviceOrderDTO.IncidentLocationEndLatitude = (float)serviceOrder.IncidentLocationEnd.Latitude;
+               serviceOrderDTO.IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude;
                serviceOrderDTO.IncidentDistance = serviceOrder.IncidentDistance.Value;
                serviceOrderDTO.CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value;
                serviceOrderDTO.IncidentCost = serviceOrder.IncidentCost.Value;
@@ -163,7 +160,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                return new UpdateServiceOrderResponseDTO
                {
                     Success = true,
-                    Message = $"Service order updated successfully: {System.Text.Json.JsonSerializer.Serialize(serviceOrderDTO)}",
+                    Message = "Service order updated successfully",
                     UserEmail = request.UserEmail,
                     ServiceOrderId = serviceOrder.Id.Id,
                };

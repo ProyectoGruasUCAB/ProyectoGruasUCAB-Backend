@@ -26,7 +26,7 @@ DepartmentServiceRegistration.RegisterServices(builder.Services, builder.Configu
 SupplierServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 VehicleServiceRegistration.RegisterServices(builder.Services);
 PolicyServiceRegistration.RegisterServices(builder.Services);
-ServiceOrderServiceRegistration.RegisterServices(builder.Services);
+ServiceOrderServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 // Agregar YARP
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

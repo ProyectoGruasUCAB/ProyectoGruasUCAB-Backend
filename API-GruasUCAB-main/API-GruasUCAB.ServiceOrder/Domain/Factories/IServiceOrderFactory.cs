@@ -19,7 +19,5 @@ namespace API_GruasUCAB.ServiceOrder.Domain.Factories
               UserId customerId,
               UserId operatorId,
               ServiceFeeId serviceFeeId);
-
-          Task<AggregateRoot.ServiceOrder?> GetServiceOrderById(ServiceOrderId id);
      }
 }

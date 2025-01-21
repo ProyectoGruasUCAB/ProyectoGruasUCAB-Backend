@@ -17,3 +17,6 @@ global using API_GruasUCAB.ServiceFee.Domain.ValueObject;
 global using API_GruasUCAB.Policy.Domain.ValueObject;
 global using API_GruasUCAB.Users.Domain.ValueObject;
 global using API_GruasUCAB.Vehicle.Domain.ValueObject;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.EntityFrameworkCore;
+global using API_GruasUCAB.ServiceOrder.Infrastructure.Database;

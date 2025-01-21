@@ -2,8 +2,12 @@ namespace API_GruasUCAB.ServiceOrder
 {
     public static class ServiceOrderServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            // DbContext
+            services.AddDbContext<ServiceOrderDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMediatR(typeof(CreateServiceOrderService).Assembly);
             services.AddScoped<IService<CreateServiceOrderRequestDTO, CreateServiceOrderResponseDTO>, CreateServiceOrderService>();
             services.AddScoped<IService<UpdateServiceOrderRequestDTO, UpdateServiceOrderResponseDTO>, UpdateServiceOrderService>();
@@ -11,16 +15,6 @@ namespace API_GruasUCAB.ServiceOrder
             services.AddScoped<IServiceOrderFactory, ServiceOrderFactory>();
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
             services.AddHttpClient();
-
-            //  State Transitions
-            services.AddScoped<IStateTransition, AssignStateTransition>();
-            services.AddScoped<IStateTransition, AcceptStateTransition>();
-            services.AddScoped<IStateTransition, LocateStateTransition>();
-            services.AddScoped<IStateTransition, ProcessStateTransition>();
-            services.AddScoped<IStateTransition, FinishStateTransition>();
-            services.AddScoped<IStateTransition, PayStateTransition>();
-            services.AddScoped<IStateTransition, CancelStateTransition>();
-            services.AddScoped<IStateTransition, CancelForChargeStateTransition>();
 
             // SecurityDecorator for CreateServiceOrder
             services.Decorate<IService<CreateServiceOrderRequestDTO, CreateServiceOrderResponseDTO>>(

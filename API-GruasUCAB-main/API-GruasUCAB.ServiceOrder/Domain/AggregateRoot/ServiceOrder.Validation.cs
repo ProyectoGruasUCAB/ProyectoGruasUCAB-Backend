@@ -24,7 +24,7 @@ namespace API_GruasUCAB.ServiceOrder.Domain.AggregateRoot
           private void ValidateIncidentDescription()
           {
                if (IncidentDescription == null)
-                    throw new InvalidIncidentDescriptionException();
+                    throw new InvalidIncidentDescriptionException("Incident description cannot be null.");
           }
 
           private void ValidateInitialLocationDriver()

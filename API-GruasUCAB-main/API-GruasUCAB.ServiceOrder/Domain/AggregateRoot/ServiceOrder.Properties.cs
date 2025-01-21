@@ -53,7 +53,44 @@ namespace API_GruasUCAB.ServiceOrder.Domain.AggregateRoot
                ServiceFeeId = serviceFeeId ?? throw new ArgumentNullException(nameof(serviceFeeId));
 
                ValidateState();
-               AddDomainEvent(new ServiceOrderCreatedEvent(serviceOrderId));
+               AddDomainEvent(new ServiceOrderCreatedEvent(
+                   serviceOrderId,
+                   incidentDescription,
+                   initialLocationDriver,
+                   incidentLocation,
+                   incidentLocationEnd,
+                   incidentDistance,
+                   customerVehicleDescription,
+                   incidentCost,
+                   policyId,
+                   statusServiceOrder,
+                   incidentDate,
+                   vehicleId,
+                   driverId,
+                   customerId,
+                   operatorId,
+                   serviceFeeId
+               ));
+
+          }
+
+          private ServiceOrder() : base(new ServiceOrderId(Guid.NewGuid()))
+          {
+               IncidentDescription = new IncidentDescription("Default Description");
+               InitialLocationDriver = new Coordinates(0, 0);
+               IncidentLocation = new Coordinates(0, 0);
+               IncidentLocationEnd = new Coordinates(0, 0);
+               IncidentDistance = new IncidentDistance(05);
+               CustomerVehicleDescription = new CustomerVehicleDescription("Default Vehicle Description");
+               IncidentCost = new IncidentCost(04);
+               PolicyId = new PolicyId(Guid.NewGuid());
+               StatusServiceOrder = new StatusServiceOrder(ServiceOrderStatus.PorAsignar);
+               IncidentDate = new IncidentDate(DateTime.Now.ToString("dd-MM-yyyy"));
+               VehicleId = new VehicleId(Guid.NewGuid());
+               DriverId = new UserId(Guid.NewGuid());
+               CustomerId = new UserId(Guid.NewGuid());
+               OperatorId = new UserId(Guid.NewGuid());
+               ServiceFeeId = new ServiceFeeId(Guid.NewGuid());
           }
      }
 }
