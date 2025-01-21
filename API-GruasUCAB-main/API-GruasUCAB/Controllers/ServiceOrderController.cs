@@ -39,6 +39,23 @@ namespace API_GruasUCAB.Controllers
 
           [HttpGet]
           [Authorize]
+          [Route("GetAllServiceOrders")]
+          [ProducesResponseType(typeof(GetAllServiceOrdersResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetAllServiceOrders()
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var query = new GetAllServiceOrdersQuery(GetUserId());
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetAllServiceOrders");
+          }
+
+          [HttpGet]
+          [Authorize]
           [Route("GetServiceOrderById/{serviceOrderId}")]
           [ProducesResponseType(typeof(GetServiceOrderByIdResponseDTO), 200)]
           [ProducesResponseType(400)]
@@ -56,23 +73,6 @@ namespace API_GruasUCAB.Controllers
                     }
                     return NotFound(response);
                }, ModelState, _logger, "GetServiceOrderById");
-          }
-
-          [HttpGet]
-          [Authorize]
-          [Route("GetAllServiceOrders")]
-          [ProducesResponseType(typeof(GetAllServiceOrdersResponseDTO), 200)]
-          [ProducesResponseType(400)]
-          [ProducesResponseType(401)]
-          [ProducesResponseType(500)]
-          public async Task<IActionResult> GetAllServiceOrders()
-          {
-               return await ActionExecutor.Execute(async () =>
-               {
-                    var query = new GetAllServiceOrdersQuery(GetUserId());
-                    var response = await _mediator.Send(query);
-                    return Ok(response);
-               }, ModelState, _logger, "GetAllServiceOrders");
           }
 
           [HttpGet]

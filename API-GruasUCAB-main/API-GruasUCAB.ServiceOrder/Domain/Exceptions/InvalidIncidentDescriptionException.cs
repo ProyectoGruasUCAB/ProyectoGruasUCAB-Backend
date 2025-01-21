@@ -1,9 +1,9 @@
 namespace API_GruasUCAB.ServiceOrder.Domain.Exceptions
 {
-     public class InvalidIncidentDescriptionException : DomainException
+     public class InvalidIncidentDescriptionException : Exception
      {
-          public InvalidIncidentDescriptionException()
-              : base("Invalid incident description")
+          public InvalidIncidentDescriptionException(string message)
+              : base(message)
           {
           }
      }
