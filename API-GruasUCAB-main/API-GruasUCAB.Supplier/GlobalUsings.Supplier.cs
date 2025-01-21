@@ -11,3 +11,7 @@ global using System.Threading;
 global using System;
 global using MediatR;
 global using API_GruasUCAB.Supplier.Infrastructure.Repositories;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.EntityFrameworkCore.Design;

@@ -2,8 +2,13 @@ namespace API_GruasUCAB.Department
 {
     public static class DepartmentServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            // Configurar DbContext            
+            services.AddDbContext<DepartmentDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddMediatR(typeof(CreateDepartmentCommandHandler).Assembly);
             services.AddScoped<IService<CreateDepartmentRequestDTO, CreateDepartmentResponseDTO>, CreateDepartmentService>();
             services.AddScoped<IService<UpdateDepartmentRequestDTO, UpdateDepartmentResponseDTO>, UpdateDepartmentService>();

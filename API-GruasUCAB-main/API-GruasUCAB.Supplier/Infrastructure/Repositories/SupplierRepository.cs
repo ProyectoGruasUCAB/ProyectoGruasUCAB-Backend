@@ -1,83 +1,86 @@
+using API_GruasUCAB.Supplier.Domain.AggregateRoot;
+using API_GruasUCAB.Supplier.Infrastructure.Database;
+using API_GruasUCAB.Supplier.Infrastructure.DTOs.SupplierQueries;
+using API_GruasUCAB.Supplier.Infrastructure.Mappers;
+using Microsoft.EntityFrameworkCore;
+
 namespace API_GruasUCAB.Supplier.Infrastructure.Repositories
 {
      public class SupplierRepository : ISupplierRepository
      {
-          private readonly List<SupplierDTO> _suppliers;
+          private readonly SupplierDbContext _context;
 
-          public SupplierRepository()
+          public SupplierRepository(SupplierDbContext context)
           {
-               // Inicializar la lista con datos de ejemplo
-               _suppliers = new List<SupplierDTO>
-            {
-                new SupplierDTO
-                {
-                    SupplierId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Supplier A",
-                    Type = "Type1"
-                },
-                new SupplierDTO
-                {
-                    SupplierId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Supplier B",
-                    Type = "Type2"
-                },
-                new SupplierDTO
-                {
-                    SupplierId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Supplier C",
-                    Type = "Type3"
-                }
-            };
+               _context = context;
           }
 
           public async Task<List<SupplierDTO>> GetAllSuppliersAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_suppliers);
+               return await _context.Suppliers
+                   .Select(s => s.ToDTO())
+                   .ToListAsync();
           }
 
           public async Task<SupplierDTO> GetSupplierByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var supplier = _suppliers.FirstOrDefault(s => s.SupplierId == id);
+               var supplier = await _context.Suppliers
+                   .FirstOrDefaultAsync(s => s.Id == new SupplierId(id));
+
                if (supplier == null)
                {
                     throw new KeyNotFoundException($"Supplier with ID {id} not found.");
                }
-               return await Task.FromResult(supplier);
+
+               return supplier.ToDTO();
           }
 
           public async Task<List<SupplierDTO>> GetSuppliersByTypeAsync(string type)
           {
-               // Simulación de una llamada a la base de datos
-               var suppliers = _suppliers.Where(s => s.Type.Equals(type, StringComparison.OrdinalIgnoreCase)).ToList();
-               if (!suppliers.Any())
+               if (!Enum.TryParse(type, out SupplierTypeEnum typeEnum))
+               {
+                    throw new ArgumentException($"Invalid supplier type: {type}");
+               }
+
+               var suppliers = await _context.Suppliers
+                   .ToListAsync();
+
+               var filteredSuppliers = suppliers
+                   .Where(s => s.Type.Value == typeEnum)
+                   .Select(s => s.ToDTO())
+                   .ToList();
+
+               if (!filteredSuppliers.Any())
                {
                     throw new KeyNotFoundException($"No suppliers with type '{type}' found.");
                }
-               return await Task.FromResult(suppliers);
+
+               return filteredSuppliers;
           }
 
-          public async Task AddSupplierAsync(SupplierDTO supplier)
+          public async Task AddSupplierAsync(SupplierDTO supplierDto)
           {
-               // Simulación de una llamada a la base de datos
-               _suppliers.Add(supplier);
-               await Task.CompletedTask;
+               var supplier = supplierDto.ToEntity();
+
+               _context.Suppliers.Add(supplier);
+               await _context.SaveChangesAsync();
           }
 
-          public async Task UpdateSupplierAsync(SupplierDTO supplier)
+          public async Task UpdateSupplierAsync(SupplierDTO supplierDto)
           {
-               // Simulación de una llamada a la base de datos
-               var existingSupplier = _suppliers.FirstOrDefault(s => s.SupplierId == supplier.SupplierId);
-               if (existingSupplier == null)
+               var supplier = await _context.Suppliers
+                   .FirstOrDefaultAsync(s => s.Id == new SupplierId(supplierDto.SupplierId));
+
+               if (supplier == null)
                {
-                    throw new KeyNotFoundException($"Supplier with ID {supplier.SupplierId} not found.");
+                    throw new KeyNotFoundException($"Supplier with ID {supplierDto.SupplierId} not found.");
                }
 
-               existingSupplier.Name = supplier.Name;
-               existingSupplier.Type = supplier.Type;
+               supplier.ChangeName(new SupplierName(supplierDto.Name));
+               supplier.ChangeType(new SupplierType(Enum.Parse<SupplierTypeEnum>(supplierDto.Type)));
 
-               await Task.CompletedTask;
+               _context.Suppliers.Update(supplier);
+               await _context.SaveChangesAsync();
           }
      }
 }

@@ -22,6 +22,8 @@ namespace API_GruasUCAB.Department.Domain.ValueObject
 
           public Guid Value => Id;
 
+          private DepartmentId() { }
+
           public override bool Equals(DepartmentId other)
           {
                return Id == other.Id;

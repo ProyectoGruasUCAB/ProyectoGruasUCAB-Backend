@@ -52,7 +52,7 @@ namespace API_GruasUCAB.ServiceOrder
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador", "Proveedor"));
 
             // SecurityRequestHandlerDecorator for GetServiceOrderById
             services.Decorate<IRequestHandler<GetServiceOrderByIdQuery, GetServiceOrderByIdResponseDTO>>(
