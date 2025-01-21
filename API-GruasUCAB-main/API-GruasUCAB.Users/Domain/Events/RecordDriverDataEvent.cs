@@ -12,9 +12,10 @@ namespace API_GruasUCAB.Users.Domain.Events
           public UserDriverLicense DriverLicense { get; }
           public UserDriverLicenseExpirationDate DriverLicenseExpirationDate { get; }
           public SupplierId SupplierId { get; }
+          public UserToken? Token { get; }
 
           public RecordDriverDataEvent(UserId userId, UserName userName, UserEmail email, UserPhone phone, UserBirthDate birthDate, UserMedicalCertificate medicalCertificate, UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
-                                       UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate, SupplierId supplierId)
+                                       UserDriverLicense driverLicense, UserDriverLicenseExpirationDate driverLicenseExpirationDate, SupplierId supplierId, UserToken? token = null)
           {
                UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
                UserName = userName ?? throw new ArgumentNullException(nameof(userName), "UserName cannot be null.");
@@ -26,6 +27,7 @@ namespace API_GruasUCAB.Users.Domain.Events
                DriverLicense = driverLicense ?? throw new ArgumentNullException(nameof(driverLicense), "DriverLicense cannot be null.");
                DriverLicenseExpirationDate = driverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(driverLicenseExpirationDate), "DriverLicenseExpirationDate cannot be null.");
                SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "SupplierId cannot be null.");
+               Token = token;
                Timestamp = DateTime.UtcNow;
           }
 

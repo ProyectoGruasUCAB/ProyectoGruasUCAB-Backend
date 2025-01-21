@@ -2,94 +2,84 @@ namespace API_GruasUCAB.ServiceFee.Infrastructure.Repositories
 {
      public class ServiceFeeRepository : IServiceFeeRepository
      {
-          private readonly List<ServiceFeeDTO> _serviceFees;
+          private readonly ServiceFeeDbContext _context;
+          private readonly IMapper _mapper;
 
-          public ServiceFeeRepository()
+          public ServiceFeeRepository(ServiceFeeDbContext context, IMapper mapper)
           {
-               // Inicializar la lista con datos de ejemplo
-               _serviceFees = new List<ServiceFeeDTO>
-            {
-                new ServiceFeeDTO
-                {
-                    ServiceFeeId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Name = "Basic Service",
-                    Price = 50.0f,
-                    PriceKm = 5.0f,
-                    Radius = 10,
-                    Description = "Basic service description"
-                },
-                new ServiceFeeDTO
-                {
-                    ServiceFeeId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Premium Service",
-                    Price = 100.0f,
-                    PriceKm = 10.0f,
-                    Radius = 20,
-                    Description = "Premium service description"
-                },
-                new ServiceFeeDTO
-                {
-                    ServiceFeeId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "VIP Service",
-                    Price = 200.0f,
-                    PriceKm = 20.0f,
-                    Radius = 30,
-                    Description = "VIP service description"
-                }
-            };
+               _context = context;
+               _mapper = mapper;
           }
 
           public async Task<List<ServiceFeeDTO>> GetAllServiceFeesAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_serviceFees);
+               var serviceFees = await _context.ServiceFees.ToListAsync();
+               return _mapper.Map<List<ServiceFeeDTO>>(serviceFees);
           }
 
           public async Task<ServiceFeeDTO> GetServiceFeeByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var serviceFee = _serviceFees.FirstOrDefault(s => s.ServiceFeeId == id);
+               var serviceFee = await _context.ServiceFees
+                   .FirstOrDefaultAsync(sf => sf.Id == new ServiceFeeId(id));
+
                if (serviceFee == null)
                {
                     throw new KeyNotFoundException($"Service fee with ID {id} not found.");
                }
-               return await Task.FromResult(serviceFee);
+
+               return _mapper.Map<ServiceFeeDTO>(serviceFee);
           }
 
-          public async Task<ServiceFeeDTO> GetServiceFeeByNameAsync(string name)
+          public async Task<List<ServiceFeeDTO>> GetServiceFeeByNameAsync(string name)
           {
-               // Simulación de una llamada a la base de datos
-               var serviceFee = _serviceFees.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+               var serviceFees = await _context.ServiceFees
+                   .ToListAsync();
+
+               var filteredServiceFees = serviceFees
+                   .Where(sf => sf.Name.Value.Contains(name, StringComparison.OrdinalIgnoreCase))
+                   .ToList();
+
+               if (!filteredServiceFees.Any())
+               {
+                    throw new KeyNotFoundException($"No service fees with name containing '{name}' found.");
+               }
+
+               return _mapper.Map<List<ServiceFeeDTO>>(filteredServiceFees);
+          }
+
+          public async Task AddServiceFeeAsync(ServiceFeeDTO serviceFeeDto)
+          {
+               var serviceFee = new Domain.AggregateRoot.ServiceFee(
+                   new ServiceFeeId(serviceFeeDto.ServiceFeeId),
+                   new ServiceFeeName(serviceFeeDto.Name),
+                   new ServiceFeePrice(serviceFeeDto.Price),
+                   new ServiceFeePriceKm(serviceFeeDto.PriceKm),
+                   new ServiceFeeRadius(serviceFeeDto.Radius),
+                   new ServiceFeeDescription(serviceFeeDto.Description)
+               );
+
+               _context.ServiceFees.Add(serviceFee);
+               await _context.SaveChangesAsync();
+          }
+
+          public async Task UpdateServiceFeeAsync(ServiceFeeDTO serviceFeeDto)
+          {
+               var serviceFee = await _context.ServiceFees
+                    .FirstOrDefaultAsync(sf => sf.Id == new ServiceFeeId(serviceFeeDto.ServiceFeeId));
+
                if (serviceFee == null)
                {
-                    throw new KeyNotFoundException($"Service fee with name {name} not found.");
-               }
-               return await Task.FromResult(serviceFee);
-          }
-
-          public async Task AddServiceFeeAsync(ServiceFeeDTO serviceFee)
-          {
-               // Simulación de una llamada a la base de datos
-               _serviceFees.Add(serviceFee);
-               await Task.CompletedTask;
-          }
-
-          public async Task UpdateServiceFeeAsync(ServiceFeeDTO serviceFee)
-          {
-               // Simulación de una llamada a la base de datos
-               var existingServiceFee = _serviceFees.FirstOrDefault(s => s.ServiceFeeId == serviceFee.ServiceFeeId);
-               if (existingServiceFee == null)
-               {
-                    throw new KeyNotFoundException($"Service fee with ID {serviceFee.ServiceFeeId} not found.");
+                    throw new KeyNotFoundException($"Service fee with ID {serviceFeeDto.ServiceFeeId} not found.");
                }
 
-               existingServiceFee.Name = serviceFee.Name;
-               existingServiceFee.Price = serviceFee.Price;
-               existingServiceFee.PriceKm = serviceFee.PriceKm;
-               existingServiceFee.Radius = serviceFee.Radius;
-               existingServiceFee.Description = serviceFee.Description;
+               serviceFee.ChangeName(new ServiceFeeName(serviceFeeDto.Name));
+               serviceFee.ChangePrice(new ServiceFeePrice(serviceFeeDto.Price));
+               serviceFee.ChangePriceKm(new ServiceFeePriceKm(serviceFeeDto.PriceKm));
+               serviceFee.ChangeRadius(new ServiceFeeRadius(serviceFeeDto.Radius));
+               serviceFee.ChangeDescription(new ServiceFeeDescription(serviceFeeDto.Description));
 
-               await Task.CompletedTask;
+               _context.ServiceFees.Update(serviceFee);
+               await _context.SaveChangesAsync();
           }
      }
 }

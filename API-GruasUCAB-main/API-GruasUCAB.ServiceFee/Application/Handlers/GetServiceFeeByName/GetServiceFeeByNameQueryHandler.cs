@@ -11,8 +11,8 @@ namespace API_GruasUCAB.ServiceFee.Application.Handlers.GetServiceFeeByName
 
           public async Task<GetServiceFeeByNameResponseDTO> Handle(GetServiceFeeByNameQuery request, CancellationToken cancellationToken)
           {
-               var serviceFee = await _serviceFeeRepository.GetServiceFeeByNameAsync(request.Name);
-               return new GetServiceFeeByNameResponseDTO { ServiceFee = serviceFee };
+               var serviceFees = await _serviceFeeRepository.GetServiceFeeByNameAsync(request.Name);
+               return new GetServiceFeeByNameResponseDTO { ServiceFees = serviceFees };
           }
      }
 }

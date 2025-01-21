@@ -16,7 +16,8 @@ namespace API_GruasUCAB.Users.Infrastructure.Mappers
                     MedicalCertificateExpirationDate = driver.MedicalCertificateExpirationDate.Value.ToString("dd-MM-yyyy"),
                     DriverLicense = driver.DriverLicense.Value,
                     DriverLicenseExpirationDate = driver.DriverLicenseExpirationDate.Value.ToString("dd-MM-yyyy"),
-                    SupplierId = driver.SupplierId.Id
+                    SupplierId = driver.SupplierId.Id,
+                    Token = driver.Token?.Value
                };
           }
      }
