@@ -105,12 +105,5 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidateState();
                AddDomainEvent(new UserPositionChangedEvent(Id, newPosition));
           }
-
-          public void ChangeDepartmentId(DepartmentId newDepartmentId)
-          {
-               DepartmentId = newDepartmentId ?? throw new ArgumentNullException(nameof(newDepartmentId), "New department cannot be null.");
-               ValidateState();
-               AddDomainEvent(new DepartmentIdChangedEvent(Id, newDepartmentId));
-          }
      }
 }

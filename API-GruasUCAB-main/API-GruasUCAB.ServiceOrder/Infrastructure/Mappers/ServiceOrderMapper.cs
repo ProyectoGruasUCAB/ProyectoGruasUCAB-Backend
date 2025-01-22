@@ -16,7 +16,7 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.Mappers
                     IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude,
                     IncidentDistance = (float)serviceOrder.IncidentDistance.Value,
                     CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value,
-                    IncidentCost = (float)serviceOrder.IncidentCost.Value,
+                    IncidentCost = serviceOrder.IncidentCost.Value,
                     PolicyId = serviceOrder.PolicyId.Value,
                     StatusServiceOrder = serviceOrder.StatusServiceOrder.Value.ToString(),
                     IncidentDate = serviceOrder.IncidentDate.Value.ToString("yyyy-MM-dd"),

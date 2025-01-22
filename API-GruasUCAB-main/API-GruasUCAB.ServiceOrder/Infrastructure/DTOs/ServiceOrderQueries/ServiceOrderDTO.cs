@@ -12,7 +12,7 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.DTOs.ServiceOrderQueries
           public float IncidentLocationEndLongitude { get; set; }
           public float IncidentDistance { get; set; }
           public string CustomerVehicleDescription { get; set; } = string.Empty;
-          public float IncidentCost { get; set; }
+          public decimal IncidentCost { get; set; }
           public Guid PolicyId { get; set; }
           public string StatusServiceOrder { get; set; } = string.Empty;
           public string IncidentDate { get; set; } = string.Empty;

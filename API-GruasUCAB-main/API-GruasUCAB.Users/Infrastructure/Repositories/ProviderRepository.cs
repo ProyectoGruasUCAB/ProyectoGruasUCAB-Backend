@@ -99,7 +99,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingProvider.ChangeName(new UserName(providerDto.Name));
                existingProvider.ChangePhone(new UserPhone(providerDto.Phone));
                existingProvider.ChangeBirthDate(new UserBirthDate(providerDto.BirthDate));
-               existingProvider.ChangeSupplierId(new SupplierId(providerDto.SupplierId));
 
                await _context.SaveChangesAsync();
           }

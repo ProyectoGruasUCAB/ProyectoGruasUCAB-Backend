@@ -52,7 +52,6 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
 
                var vehicleDto = _mapper.Map<VehicleDTO>(vehicle);
 
-               // Validar y ajustar la fecha de expiración de la responsabilidad civil
                if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                {
                     throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
@@ -98,7 +97,6 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Vehicle with ID {vehicleDto.VehicleId} not found.");
                }
 
-               // Validar y ajustar la fecha de expiración de la responsabilidad civil
                if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                {
                     throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
@@ -113,7 +111,6 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
                vehicle.ChangeModel(new VehicleModel(vehicleDto.Model));
                vehicle.ChangeVehicleTypeId(new VehicleTypeId(vehicleDto.VehicleTypeId));
                vehicle.ChangeDriverId(vehicleDto.DriverId != null ? new UserId(vehicleDto.DriverId.Value) : null);
-               vehicle.ChangeSupplierId(new SupplierId(vehicleDto.SupplierId));
 
                _context.Vehicles.Update(vehicle);
                await _context.SaveChangesAsync();

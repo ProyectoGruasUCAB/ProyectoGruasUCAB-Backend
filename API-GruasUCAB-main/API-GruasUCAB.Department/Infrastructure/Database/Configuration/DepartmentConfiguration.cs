@@ -1,6 +1,4 @@
 global using DepartmentAggregate = API_GruasUCAB.Department.Domain.AggregateRoot.Department;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace API_GruasUCAB.Department.Infrastructure.Database.Configuration
 {
@@ -18,6 +16,9 @@ namespace API_GruasUCAB.Department.Infrastructure.Database.Configuration
                 .HasConversion(name => name.Value, str => new DepartmentName(str))
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasIndex(d => d.Name)
+                .IsUnique();
 
             builder.Property(d => d.Description)
                 .HasConversion(description => description.Value, str => new DepartmentDescription(str))

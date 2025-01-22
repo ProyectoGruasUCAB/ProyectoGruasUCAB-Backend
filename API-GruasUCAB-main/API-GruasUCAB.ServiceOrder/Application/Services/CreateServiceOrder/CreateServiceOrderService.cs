@@ -4,11 +4,34 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
      {
           private readonly IServiceOrderRepository _serviceOrderRepository;
           private readonly IServiceOrderFactory _serviceOrderFactory;
+          private readonly IDriverRepository _driverRepository;
+          private readonly IVehicleRepository _vehicleRepository;
+          private readonly IServiceFeeRepository _serviceFeeRepository;
+          private readonly IPolicyRepository _policyRepository;
+          private readonly IClientRepository _clientRepository;
+          private readonly IWorkerRepository _workerRepository;
+          private readonly IncidentCostCalculator _incidentCostCalculator;
 
-          public CreateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory)
+          public CreateServiceOrderService(
+              IServiceOrderRepository serviceOrderRepository,
+              IServiceOrderFactory serviceOrderFactory,
+              IDriverRepository driverRepository,
+              IVehicleRepository vehicleRepository,
+              IServiceFeeRepository serviceFeeRepository,
+              IPolicyRepository policyRepository,
+              IClientRepository clientRepository,
+              IWorkerRepository workerRepository,
+              IncidentCostCalculator incidentCostCalculator)
           {
                _serviceOrderRepository = serviceOrderRepository;
                _serviceOrderFactory = serviceOrderFactory;
+               _driverRepository = driverRepository;
+               _vehicleRepository = vehicleRepository;
+               _serviceFeeRepository = serviceFeeRepository;
+               _policyRepository = policyRepository;
+               _clientRepository = clientRepository;
+               _workerRepository = workerRepository;
+               _incidentCostCalculator = incidentCostCalculator;
           }
 
           public async Task<CreateServiceOrderResponseDTO> Execute(CreateServiceOrderRequestDTO request)
@@ -17,6 +40,13 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                {
                     throw new ArgumentException($"Invalid initial status: {request.InitialStatus}. Allowed statuses are: {ServiceOrderStatus.PorAsignar}, {ServiceOrderStatus.PorAceptado}");
                }
+
+               await ValidateIdsExist(request);
+               var incidentCost = await _incidentCostCalculator.CalculateIncidentCost(
+                   request.PolicyId,
+                   request.ServiceFeeId,
+                   new IncidentDistance(request.IncidentDistance)
+               );
 
                TimeZoneInfo venezuelaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Venezuela Standard Time");
                DateTime venezuelaDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, venezuelaTimeZone);
@@ -29,7 +59,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                    new Coordinates((float)request.IncidentLocationEndLatitude, (float)request.IncidentLocationEndLongitude),
                    new IncidentDistance(request.IncidentDistance),
                    new CustomerVehicleDescription(request.CustomerVehicleDescription),
-                   new IncidentCost(request.IncidentCost),
+                   new IncidentCost(incidentCost),
                    new PolicyId(request.PolicyId),
                    new StatusServiceOrder(Enum.Parse<ServiceOrderStatus>(request.InitialStatus)),
                    new IncidentDate(venezuelaDateTime.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)),
@@ -53,7 +83,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                     IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude,
                     IncidentDistance = (float)serviceOrder.IncidentDistance.Value,
                     CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value,
-                    IncidentCost = (float)serviceOrder.IncidentCost.Value,
+                    IncidentCost = serviceOrder.IncidentCost.Value,
                     PolicyId = serviceOrder.PolicyId.Value,
                     IncidentDate = serviceOrder.IncidentDate.Value.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture),
                     VehicleId = serviceOrder.VehicleId.Value,
@@ -72,6 +102,16 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                     UserEmail = request.UserEmail,
                     ServiceOrderId = serviceOrder.Id.Value
                };
+          }
+
+          private async Task ValidateIdsExist(CreateServiceOrderRequestDTO request)
+          {
+               await _driverRepository.GetDriverByIdAsync(request.DriverId);
+               await _vehicleRepository.GetVehicleByIdAsync(request.VehicleId);
+               await _serviceFeeRepository.GetServiceFeeByIdAsync(request.ServiceFeeId);
+               await _policyRepository.GetPolicyByIdAsync(request.PolicyId);
+               await _clientRepository.GetClientByIdAsync(request.CustomerId);
+               await _workerRepository.GetWorkerByIdAsync(request.OperatorId);
           }
      }
 }

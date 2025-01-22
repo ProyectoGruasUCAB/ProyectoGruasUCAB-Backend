@@ -5,22 +5,34 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
           private readonly IVehicleRepository _vehicleRepository;
           private readonly IVehicleTypeRepository _vehicleTypeRepository;
           private readonly IVehicleFactory _vehicleFactory;
+          private readonly IProviderRepository _providerRepository;
+          private readonly IDriverRepository _driverRepository;
 
-          public UpdateVehicleService(IVehicleRepository vehicleRepository, IVehicleTypeRepository vehicleTypeRepository, IVehicleFactory vehicleFactory)
+          public UpdateVehicleService(IVehicleRepository vehicleRepository, IVehicleTypeRepository vehicleTypeRepository, IVehicleFactory vehicleFactory, IProviderRepository providerRepository, IDriverRepository driverRepository)
           {
                _vehicleRepository = vehicleRepository;
                _vehicleTypeRepository = vehicleTypeRepository;
                _vehicleFactory = vehicleFactory;
+               _providerRepository = providerRepository;
+               _driverRepository = driverRepository;
           }
 
           public async Task<UpdateVehicleResponseDTO> Execute(UpdateVehicleRequestDTO request)
           {
                var vehicleDTO = await _vehicleRepository.GetVehicleByIdAsync(request.VehicleId);
-               if (vehicleDTO == null)
+               var provider = await _providerRepository.GetProviderByIdAsync(request.UserId);
+               if (provider.SupplierId != vehicleDTO.SupplierId)
                {
-                    throw new VehicleNotFoundException(request.VehicleId);
+                    throw new UnauthorizedAccessException("User does not have permission to update this vehicle.");
                }
-
+               if (request.DriverId.HasValue)
+               {
+                    var driver = await _driverRepository.GetDriverByIdAsync(request.DriverId.Value);
+                    if (driver.SupplierId != vehicleDTO.SupplierId || driver.SupplierId != provider.SupplierId)
+                    {
+                         throw new UnauthorizedAccessException("Driver does not have permission to be assigned to this vehicle.");
+                    }
+               }
                if (request.VehicleTypeId.HasValue)
                {
                     var vehicleType = await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId.Value);
@@ -93,11 +105,6 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeDriverId(null);
                }
 
-               if (request.SupplierId.HasValue)
-               {
-                    vehicle.ChangeSupplierId(new SupplierId(request.SupplierId.Value));
-               }
-
                vehicleDTO.CivilLiability = vehicle.CivilLiability.Value;
                vehicleDTO.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy");
                vehicleDTO.TrafficLicense = vehicle.TrafficLicense.Value;
@@ -116,17 +123,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     Success = true,
                     Message = "Vehicle updated successfully",
                     UserEmail = request.UserEmail,
-                    VehicleId = vehicle.Id.Id,
-                    CivilLiability = vehicle.CivilLiability.Value,
-                    CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy"),
-                    TrafficLicense = vehicle.TrafficLicense.Value,
-                    LicensePlate = vehicle.LicensePlate.Value,
-                    Brand = vehicle.Brand.Value,
-                    Color = vehicle.Color.Value,
-                    Model = vehicle.Model.Value,
-                    VehicleTypeId = vehicle.VehicleTypeId.Id,
-                    DriverId = vehicle.DriverId?.Id,
-                    SupplierId = vehicle.SupplierId.Id
+                    VehicleId = vehicle.Id.Id
                };
           }
      }

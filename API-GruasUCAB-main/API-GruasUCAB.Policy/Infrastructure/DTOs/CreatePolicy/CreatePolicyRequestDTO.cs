@@ -12,7 +12,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.DTOs.CreatePolicy
 
           [Required(ErrorMessage = "Coverage amount is required.")]
           [JsonPropertyOrder(2)]
-          public float CoverageAmount { get; set; }
+          public decimal CoverageAmount { get; set; }
 
           [Required(ErrorMessage = "Coverage kilometers is required.")]
           [JsonPropertyOrder(2)]
@@ -20,11 +20,11 @@ namespace API_GruasUCAB.Policy.Infrastructure.DTOs.CreatePolicy
 
           [Required(ErrorMessage = "Base amount is required.")]
           [JsonPropertyOrder(2)]
-          public float BaseAmount { get; set; }
+          public decimal BaseAmount { get; set; }
 
           [Required(ErrorMessage = "Price per kilometer is required.")]
           [JsonPropertyOrder(2)]
-          public float PriceKm { get; set; }
+          public decimal PriceKm { get; set; }
 
           [Required(ErrorMessage = "Client ID is required.")]
           [JsonPropertyOrder(2)]

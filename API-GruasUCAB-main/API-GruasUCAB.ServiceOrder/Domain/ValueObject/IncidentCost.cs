@@ -2,13 +2,13 @@ namespace API_GruasUCAB.ServiceOrder.Domain.ValueObject
 {
      public class IncidentCost : ValueObject<IncidentCost>
      {
-          public float Cost { get; }
+          public decimal Cost { get; }
 
-          public float Value => Cost;
+          public decimal Value => Cost;
 
-          public IncidentCost(float cost)
+          public IncidentCost(decimal cost)
           {
-               if (cost <= 0)
+               if (cost < 0)
                     throw new InvalidIncidentCostException();
 
                Cost = cost;

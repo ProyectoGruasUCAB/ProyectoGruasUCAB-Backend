@@ -89,12 +89,5 @@ namespace API_GruasUCAB.Users.Domain.Entities
                ValidateState();
                AddDomainEvent(new UserBirthDateChangedEvent(Id, newBirthDate));
           }
-
-          public void ChangeSupplierId(SupplierId newSupplierId)
-          {
-               SupplierId = newSupplierId ?? throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
-               ValidateState();
-               AddDomainEvent(new SupplierIdChangedEvent(Id, newSupplierId));
-          }
      }
 }

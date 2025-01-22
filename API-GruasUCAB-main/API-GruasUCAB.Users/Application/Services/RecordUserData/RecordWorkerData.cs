@@ -4,11 +4,13 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
      {
           private readonly IWorkerFactory _workerFactory;
           private readonly IWorkerRepository _workerRepository;
+          private readonly IDepartmentRepository _departmentRepository;
 
-          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository)
+          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository, IDepartmentRepository departmentRepository)
           {
                _workerFactory = workerFactory;
                _workerRepository = workerRepository;
+               _departmentRepository = departmentRepository;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -17,6 +19,18 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     throw new ArgumentNullException(nameof(request.Position));
                if (!request.WorkplaceId.HasValue)
                     throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for workers.");
+
+               var department = await _departmentRepository.GetDepartmentByIdAsync(request.WorkplaceId.Value);
+               if (department == null)
+               {
+                    return new RecordUserDataResponseDTO
+                    {
+                         Success = false,
+                         Message = "Department does not exist",
+                         UserEmail = request.UserEmail,
+                         UserId = request.UserId
+                    };
+               }
 
                var worker = _workerFactory.CreateWorker(
                    new UserId(request.UserId),

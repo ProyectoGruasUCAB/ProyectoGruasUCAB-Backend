@@ -1,7 +1,3 @@
-using API_GruasUCAB.Department.Domain.AggregateRoot;
-using Microsoft.EntityFrameworkCore;
-using API_GruasUCAB.Department.Infrastructure.Database.Configuration;
-
 namespace API_GruasUCAB.Department.Infrastructure.Database
 {
      public class DepartmentDbContext : DbContext
@@ -16,7 +12,6 @@ namespace API_GruasUCAB.Department.Infrastructure.Database
 
                modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
 
-               // Configuración de clave primaria de Department
                modelBuilder.Entity<DepartmentAggregate>()
                    .HasKey(d => d.Id);
           }

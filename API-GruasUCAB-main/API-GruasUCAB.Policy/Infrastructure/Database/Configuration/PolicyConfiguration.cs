@@ -17,7 +17,10 @@ namespace API_GruasUCAB.Policy.Infrastructure.Database.Configuration
             builder.Property(cd => cd.PolicyNumber)
                 .HasConversion(number => number.Value, str => new PolicyNumber(str))
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(10);
+
+            builder.HasIndex(cd => cd.PolicyNumber)
+                   .IsUnique();
 
             builder.Property(cd => cd.PolicyName)
                 .HasConversion(name => name.Value, str => new PolicyName(str))
@@ -44,14 +47,17 @@ namespace API_GruasUCAB.Policy.Infrastructure.Database.Configuration
 
             builder.Property(cd => cd.PolicyCoverageAmount)
                 .HasConversion(coverageAmount => coverageAmount.Value, value => new PolicyCoverageAmount(value))
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
             builder.Property(cd => cd.PolicyBaseAmount)
                 .HasConversion(baseAmount => baseAmount.Value, value => new PolicyBaseAmount(value))
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
             builder.Property(cd => cd.PolicyPriceKm)
                 .HasConversion(priceKm => priceKm.Value, value => new PolicyPriceKm(value))
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
             builder.Property(cd => cd.PolicyClient)

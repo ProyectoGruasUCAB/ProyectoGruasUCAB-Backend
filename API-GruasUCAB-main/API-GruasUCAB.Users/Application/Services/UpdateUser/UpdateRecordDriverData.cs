@@ -70,12 +70,6 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     driver.AddDomainEvent(new UserDriverLicenseExpirationDateChangedEvent(driver.Id, new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate)));
                }
 
-               if (request.WorkplaceId.HasValue)
-               {
-                    driver.ChangeSupplierId(new SupplierId(request.WorkplaceId.Value));
-                    driver.AddDomainEvent(new SupplierIdChangedEvent(driver.Id, new SupplierId(request.WorkplaceId.Value)));
-               }
-
                if (!string.IsNullOrEmpty(request.Token))
                {
                     driver.ChangeToken(new UserToken(request.Token));

@@ -6,14 +6,6 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.DTOs.CreateVehicle
           [JsonPropertyOrder(2)]
           public Guid UserId { get; set; }
 
-          [Required(ErrorMessage = "Driver ID is required.")]
-          [JsonPropertyOrder(2)]
-          public Guid? DriverId { get; set; }
-
-          [Required(ErrorMessage = "Supplier ID is required.")]
-          [JsonPropertyOrder(2)]
-          public Guid SupplierId { get; set; }
-
           [Required(ErrorMessage = "Civil Liability is required.")]
           [JsonPropertyOrder(2)]
           public string CivilLiability { get; set; } = string.Empty;

@@ -2,9 +2,9 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
 {
      public class PolicyPriceKm : ValueObject<PolicyPriceKm>
      {
-          public float PriceKm { get; }
+          public decimal PriceKm { get; }
 
-          public PolicyPriceKm(float priceKm)
+          public PolicyPriceKm(decimal priceKm)
           {
                if (priceKm <= 0)
                     throw new InvalidPolicyPriceKmException();
@@ -12,7 +12,7 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
                PriceKm = priceKm;
           }
 
-          public float Value => PriceKm;
+          public decimal Value => PriceKm;
 
           public override bool Equals(PolicyPriceKm other)
           {

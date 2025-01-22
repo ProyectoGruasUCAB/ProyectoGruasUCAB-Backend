@@ -45,12 +45,6 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
                     provider.ChangeBirthDate(new UserBirthDate(request.BirthDate));
                     provider.AddDomainEvent(new UserBirthDateChangedEvent(provider.Id, new UserBirthDate(request.BirthDate)));
                }
-
-               if (request.WorkplaceId.HasValue)
-               {
-                    provider.ChangeSupplierId(new SupplierId(request.WorkplaceId.Value));
-                    provider.AddDomainEvent(new SupplierIdChangedEvent(provider.Id, new SupplierId(request.WorkplaceId.Value)));
-               }
           }
      }
 }

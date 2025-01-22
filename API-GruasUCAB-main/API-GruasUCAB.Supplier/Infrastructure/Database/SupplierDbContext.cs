@@ -1,9 +1,3 @@
-using API_GruasUCAB.Core.Infrastructure.Database;
-using API_GruasUCAB.Supplier.Domain.AggregateRoot;
-using API_GruasUCAB.Supplier.Infrastructure.Database.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-
 namespace API_GruasUCAB.Supplier.Infrastructure.Database
 {
      public class SupplierDbContext : DbContext, IUserDbContext

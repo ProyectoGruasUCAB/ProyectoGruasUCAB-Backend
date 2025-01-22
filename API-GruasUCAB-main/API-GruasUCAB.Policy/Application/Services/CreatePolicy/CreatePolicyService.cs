@@ -15,7 +15,6 @@ namespace API_GruasUCAB.Policy.Application.Services.CreatePolicy
 
           public async Task<CreatePolicyResponseDTO> Execute(CreatePolicyRequestDTO request)
           {
-               // Validar que el cliente exista
                var client = await _clientRepository.GetClientByIdAsync(request.ClientId);
                if (client == null)
                {

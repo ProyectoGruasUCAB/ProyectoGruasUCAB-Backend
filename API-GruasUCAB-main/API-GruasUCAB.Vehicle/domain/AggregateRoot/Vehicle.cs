@@ -35,7 +35,7 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
                Color = color ?? throw new ArgumentNullException(nameof(color), "Vehicle must have a color.");
                Model = model ?? throw new ArgumentNullException(nameof(model), "Vehicle must have a model.");
                VehicleTypeId = vehicleTypeId ?? throw new ArgumentNullException(nameof(vehicleTypeId), "Vehicle must have a type.");
-               DriverId = driverId; // Permitir valores nulos
+               DriverId = driverId;
                SupplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId), "Vehicle must have a supplier.");
 
                ValidateState();
@@ -186,15 +186,6 @@ namespace API_GruasUCAB.Vehicle.Domain.AggregateRoot
                DriverId = newDriverId;
                ValidateState();
                AddDomainEvent(new VehicleDriverChangedEvent(Id, newDriverId));
-          }
-
-          public void ChangeSupplierId(SupplierId newSupplierId)
-          {
-               if (newSupplierId == null)
-                    throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
-               SupplierId = newSupplierId;
-               ValidateState();
-               AddDomainEvent(new VehicleSupplierChangedEvent(Id, newSupplierId));
           }
      }
 }

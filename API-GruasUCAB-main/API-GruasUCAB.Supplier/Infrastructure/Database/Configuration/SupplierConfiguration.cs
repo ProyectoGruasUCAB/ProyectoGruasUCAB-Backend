@@ -1,6 +1,4 @@
 global using SupplierAggregate = API_GruasUCAB.Supplier.Domain.AggregateRoot.Supplier;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace API_GruasUCAB.Supplier.Infrastructure.Database.Configuration
 {
@@ -18,6 +16,9 @@ namespace API_GruasUCAB.Supplier.Infrastructure.Database.Configuration
                 .HasConversion(name => name.Value, str => new SupplierName(str))
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasIndex(s => s.Name)
+                .IsUnique();
 
             builder.Property(s => s.Type)
                 .HasConversion(

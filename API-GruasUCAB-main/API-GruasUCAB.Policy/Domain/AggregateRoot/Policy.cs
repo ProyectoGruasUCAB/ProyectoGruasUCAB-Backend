@@ -110,10 +110,10 @@ namespace API_GruasUCAB.Policy.Domain.AggregateRoot
           {
                PolicyNumber = new PolicyNumber("2222");
                PolicyName = new PolicyName("DefaultName");
-               PolicyCoverageAmount = new PolicyCoverageAmount(06);
-               PolicyCoverageKm = new PolicyCoverageKm(05);
+               PolicyCoverageAmount = new PolicyCoverageAmount(50);
+               PolicyCoverageKm = new PolicyCoverageKm(50);
                PolicyBaseAmount = new PolicyBaseAmount(50);
-               PolicyPriceKm = new PolicyPriceKm(05);
+               PolicyPriceKm = new PolicyPriceKm(50);
                PolicyIssueDate = new PolicyIssueDate(DateTime.Now.ToString("dd-MM-yyyy"));
                PolicyExpirationDate = new PolicyExpirationDate(DateTime.Now.AddYears(1).ToString("dd-MM-yyyy"), DateTime.Now);
                PolicyClient = new PolicyClient(Guid.NewGuid());

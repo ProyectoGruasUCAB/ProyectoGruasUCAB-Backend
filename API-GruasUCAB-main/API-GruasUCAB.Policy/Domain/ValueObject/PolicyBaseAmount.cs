@@ -2,9 +2,9 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
 {
      public class PolicyBaseAmount : ValueObject<PolicyBaseAmount>
      {
-          public float BaseAmount { get; }
+          public decimal BaseAmount { get; }
 
-          public PolicyBaseAmount(float baseAmount)
+          public PolicyBaseAmount(decimal baseAmount)
           {
                if (baseAmount <= 0)
                     throw new InvalidPolicyBaseAmountException();
@@ -12,7 +12,7 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
                BaseAmount = baseAmount;
           }
 
-          public float Value => BaseAmount;
+          public decimal Value => BaseAmount;
 
           public override bool Equals(PolicyBaseAmount other)
           {

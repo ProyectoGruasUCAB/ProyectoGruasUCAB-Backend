@@ -2,9 +2,9 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
 {
      public class PolicyCoverageAmount : ValueObject<PolicyCoverageAmount>
      {
-          public float Amount { get; }
+          public decimal Amount { get; }
 
-          public PolicyCoverageAmount(float amount)
+          public PolicyCoverageAmount(decimal amount)
           {
                if (amount <= 0)
                     throw new InvalidPolicyCoverageAmountException();
@@ -12,7 +12,7 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
                Amount = amount;
           }
 
-          public float Value => Amount;
+          public decimal Value => Amount;
 
           public override bool Equals(PolicyCoverageAmount other)
           {

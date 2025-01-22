@@ -144,13 +144,6 @@ namespace API_GruasUCAB.Users.Domain.Entities
                AddDomainEvent(new UserDriverLicenseExpirationDateChangedEvent(Id, newDate));
           }
 
-          public void ChangeSupplierId(SupplierId newSupplierId)
-          {
-               SupplierId = newSupplierId ?? throw new ArgumentNullException(nameof(newSupplierId), "New supplier cannot be null.");
-               ValidateState();
-               AddDomainEvent(new SupplierIdChangedEvent(Id, newSupplierId));
-          }
-
           public void ChangeToken(UserToken newToken)
           {
                Token = newToken;

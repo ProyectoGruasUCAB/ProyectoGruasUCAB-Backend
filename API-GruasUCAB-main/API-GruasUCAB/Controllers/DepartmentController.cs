@@ -64,6 +64,11 @@ namespace API_GruasUCAB.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetDepartmentById(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("The department ID cannot be empty.");
+            }
+
             return await ActionExecutor.Execute(async () =>
             {
                 var userId = GetUserId();
@@ -82,6 +87,11 @@ namespace API_GruasUCAB.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetDepartmentByName(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("The department name cannot be empty.");
+            }
+
             return await ActionExecutor.Execute(async () =>
             {
                 var userId = GetUserId();
