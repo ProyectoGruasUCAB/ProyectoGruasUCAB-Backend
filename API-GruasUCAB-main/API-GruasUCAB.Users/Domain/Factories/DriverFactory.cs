@@ -20,9 +20,12 @@ namespace API_GruasUCAB.Users.Domain.Factories
               UserMedicalCertificateExpirationDate medicalCertificateExpirationDate,
               UserDriverLicense driverLicense,
               UserDriverLicenseExpirationDate driverLicenseExpirationDate,
-              SupplierId supplierId)
+              SupplierId supplierId,
+              string token = "")
           {
-               return new Driver(id, name, email, phone, cedula, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId);
+               UserToken? userToken = string.IsNullOrEmpty(token) ? null : new UserToken(token);
+
+               return new Driver(id, name, email, phone, cedula, birthDate, medicalCertificate, medicalCertificateExpirationDate, driverLicense, driverLicenseExpirationDate, supplierId, userToken);
           }
 
           public async Task<Driver> GetDriverById(UserId id)
@@ -39,7 +42,8 @@ namespace API_GruasUCAB.Users.Domain.Factories
                    new UserMedicalCertificateExpirationDate(driverDTO.MedicalCertificateExpirationDate),
                    new UserDriverLicense(driverDTO.DriverLicense),
                    new UserDriverLicenseExpirationDate(driverDTO.DriverLicenseExpirationDate),
-                   new SupplierId(driverDTO.SupplierId)
+                   new SupplierId(driverDTO.SupplierId),
+                   driverDTO.Token != null ? new UserToken(driverDTO.Token) : null
                );
           }
      }

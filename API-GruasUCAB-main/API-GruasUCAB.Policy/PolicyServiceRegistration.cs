@@ -54,6 +54,15 @@ namespace API_GruasUCAB.Policy
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
                     "Administrador", "Trabajador"));
+
+            // Client Services
+            services.AddScoped<CreateClientService>();
+            services.AddScoped<IClientRepository, ClientRepository>();
+
+            // Client Queries
+            services.AddScoped<IRequestHandler<GetAllClientsQuery, List<ClientDTO>>, GetAllClientsQueryHandler>();
+            services.AddScoped<IRequestHandler<GetClientByIdQuery, ClientDTO>, GetClientByIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetClientByClientNumberQuery, ClientDTO>, GetClientByClientNumberQueryHandler>();
         }
     }
 }

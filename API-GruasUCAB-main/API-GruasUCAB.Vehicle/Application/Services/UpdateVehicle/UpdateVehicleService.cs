@@ -3,11 +3,13 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
      public class UpdateVehicleService : IService<UpdateVehicleRequestDTO, UpdateVehicleResponseDTO>
      {
           private readonly IVehicleRepository _vehicleRepository;
+          private readonly IVehicleTypeRepository _vehicleTypeRepository;
           private readonly IVehicleFactory _vehicleFactory;
 
-          public UpdateVehicleService(IVehicleRepository vehicleRepository, IVehicleFactory vehicleFactory)
+          public UpdateVehicleService(IVehicleRepository vehicleRepository, IVehicleTypeRepository vehicleTypeRepository, IVehicleFactory vehicleFactory)
           {
                _vehicleRepository = vehicleRepository;
+               _vehicleTypeRepository = vehicleTypeRepository;
                _vehicleFactory = vehicleFactory;
           }
 
@@ -17,6 +19,15 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                if (vehicleDTO == null)
                {
                     throw new VehicleNotFoundException(request.VehicleId);
+               }
+
+               if (request.VehicleTypeId.HasValue)
+               {
+                    var vehicleType = await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId.Value);
+                    if (vehicleType == null)
+                    {
+                         throw new KeyNotFoundException($"VehicleType with ID {request.VehicleTypeId.Value} not found.");
+                    }
                }
 
                var vehicle = _vehicleFactory.CreateVehicle(
@@ -88,7 +99,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                }
 
                vehicleDTO.CivilLiability = vehicle.CivilLiability.Value;
-               vehicleDTO.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("yyyy-MM-dd");
+               vehicleDTO.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy");
                vehicleDTO.TrafficLicense = vehicle.TrafficLicense.Value;
                vehicleDTO.LicensePlate = vehicle.LicensePlate.Value;
                vehicleDTO.Brand = vehicle.Brand.Value;

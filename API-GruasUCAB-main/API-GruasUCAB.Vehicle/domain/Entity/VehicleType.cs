@@ -3,9 +3,9 @@ namespace API_GruasUCAB.Vehicle.Domain.Entity
      public class VehicleType : Entity<VehicleTypeId>
      {
           public VehicleTypeEnumerate Type { get; private set; }
-          public string DescripcionVehicleType { get; private set; }
+          public DescripcionVehicleType DescripcionVehicleType { get; private set; }
 
-          public VehicleType(VehicleTypeId id, VehicleTypeEnumerate type, string descripcionVehicleType)
+          public VehicleType(VehicleTypeId id, VehicleTypeEnumerate type, DescripcionVehicleType descripcionVehicleType)
               : base(id)
           {
                Type = type;
@@ -17,11 +17,9 @@ namespace API_GruasUCAB.Vehicle.Domain.Entity
                Type = newType;
           }
 
-          public void ChangeDescripcionVehicleType(string newDescripcion)
+          public void ChangeDescripcionVehicleType(DescripcionVehicleType newDescripcion)
           {
-               if (string.IsNullOrWhiteSpace(newDescripcion))
-                    throw new ArgumentNullException(nameof(newDescripcion), "New description cannot be null or empty.");
-               DescripcionVehicleType = newDescripcion;
+               DescripcionVehicleType = newDescripcion ?? throw new ArgumentNullException(nameof(newDescripcion), "New description cannot be null or empty.");
           }
      }
 

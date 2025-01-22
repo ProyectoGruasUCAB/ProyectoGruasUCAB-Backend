@@ -1,10 +1,7 @@
 namespace API_GruasUCAB.Policy.Domain.Exceptions
 {
-     public class InvalidPolicyNumberException : DomainException
+     public class InvalidPolicyNumberException : Exception
      {
-          public InvalidPolicyNumberException()
-              : base("Invalid policy number")
-          {
-          }
+          public InvalidPolicyNumberException(string message) : base(message) { }
      }
 }

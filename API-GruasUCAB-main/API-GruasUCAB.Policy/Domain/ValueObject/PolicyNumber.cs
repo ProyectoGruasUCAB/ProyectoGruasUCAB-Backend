@@ -6,8 +6,12 @@ namespace API_GruasUCAB.Policy.Domain.ValueObject
 
           public PolicyNumber(string number)
           {
-               if (string.IsNullOrWhiteSpace(number) || !number.All(char.IsDigit))
-                    throw new InvalidPolicyNumberException();
+               if (string.IsNullOrWhiteSpace(number))
+                    throw new InvalidPolicyNumberException("Policy number cannot be empty.");
+
+               // Si el número de póliza debe ser estrictamente numérico, descomenta la siguiente línea
+               // if (!number.All(char.IsDigit))
+               //     throw new InvalidPolicyNumberException("Policy number must be numeric.");
 
                Number = number;
           }

@@ -1,9 +1,8 @@
-using API_GruasUCAB.Policy.Application.Commands.CreateClient;
-using API_GruasUCAB.Policy.Application.Queries.GetClientById;
-using API_GruasUCAB.Policy.Application.Queries.GetAllClients;
-using API_GruasUCAB.Policy.Infrastructure.DTOs.ClientQueries;
-using API_GruasUCAB.Policy.Infrastructure.DTOs.CreateClient;
 using API_GruasUCAB.Core.Utilities.ActionExecutor;
+using API_GruasUCAB.Policy.Infrastructure.Adapters.DTOs;
+using API_GruasUCAB.Policy.Infrastructure.Adapters.DTOs.CreateClient;
+using API_GruasUCAB.Policy.Infrastructure.Adapters.Services.CreateClient;
+using API_GruasUCAB.Policy.Infrastructure.Adapters.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -17,11 +16,13 @@ namespace API_GruasUCAB.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<ClientController> _logger;
+        private readonly CreateClientService _createClientService;
 
-        public ClientController(IMediator mediator, ILogger<ClientController> logger)
+        public ClientController(IMediator mediator, ILogger<ClientController> logger, CreateClientService createClientService)
         {
             _mediator = mediator;
             _logger = logger;
+            _createClientService = createClientService;
         }
 
         private Guid GetUserId()
@@ -32,42 +33,6 @@ namespace API_GruasUCAB.Controllers
                 throw new UnauthorizedAccessException("User ID is missing from the token.");
             }
             return Guid.Parse(userId);
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("GetAllClients")]
-        [ProducesResponseType(typeof(GetAllClientsResponseDTO), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAllClients()
-        {
-            return await ActionExecutor.Execute(async () =>
-            {
-                var userId = GetUserId();
-                var query = new GetAllClientsQuery(userId);
-                var response = await _mediator.Send(query);
-                return Ok(response);
-            }, ModelState, _logger, "GetAllClients");
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("GetClientById/{id}")]
-        [ProducesResponseType(typeof(GetClientByIdResponseDTO), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> GetClientById(Guid id)
-        {
-            return await ActionExecutor.Execute(async () =>
-            {
-                var userId = GetUserId();
-                var query = new GetClientByIdQuery(userId, id);
-                var response = await _mediator.Send(query);
-                return Ok(response);
-            }, ModelState, _logger, "GetClientById");
         }
 
         [HttpPost]
@@ -81,14 +46,64 @@ namespace API_GruasUCAB.Controllers
         {
             return await ActionExecutor.Execute(async () =>
             {
-                var command = new CreateClientCommand(request);
-                var response = await _mediator.Send(command);
+                var response = await _createClientService.Execute(request);
                 if (response.Success)
                 {
                     return Ok(response);
                 }
                 return BadRequest(response);
             }, ModelState, _logger, "CreateClient");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetAllClients")]
+        [ProducesResponseType(typeof(List<ClientDTO>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAllClients()
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var query = new GetAllClientsQuery();
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetAllClients");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetClientById/{id}")]
+        [ProducesResponseType(typeof(ClientDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetClientById(Guid id)
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var query = new GetClientByIdQuery(id);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetClientById");
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetClientByClientNumber/{clientNumber}")]
+        [ProducesResponseType(typeof(ClientDTO), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetClientByClientNumber(string clientNumber)
+        {
+            return await ActionExecutor.Execute(async () =>
+            {
+                var query = new GetClientByClientNumberQuery(clientNumber);
+                var response = await _mediator.Send(query);
+                return Ok(response);
+            }, ModelState, _logger, "GetClientByClientNumber");
         }
     }
 }

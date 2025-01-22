@@ -2,114 +2,121 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
 {
      public class VehicleRepository : IVehicleRepository
      {
-          private readonly List<VehicleDTO> _vehicles;
+          private readonly VehicleDbContext _context;
+          private readonly IMapper _mapper;
 
-          public VehicleRepository()
+          public VehicleRepository(VehicleDbContext context, IMapper mapper)
           {
-               // Inicializar la lista con datos de ejemplo
-               _vehicles = new List<VehicleDTO>
-            {
-                new VehicleDTO
-                {
-                    VehicleId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    DriverId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    SupplierId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    CivilLiability = "Liability A",
-                    CivilLiabilityExpirationDate = "01-12-2025",
-                    TrafficLicense = "License A",
-                    LicensePlate = "ABC123",
-                    Brand = "Brand A",
-                    Color = "Red",
-                    Model = "Model A",
-                    VehicleTypeId = Guid.Parse("44444444-4444-4444-4444-444444444444")
-                },
-                new VehicleDTO
-                {
-                    VehicleId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                    DriverId = Guid.Parse("66666666-6666-6666-6666-666666666666"),
-                    SupplierId = Guid.Parse("77777777-7777-7777-7777-777777777777"),
-                    CivilLiability = "Liability B",
-                    CivilLiabilityExpirationDate = "2024-12-31",
-                    TrafficLicense = "License B",
-                    LicensePlate = "DEF456",
-                    Brand = "Brand B",
-                    Color = "Blue",
-                    Model = "Model B",
-                    VehicleTypeId = Guid.Parse("88888888-8888-8888-8888-888888888888")
-                },
-                new VehicleDTO
-                {
-                    VehicleId = Guid.Parse("99999999-9999-9999-9999-999999999999"),
-                    DriverId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                    SupplierId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    CivilLiability = "Liability C",
-                    CivilLiabilityExpirationDate = "2025-12-31",
-                    TrafficLicense = "License C",
-                    LicensePlate = "GHI789",
-                    Brand = "Brand C",
-                    Color = "Green",
-                    Model = "Model C",
-                    VehicleTypeId = Guid.Parse("22222222-2222-2222-2222-222222222222")
-                }
-            };
+               _context = context;
+               _mapper = mapper;
           }
 
           public async Task<List<VehicleDTO>> GetAllVehiclesAsync()
           {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_vehicles);
+               var vehicles = await _context.Vehicles.ToListAsync();
+               return _mapper.Map<List<VehicleDTO>>(vehicles);
           }
 
           public async Task<VehicleDTO> GetVehicleByIdAsync(Guid id)
           {
-               // Simulación de una llamada a la base de datos
-               var vehicle = _vehicles.FirstOrDefault(v => v.VehicleId == id);
+               var vehicle = await _context.Vehicles
+                   .FirstOrDefaultAsync(v => v.Id == new VehicleId(id));
+
                if (vehicle == null)
                {
                     throw new KeyNotFoundException($"Vehicle with ID {id} not found.");
                }
-               return await Task.FromResult(vehicle);
+
+               var vehicleDto = _mapper.Map<VehicleDTO>(vehicle);
+
+               if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+               {
+                    throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
+               }
+
+               vehicleDto.CivilLiabilityExpirationDate = parsedDate.ToString("dd-MM-yyyy");
+
+               return vehicleDto;
           }
 
           public async Task<VehicleDTO> GetVehicleByLicensePlateAsync(string licensePlate)
           {
-               // Simulación de una llamada a la base de datos
-               var vehicle = _vehicles.FirstOrDefault(v => v.LicensePlate.Equals(licensePlate, StringComparison.OrdinalIgnoreCase));
+               var vehicles = await _context.Vehicles.ToListAsync();
+               var vehicle = vehicles
+                   .FirstOrDefault(v => v.LicensePlate.Value.Equals(licensePlate, StringComparison.OrdinalIgnoreCase));
+
                if (vehicle == null)
                {
                     throw new KeyNotFoundException($"Vehicle with license plate {licensePlate} not found.");
                }
-               return await Task.FromResult(vehicle);
-          }
 
-          public async Task AddVehicleAsync(VehicleDTO vehicle)
-          {
-               // Simulación de una llamada a la base de datos
-               _vehicles.Add(vehicle);
-               await Task.CompletedTask;
-          }
+               var vehicleDto = _mapper.Map<VehicleDTO>(vehicle);
 
-          public async Task UpdateVehicleAsync(VehicleDTO vehicle)
-          {
-               // Simulación de una llamada a la base de datos
-               var existingVehicle = _vehicles.FirstOrDefault(v => v.VehicleId == vehicle.VehicleId);
-               if (existingVehicle == null)
+               // Validar y ajustar la fecha de expiración de la responsabilidad civil
+               if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                {
-                    throw new KeyNotFoundException($"Vehicle with ID {vehicle.VehicleId} not found.");
+                    throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
                }
 
-               existingVehicle.CivilLiability = vehicle.CivilLiability;
-               existingVehicle.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate;
-               existingVehicle.TrafficLicense = vehicle.TrafficLicense;
-               existingVehicle.LicensePlate = vehicle.LicensePlate;
-               existingVehicle.Brand = vehicle.Brand;
-               existingVehicle.Color = vehicle.Color;
-               existingVehicle.Model = vehicle.Model;
-               existingVehicle.VehicleTypeId = vehicle.VehicleTypeId;
-               existingVehicle.DriverId = vehicle.DriverId;
-               existingVehicle.SupplierId = vehicle.SupplierId;
+               vehicleDto.CivilLiabilityExpirationDate = parsedDate.ToString("dd-MM-yyyy");
 
-               await Task.CompletedTask;
+               return vehicleDto;
+          }
+
+          public async Task AddVehicleAsync(VehicleDTO vehicleDto)
+          {
+               if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+               {
+                    throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
+               }
+
+               var vehicle = new Domain.AggregateRoot.Vehicle(
+                   new VehicleId(vehicleDto.VehicleId),
+                   new VehicleCivilLiability(vehicleDto.CivilLiability),
+                   new VehicleCivilLiabilityExpirationDate(parsedDate.ToString("dd-MM-yyyy")),
+                   new VehicleTrafficLicense(vehicleDto.TrafficLicense),
+                   new VehicleLicensePlate(vehicleDto.LicensePlate),
+                   new VehicleBrand(vehicleDto.Brand),
+                   new VehicleColor(vehicleDto.Color),
+                   new VehicleModel(vehicleDto.Model),
+                   new VehicleTypeId(vehicleDto.VehicleTypeId),
+                   vehicleDto.DriverId != null ? new UserId(vehicleDto.DriverId.Value) : null,
+                   new SupplierId(vehicleDto.SupplierId)
+               );
+
+               _context.Vehicles.Add(vehicle);
+               await _context.SaveChangesAsync();
+          }
+
+          public async Task UpdateVehicleAsync(VehicleDTO vehicleDto)
+          {
+               var vehicle = await _context.Vehicles
+                   .FirstOrDefaultAsync(v => v.Id == new VehicleId(vehicleDto.VehicleId));
+
+               if (vehicle == null)
+               {
+                    throw new KeyNotFoundException($"Vehicle with ID {vehicleDto.VehicleId} not found.");
+               }
+
+               // Validar y ajustar la fecha de expiración de la responsabilidad civil
+               if (!DateTime.TryParseExact(vehicleDto.CivilLiabilityExpirationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+               {
+                    throw new ArgumentException($"Invalid Vehicle Civil Liability Expiration Date format: {vehicleDto.CivilLiabilityExpirationDate}");
+               }
+
+               vehicle.ChangeCivilLiability(new VehicleCivilLiability(vehicleDto.CivilLiability));
+               vehicle.ChangeCivilLiabilityExpirationDate(new VehicleCivilLiabilityExpirationDate(parsedDate.ToString("dd-MM-yyyy")));
+               vehicle.ChangeTrafficLicense(new VehicleTrafficLicense(vehicleDto.TrafficLicense));
+               vehicle.ChangeLicensePlate(new VehicleLicensePlate(vehicleDto.LicensePlate));
+               vehicle.ChangeBrand(new VehicleBrand(vehicleDto.Brand));
+               vehicle.ChangeColor(new VehicleColor(vehicleDto.Color));
+               vehicle.ChangeModel(new VehicleModel(vehicleDto.Model));
+               vehicle.ChangeVehicleTypeId(new VehicleTypeId(vehicleDto.VehicleTypeId));
+               vehicle.ChangeDriverId(vehicleDto.DriverId != null ? new UserId(vehicleDto.DriverId.Value) : null);
+               vehicle.ChangeSupplierId(new SupplierId(vehicleDto.SupplierId));
+
+               _context.Vehicles.Update(vehicle);
+               await _context.SaveChangesAsync();
           }
      }
 }

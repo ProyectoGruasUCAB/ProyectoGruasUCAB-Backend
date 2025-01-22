@@ -17,3 +17,5 @@ global using Microsoft.Extensions.Configuration;
 global using API_GruasUCAB.Policy.Infrastructure.Repositories;
 global using API_GruasUCAB.Policy.Infrastructure.Database.Configuration;
 global using API_GruasUCAB.Policy.Infrastructure.Database;
+global using AutoMapper;
+global using API_GruasUCAB.Policy.Infrastructure.Adapters.Repositories;

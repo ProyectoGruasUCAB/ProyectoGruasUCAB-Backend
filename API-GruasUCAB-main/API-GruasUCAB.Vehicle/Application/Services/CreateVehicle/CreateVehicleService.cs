@@ -3,16 +3,24 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
      public class CreateVehicleService : IService<CreateVehicleRequestDTO, CreateVehicleResponseDTO>
      {
           private readonly IVehicleRepository _vehicleRepository;
+          private readonly IVehicleTypeRepository _vehicleTypeRepository;
           private readonly IVehicleFactory _vehicleFactory;
 
-          public CreateVehicleService(IVehicleRepository vehicleRepository, IVehicleFactory vehicleFactory)
+          public CreateVehicleService(IVehicleRepository vehicleRepository, IVehicleTypeRepository vehicleTypeRepository, IVehicleFactory vehicleFactory)
           {
                _vehicleRepository = vehicleRepository;
+               _vehicleTypeRepository = vehicleTypeRepository;
                _vehicleFactory = vehicleFactory;
           }
 
           public async Task<CreateVehicleResponseDTO> Execute(CreateVehicleRequestDTO request)
           {
+               var vehicleType = await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId);
+               if (vehicleType == null)
+               {
+                    throw new KeyNotFoundException($"VehicleType with ID {request.VehicleTypeId} not found.");
+               }
+
                var vehicle = _vehicleFactory.CreateVehicle(
                    new VehicleId(Guid.NewGuid()),
                    new VehicleCivilLiability(request.CivilLiability),
@@ -31,7 +39,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
                {
                     VehicleId = vehicle.Id.Id,
                     CivilLiability = vehicle.CivilLiability.Value,
-                    CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("yyyy-MM-dd"),
+                    CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy"),
                     TrafficLicense = vehicle.TrafficLicense.Value,
                     LicensePlate = vehicle.LicensePlate.Value,
                     Brand = vehicle.Brand.Value,

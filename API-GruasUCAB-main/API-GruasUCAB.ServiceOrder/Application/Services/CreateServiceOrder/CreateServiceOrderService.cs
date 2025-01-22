@@ -13,20 +13,25 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
 
           public async Task<CreateServiceOrderResponseDTO> Execute(CreateServiceOrderRequestDTO request)
           {
+               if (request.InitialStatus != ServiceOrderStatus.PorAsignar.ToString() && request.InitialStatus != ServiceOrderStatus.PorAceptado.ToString())
+               {
+                    throw new ArgumentException($"Invalid initial status: {request.InitialStatus}. Allowed statuses are: {ServiceOrderStatus.PorAsignar}, {ServiceOrderStatus.PorAceptado}");
+               }
+
                TimeZoneInfo venezuelaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Venezuela Standard Time");
                DateTime venezuelaDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, venezuelaTimeZone);
 
                var serviceOrder = _serviceOrderFactory.CreateServiceOrder(
                    new ServiceOrderId(Guid.NewGuid()),
                    new IncidentDescription(request.IncidentDescription),
-                   new Coordinates(request.InitialLocationDriverLat, request.InitialLocationDriverLon),
-                   new Coordinates(request.IncidentLocationLat, request.IncidentLocationLon),
-                   new Coordinates(request.IncidentLocationEndLat, request.IncidentLocationEndLon),
+                   new Coordinates((float)request.InitialLocationDriverLatitude, (float)request.InitialLocationDriverLongitude),
+                   new Coordinates((float)request.IncidentLocationLatitude, (float)request.IncidentLocationLongitude),
+                   new Coordinates((float)request.IncidentLocationEndLatitude, (float)request.IncidentLocationEndLongitude),
                    new IncidentDistance(request.IncidentDistance),
                    new CustomerVehicleDescription(request.CustomerVehicleDescription),
                    new IncidentCost(request.IncidentCost),
                    new PolicyId(request.PolicyId),
-                   new StatusServiceOrder(ServiceOrderStatus.PorAsignar),
+                   new StatusServiceOrder(Enum.Parse<ServiceOrderStatus>(request.InitialStatus)),
                    new IncidentDate(venezuelaDateTime.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)),
                    new VehicleId(request.VehicleId),
                    new UserId(request.DriverId),
@@ -37,25 +42,25 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
 
                var serviceOrderDTO = new ServiceOrderDTO
                {
-                    ServiceOrderId = serviceOrder.Id.Id,
-                    StatusServiceOrder = serviceOrder.StatusServiceOrder.Status.ToString(),
+                    ServiceOrderId = serviceOrder.Id.Value,
+                    StatusServiceOrder = serviceOrder.StatusServiceOrder.Value.ToString(),
                     IncidentDescription = serviceOrder.IncidentDescription.Value,
-                    InitialLocationDriverLat = serviceOrder.InitialLocationDriver.Latitude,
-                    InitialLocationDriverLon = serviceOrder.InitialLocationDriver.Longitude,
-                    IncidentLocationLat = serviceOrder.IncidentLocation.Latitude,
-                    IncidentLocationLon = serviceOrder.IncidentLocation.Longitude,
-                    IncidentLocationEndLat = serviceOrder.IncidentLocationEnd.Latitude,
-                    IncidentLocationEndLon = serviceOrder.IncidentLocationEnd.Longitude,
-                    IncidentDistance = serviceOrder.IncidentDistance.Value,
+                    InitialLocationDriverLatitude = (float)serviceOrder.InitialLocationDriver.Latitude,
+                    InitialLocationDriverLongitude = (float)serviceOrder.InitialLocationDriver.Longitude,
+                    IncidentLocationLatitude = (float)serviceOrder.IncidentLocation.Latitude,
+                    IncidentLocationLongitude = (float)serviceOrder.IncidentLocation.Longitude,
+                    IncidentLocationEndLatitude = (float)serviceOrder.IncidentLocationEnd.Latitude,
+                    IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude,
+                    IncidentDistance = (float)serviceOrder.IncidentDistance.Value,
                     CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value,
-                    IncidentCost = serviceOrder.IncidentCost.Value,
-                    PolicyId = serviceOrder.PolicyId.Id,
+                    IncidentCost = (float)serviceOrder.IncidentCost.Value,
+                    PolicyId = serviceOrder.PolicyId.Value,
                     IncidentDate = serviceOrder.IncidentDate.Value.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture),
-                    VehicleId = serviceOrder.VehicleId.Id,
-                    DriverId = serviceOrder.DriverId.Id,
-                    CustomerId = serviceOrder.CustomerId.Id,
-                    OperatorId = serviceOrder.OperatorId.Id,
-                    ServiceFeeId = serviceOrder.ServiceFeeId.Id
+                    VehicleId = serviceOrder.VehicleId.Value,
+                    DriverId = serviceOrder.DriverId.Value,
+                    CustomerId = serviceOrder.CustomerId.Value,
+                    OperatorId = serviceOrder.OperatorId.Value,
+                    ServiceFeeId = serviceOrder.ServiceFeeId.Value
                };
 
                await _serviceOrderRepository.AddServiceOrderAsync(serviceOrderDTO);
@@ -63,9 +68,9 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                return new CreateServiceOrderResponseDTO
                {
                     Success = true,
-                    Message = $"Service order created successfully: {System.Text.Json.JsonSerializer.Serialize(serviceOrderDTO)}",
+                    Message = "Service order created successfully.",
                     UserEmail = request.UserEmail,
-                    ServiceOrderId = serviceOrder.Id.Id
+                    ServiceOrderId = serviceOrder.Id.Value
                };
           }
      }

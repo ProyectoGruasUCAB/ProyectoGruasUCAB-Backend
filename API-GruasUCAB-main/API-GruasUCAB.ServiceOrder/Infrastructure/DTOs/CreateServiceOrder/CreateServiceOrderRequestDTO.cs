@@ -10,29 +10,33 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.DTOs.CreateServiceOrder
           [JsonPropertyOrder(2)]
           public string IncidentDescription { get; set; } = string.Empty;
 
+          [Required(ErrorMessage = "Initial status is required.")]
+          [JsonPropertyOrder(2)]
+          public string InitialStatus { get; set; } = string.Empty;
+
           [Required(ErrorMessage = "Initial location driver latitude is required.")]
           [JsonPropertyOrder(3)]
-          public double InitialLocationDriverLat { get; set; }
+          public double InitialLocationDriverLatitude { get; set; }
 
           [Required(ErrorMessage = "Initial location driver longitude is required.")]
           [JsonPropertyOrder(4)]
-          public double InitialLocationDriverLon { get; set; }
+          public double InitialLocationDriverLongitude { get; set; }
 
           [Required(ErrorMessage = "Incident location latitude is required.")]
           [JsonPropertyOrder(5)]
-          public double IncidentLocationLat { get; set; }
+          public double IncidentLocationLatitude { get; set; }
 
           [Required(ErrorMessage = "Incident location longitude is required.")]
           [JsonPropertyOrder(6)]
-          public double IncidentLocationLon { get; set; }
+          public double IncidentLocationLongitude { get; set; }
 
           [Required(ErrorMessage = "Incident location end latitude is required.")]
           [JsonPropertyOrder(7)]
-          public double IncidentLocationEndLat { get; set; }
+          public double IncidentLocationEndLatitude { get; set; }
 
           [Required(ErrorMessage = "Incident location end longitude is required.")]
           [JsonPropertyOrder(8)]
-          public double IncidentLocationEndLon { get; set; }
+          public double IncidentLocationEndLongitude { get; set; }
 
           [Required(ErrorMessage = "Incident distance is required.")]
           [JsonPropertyOrder(9)]

@@ -2,8 +2,12 @@ namespace API_GruasUCAB.ServiceFee
 {
     public static class ServiceFeeServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<ServiceFeeDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddAutoMapper(typeof(ServiceFeeProfile));
+
             services.AddMediatR(typeof(CreateServiceFeeCommandHandler).Assembly);
             services.AddScoped<IService<CreateServiceFeeRequestDTO, CreateServiceFeeResponseDTO>, CreateServiceFeeService>();
             services.AddScoped<IService<UpdateServiceFeeRequestDTO, UpdateServiceFeeResponseDTO>, UpdateServiceFeeService>();

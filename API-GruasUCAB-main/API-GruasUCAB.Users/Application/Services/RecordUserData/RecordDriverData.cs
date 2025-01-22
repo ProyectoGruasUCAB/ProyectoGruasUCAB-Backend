@@ -35,7 +35,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate),
                    new UserDriverLicense(request.DriverLicense),
                    new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate),
-                   new SupplierId(request.WorkplaceId.Value)
+                   new SupplierId(request.WorkplaceId.Value),
+                   request.Token ?? string.Empty
                );
 
                var driverDTO = driver.ToDTO();

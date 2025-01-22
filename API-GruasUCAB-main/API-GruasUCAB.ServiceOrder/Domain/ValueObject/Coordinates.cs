@@ -31,5 +31,20 @@ namespace API_GruasUCAB.ServiceOrder.Domain.ValueObject
           {
                return $"{Latitude}, {Longitude}";
           }
+
+          public static Coordinates Parse(string value)
+          {
+               var parts = value.Split(',');
+               if (parts.Length != 2)
+                    throw new InvalidCoordinatesException("Invalid coordinate format.");
+
+               if (!double.TryParse(parts[0], out var latitude))
+                    throw new InvalidCoordinatesException("Invalid latitude.");
+
+               if (!double.TryParse(parts[1], out var longitude))
+                    throw new InvalidCoordinatesException("Invalid length.");
+
+               return new Coordinates(latitude, longitude);
+          }
      }
 }

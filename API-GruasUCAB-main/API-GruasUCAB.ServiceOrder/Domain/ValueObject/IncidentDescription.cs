@@ -8,8 +8,15 @@ namespace API_GruasUCAB.ServiceOrder.Domain.ValueObject
 
           public IncidentDescription(string description)
           {
-               if (string.IsNullOrWhiteSpace(description) || description.Length < 4 || description.Length > 50)
-                    throw new InvalidIncidentDescriptionException();
+               description = description.Trim();
+               if (string.IsNullOrWhiteSpace(description))
+                    throw new InvalidIncidentDescriptionException("Description cannot be null or whitespace.");
+
+               if (description.Length < 4)
+                    throw new InvalidIncidentDescriptionException("Description must be at least 4 characters long.");
+
+               if (description.Length > 50)
+                    throw new InvalidIncidentDescriptionException("Description cannot be more than 50 characters long.");
 
                Description = description;
           }

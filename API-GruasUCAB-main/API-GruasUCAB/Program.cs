@@ -21,12 +21,12 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 AuthServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 UserServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-ServiceFeeServiceRegistration.RegisterServices(builder.Services);
+ServiceFeeServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 DepartmentServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 SupplierServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-VehicleServiceRegistration.RegisterServices(builder.Services);
+VehicleServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 PolicyServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-ServiceOrderServiceRegistration.RegisterServices(builder.Services);
+ServiceOrderServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 // Agregar YARP
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

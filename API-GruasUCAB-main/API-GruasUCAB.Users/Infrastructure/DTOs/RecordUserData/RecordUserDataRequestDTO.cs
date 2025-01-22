@@ -43,5 +43,8 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.RecordUserData
 
           [JsonPropertyOrder(2)]
           public Guid? WorkplaceId { get; set; }
+
+          [JsonPropertyOrder(2)]
+          public string? Token { get; set; } = string.Empty;
      }
 }

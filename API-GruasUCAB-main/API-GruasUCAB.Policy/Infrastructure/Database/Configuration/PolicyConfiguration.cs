@@ -1,7 +1,6 @@
 global using PolicyAggregate = API_GruasUCAB.Policy.Domain.AggregateRoot.Policy;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace API_GruasUCAB.Policy.Infrastructure.Database.Configuration
 {
@@ -9,53 +8,53 @@ namespace API_GruasUCAB.Policy.Infrastructure.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<PolicyAggregate> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(cd => cd.Id);
 
-            builder.Property(p => p.Id)
+            builder.Property(cd => cd.Id)
                 .HasConversion(id => id.Value.ToString(), str => new PolicyId(Guid.Parse(str)))
                 .IsRequired();
 
-            builder.Property(p => p.PolicyNumber)
+            builder.Property(cd => cd.PolicyNumber)
                 .HasConversion(number => number.Value, str => new PolicyNumber(str))
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(p => p.PolicyName)
+            builder.Property(cd => cd.PolicyName)
                 .HasConversion(name => name.Value, str => new PolicyName(str))
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(p => p.PolicyIssueDate)
+            builder.Property(cd => cd.PolicyIssueDate)
                 .HasConversion(
                     issueDate => issueDate.Value.ToString("dd-MM-yyyy"),
-                    str => new PolicyIssueDate(DateTime.ParseExact(str, "dd-MM-yyyy", CultureInfo.InvariantCulture))
+                    str => new PolicyIssueDate(str)
                 )
                 .IsRequired();
 
-            builder.Property(p => p.PolicyExpirationDate)
+            builder.Property(cd => cd.PolicyExpirationDate)
                 .HasConversion(
                     expirationDate => expirationDate.Value.ToString("dd-MM-yyyy"),
-                    str => new PolicyExpirationDate(DateTime.ParseExact(str, "dd-MM-yyyy", CultureInfo.InvariantCulture))
+                    str => new PolicyExpirationDate(str, DateTime.Now)
                 )
                 .IsRequired();
 
-            builder.Property(p => p.PolicyCoverageKm)
+            builder.Property(cd => cd.PolicyCoverageKm)
                 .HasConversion(coverageKm => coverageKm.Value, value => new PolicyCoverageKm(value))
                 .IsRequired();
 
-            builder.Property(p => p.PolicyCoverageAmount)
+            builder.Property(cd => cd.PolicyCoverageAmount)
                 .HasConversion(coverageAmount => coverageAmount.Value, value => new PolicyCoverageAmount(value))
                 .IsRequired();
 
-            builder.Property(p => p.PolicyBaseAmount)
+            builder.Property(cd => cd.PolicyBaseAmount)
                 .HasConversion(baseAmount => baseAmount.Value, value => new PolicyBaseAmount(value))
                 .IsRequired();
 
-            builder.Property(p => p.PolicyPriceKm)
+            builder.Property(cd => cd.PolicyPriceKm)
                 .HasConversion(priceKm => priceKm.Value, value => new PolicyPriceKm(value))
                 .IsRequired();
 
-            builder.Property(p => p.PolicyClient)
+            builder.Property(cd => cd.PolicyClient)
                 .HasConversion(clientId => clientId.Value.ToString(), str => new PolicyClient(Guid.Parse(str)))
                 .IsRequired();
         }

@@ -4,15 +4,29 @@ namespace API_GruasUCAB.Policy.Application.Services.CreatePolicy
      {
           private readonly IPolicyRepository _policyRepository;
           private readonly IPolicyFactory _policyFactory;
+          private readonly IClientRepository _clientRepository;
 
-          public CreatePolicyService(IPolicyRepository policyRepository, IPolicyFactory policyFactory)
+          public CreatePolicyService(IPolicyRepository policyRepository, IPolicyFactory policyFactory, IClientRepository clientRepository)
           {
                _policyRepository = policyRepository;
                _policyFactory = policyFactory;
+               _clientRepository = clientRepository;
           }
 
           public async Task<CreatePolicyResponseDTO> Execute(CreatePolicyRequestDTO request)
           {
+               // Validar que el cliente exista
+               var client = await _clientRepository.GetClientByIdAsync(request.ClientId);
+               if (client == null)
+               {
+                    return new CreatePolicyResponseDTO
+                    {
+                         Success = false,
+                         Message = "Client does not exist",
+                         UserEmail = request.UserEmail
+                    };
+               }
+
                var random = new Random();
                var policyNumber = random.Next(1000, 9999).ToString();
 

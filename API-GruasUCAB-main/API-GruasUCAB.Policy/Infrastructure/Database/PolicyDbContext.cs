@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using API_GruasUCAB.Policy.Infrastructure.Database.Configuration;
+using API_GruasUCAB.Policy.Infrastructure.Adapters.Entities;
 
 namespace API_GruasUCAB.Policy.Infrastructure.Database
 {
@@ -9,7 +12,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Database
         public DbContext DbContext => this;
 
         public DbSet<PolicyAggregate> Policies { get; set; } = null!;
-        public DbSet<Client> Clients { get; set; } = null!;
+        public DbSet<ClientAggregate> Clients { get; set; } = null!;
 
         public IDbContextTransaction BeginTransaction()
         {
@@ -39,15 +42,20 @@ namespace API_GruasUCAB.Policy.Infrastructure.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new PolicyConfiguration());
-            modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
 
             // Configuración de clave primaria de Policy
             modelBuilder.Entity<PolicyAggregate>()
-                .HasKey(c => c.Id);
+                .HasKey(cd => cd.Id);
 
-            // Configuración de clave primaria de Client
-            modelBuilder.Entity<Client>()
-                .HasKey(c => c.Id_cliente);
+            modelBuilder.Entity<ClientAggregate>(entity =>
+            {
+                entity.HasKey(e => e.Id_cliente);
+                entity.Property(e => e.Nombre_completo_cliente).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Cedula_cliente).IsRequired();
+                entity.Property(e => e.Tlf_cliente).IsRequired();
+                entity.Property(e => e.Fecha_nacimiento_cliente).IsRequired();
+            });
         }
     }
 }
