@@ -44,28 +44,14 @@ namespace API_GruasUCAB.ServiceOrder.Domain.Services
                    new ServiceFeeDescription(serviceFeeDto.Description)
                );
 
-               // Calcular el costo base del incidente
                var baseCost = (decimal)serviceFee.Price.Value;
-               Console.WriteLine($"Base Cost: {baseCost}");
-
-               // Calcular el costo adicional por kilómetro
                var additionalCost = incidentDistance.Value > policy.PolicyCoverageKm.Value
                    ? ((decimal)incidentDistance.Value - policy.PolicyCoverageKm.Value) * (decimal)serviceFee.PriceKm.Value
                    : 0;
-               Console.WriteLine($"Additional Cost: {additionalCost}");
-
-               // Calcular el costo total del incidente
                var totalCost = baseCost + additionalCost;
-               Console.WriteLine($"Total Cost before coverage check: {totalCost}");
-
-               // Verificar si el costo total excede la cobertura de la póliza
-               if (totalCost > policy.PolicyCoverageAmount.Value)
-               {
-                    totalCost = policy.PolicyCoverageAmount.Value;
-               }
-               Console.WriteLine($"Total Cost after coverage check: {totalCost}");
-
-               return totalCost;
+               var coverageDifference = policy.PolicyCoverageAmount.Value - totalCost;
+               var amountToPay = coverageDifference < 0 ? -coverageDifference : 0;
+               return amountToPay;
           }
      }
 }
