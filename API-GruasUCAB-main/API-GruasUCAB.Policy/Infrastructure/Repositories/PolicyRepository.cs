@@ -6,7 +6,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
 
         public PolicyRepository(PolicyDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<PolicyDTO>> GetAllPoliciesAsync()
@@ -58,7 +58,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
         public async Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber)
         {
             var policy = await _context.Policies
-                .FirstOrDefaultAsync(p => p.PolicyNumberValue == policyNumber);
+                .FirstOrDefaultAsync(p => p.PolicyNumber.Value == policyNumber);
             if (policy == null)
             {
                 throw new KeyNotFoundException($"Policy with number {policyNumber} not found.");

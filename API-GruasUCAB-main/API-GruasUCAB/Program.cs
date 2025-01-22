@@ -12,6 +12,10 @@ using API_GruasUCAB.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Registrar servicios de la aplicación
+PolicyServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
+
+
 // Configurar Serilog
 CoreServiceRegistration.ConfigureLogging(builder);
 
