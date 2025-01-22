@@ -4,15 +4,37 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
      {
           private readonly IServiceOrderRepository _serviceOrderRepository;
           private readonly IServiceOrderFactory _serviceOrderFactory;
+          private readonly IDriverRepository _driverRepository;
+          private readonly IVehicleRepository _vehicleRepository;
+          private readonly IServiceFeeRepository _serviceFeeRepository;
+          private readonly IPolicyRepository _policyRepository;
+          private readonly IClientRepository _clientRepository;
+          private readonly IWorkerRepository _workerRepository;
 
-          public UpdateServiceOrderService(IServiceOrderRepository serviceOrderRepository, IServiceOrderFactory serviceOrderFactory)
+          public UpdateServiceOrderService(
+              IServiceOrderRepository serviceOrderRepository,
+              IServiceOrderFactory serviceOrderFactory,
+              IDriverRepository driverRepository,
+              IVehicleRepository vehicleRepository,
+              IServiceFeeRepository serviceFeeRepository,
+              IPolicyRepository policyRepository,
+              IClientRepository clientRepository,
+              IWorkerRepository workerRepository)
           {
                _serviceOrderRepository = serviceOrderRepository;
                _serviceOrderFactory = serviceOrderFactory;
+               _driverRepository = driverRepository;
+               _vehicleRepository = vehicleRepository;
+               _serviceFeeRepository = serviceFeeRepository;
+               _policyRepository = policyRepository;
+               _clientRepository = clientRepository;
+               _workerRepository = workerRepository;
           }
 
           public async Task<UpdateServiceOrderResponseDTO> Execute(UpdateServiceOrderRequestDTO request)
           {
+               await ValidateIdsExist(request);
+
                var serviceOrderDTO = await _serviceOrderRepository.GetServiceOrderByIdAsync(request.ServiceOrderId)
                    ?? throw new ServiceOrderNotFoundException(request.ServiceOrderId);
 
@@ -34,6 +56,27 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                    new UserId(serviceOrderDTO.OperatorId),
                    new ServiceFeeId(serviceOrderDTO.ServiceFeeId)
                );
+
+               if (serviceOrder.StatusServiceOrder.Status >= ServiceOrderStatus.EnProceso)
+               {
+                    if (!string.IsNullOrEmpty(request.IncidentDescription) ||
+                         request.DriverId.HasValue ||
+                         request.VehicleId.HasValue ||
+                         request.CustomerId.HasValue ||
+                         request.ServiceFeeId.HasValue ||
+                         request.PolicyId.HasValue ||
+                         request.InitialLocationDriverLat.HasValue ||
+                         request.InitialLocationDriverLon.HasValue ||
+                         request.IncidentLocationLat.HasValue ||
+                         request.IncidentLocationLon.HasValue ||
+                         request.IncidentLocationEndLat.HasValue ||
+                         request.IncidentLocationEndLon.HasValue ||
+                         request.IncidentDistance.HasValue ||
+                         request.IncidentCost.HasValue)
+                    {
+                         throw new InvalidOperationException("These fields cannot be changed from the InProcess status.");
+                    }
+               }
 
                if (!string.IsNullOrEmpty(request.IncidentDescription))
                {
@@ -164,6 +207,39 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                     UserEmail = request.UserEmail,
                     ServiceOrderId = serviceOrder.Id.Id,
                };
+          }
+
+          private async Task ValidateIdsExist(UpdateServiceOrderRequestDTO request)
+          {
+               if (request.DriverId.HasValue)
+               {
+                    await _driverRepository.GetDriverByIdAsync(request.DriverId.Value);
+               }
+
+               if (request.VehicleId.HasValue)
+               {
+                    await _vehicleRepository.GetVehicleByIdAsync(request.VehicleId.Value);
+               }
+
+               if (request.ServiceFeeId.HasValue)
+               {
+                    await _serviceFeeRepository.GetServiceFeeByIdAsync(request.ServiceFeeId.Value);
+               }
+
+               if (request.PolicyId.HasValue)
+               {
+                    await _policyRepository.GetPolicyByIdAsync(request.PolicyId.Value);
+               }
+
+               if (request.CustomerId.HasValue)
+               {
+                    await _clientRepository.GetClientByIdAsync(request.CustomerId.Value);
+               }
+
+               if (request.OperatorId.HasValue)
+               {
+                    await _workerRepository.GetWorkerByIdAsync(request.OperatorId.Value);
+               }
           }
      }
 }

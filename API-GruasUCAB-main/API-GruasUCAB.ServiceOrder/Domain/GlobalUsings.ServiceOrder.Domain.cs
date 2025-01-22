@@ -4,4 +4,5 @@ global using API_GruasUCAB.ServiceOrder.Domain.Exceptions;
 global using API_GruasUCAB.ServiceOrder.Domain.Factories;
 global using API_GruasUCAB.ServiceOrder.Domain.Events;
 global using API_GruasUCAB.ServiceOrder.Domain.StateMachine;
+global using API_GruasUCAB.ServiceOrder.Domain.Services;
 global using Stateless;

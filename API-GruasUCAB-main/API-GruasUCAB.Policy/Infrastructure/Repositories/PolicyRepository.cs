@@ -20,6 +20,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
                     CoverageAmount = p.PolicyCoverageAmount.Value,
                     CoverageKm = p.PolicyCoverageKm.Value,
                     BaseAmount = p.PolicyBaseAmount.Value,
+                    PriceKm = p.PolicyPriceKm.Value,
                     IssueDate = p.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
                     ExpirationDate = p.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
                     ClientId = p.PolicyClient.Value
@@ -49,6 +50,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
                 CoverageAmount = policy.PolicyCoverageAmount.Value,
                 CoverageKm = policy.PolicyCoverageKm.Value,
                 BaseAmount = policy.PolicyBaseAmount.Value,
+                PriceKm = policy.PolicyPriceKm.Value,
                 IssueDate = policy.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
                 ExpirationDate = policy.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
                 ClientId = policy.PolicyClient.Value
@@ -72,6 +74,7 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
                 CoverageAmount = policy.PolicyCoverageAmount.Value,
                 CoverageKm = policy.PolicyCoverageKm.Value,
                 BaseAmount = policy.PolicyBaseAmount.Value,
+                PriceKm = policy.PolicyPriceKm.Value,
                 IssueDate = policy.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
                 ExpirationDate = policy.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
                 ClientId = policy.PolicyClient.Value

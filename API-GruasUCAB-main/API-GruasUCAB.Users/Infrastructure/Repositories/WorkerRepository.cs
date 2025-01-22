@@ -132,7 +132,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingWorker.ChangePhone(new UserPhone(workerDto.Phone));
                existingWorker.ChangeBirthDate(new UserBirthDate(workerDto.BirthDate));
                existingWorker.ChangePosition(new UserPosition(workerDto.Position));
-               existingWorker.ChangeDepartmentId(new DepartmentId(workerDto.DepartmentId));
 
                await _context.SaveChangesAsync();
           }

@@ -14,9 +14,6 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.DTOs.UpdateVehicle
           public Guid? DriverId { get; set; }
 
           [JsonPropertyOrder(2)]
-          public Guid? SupplierId { get; set; }
-
-          [JsonPropertyOrder(2)]
           public string? CivilLiability { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]

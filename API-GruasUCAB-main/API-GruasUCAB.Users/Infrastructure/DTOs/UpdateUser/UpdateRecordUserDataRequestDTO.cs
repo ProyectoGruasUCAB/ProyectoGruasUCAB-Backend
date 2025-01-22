@@ -35,9 +35,6 @@ namespace API_GruasUCAB.Users.Infrastructure.DTOs.UpdateUser
           public string? Position { get; set; } = string.Empty;
 
           [JsonPropertyOrder(2)]
-          public Guid? WorkplaceId { get; set; }
-
-          [JsonPropertyOrder(2)]
           public string? Token { get; set; } = string.Empty;
      }
 }

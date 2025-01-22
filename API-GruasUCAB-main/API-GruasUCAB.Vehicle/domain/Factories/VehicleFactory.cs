@@ -32,7 +32,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
                    color,
                    model,
                    vehicleTypeId,
-                   driverId,
+                   driverId ?? null,
                    supplierId
                );
           }
@@ -50,7 +50,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Factories
                    new VehicleColor(vehicleDTO.Color),
                    new VehicleModel(vehicleDTO.Model),
                    new VehicleTypeId(vehicleDTO.VehicleTypeId),
-                   vehicleDTO.DriverId.HasValue ? new UserId(vehicleDTO.DriverId.Value) : (UserId?)null,
+                   vehicleDTO.DriverId.HasValue ? new UserId(vehicleDTO.DriverId.Value) : null,
                    new SupplierId(vehicleDTO.SupplierId)
                );
           }

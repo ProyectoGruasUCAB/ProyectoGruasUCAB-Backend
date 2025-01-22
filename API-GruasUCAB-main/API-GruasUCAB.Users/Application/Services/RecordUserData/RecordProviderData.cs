@@ -4,11 +4,13 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
      {
           private readonly IProviderFactory _providerFactory;
           private readonly IProviderRepository _providerRepository;
+          private readonly ISupplierRepository _supplierRepository;
 
-          public RecordProviderData(IProviderFactory providerFactory, IProviderRepository providerRepository)
+          public RecordProviderData(IProviderFactory providerFactory, IProviderRepository providerRepository, ISupplierRepository supplierRepository)
           {
                _providerFactory = providerFactory;
                _providerRepository = providerRepository;
+               _supplierRepository = supplierRepository;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -16,6 +18,18 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                if (!request.WorkplaceId.HasValue)
                {
                     throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for providers.");
+               }
+
+               var supplier = await _supplierRepository.GetSupplierByIdAsync(request.WorkplaceId.Value);
+               if (supplier == null)
+               {
+                    return new RecordUserDataResponseDTO
+                    {
+                         Success = false,
+                         Message = "Supplier does not exist",
+                         UserEmail = request.UserEmail,
+                         UserId = request.UserId
+                    };
                }
 
                var provider = _providerFactory.CreateProvider(

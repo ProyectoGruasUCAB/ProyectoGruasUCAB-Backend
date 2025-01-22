@@ -4,11 +4,13 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
      {
           private readonly IDriverFactory _driverFactory;
           private readonly IDriverRepository _driverRepository;
+          private readonly ISupplierRepository _supplierRepository;
 
-          public RecordDriverData(IDriverFactory driverFactory, IDriverRepository driverRepository)
+          public RecordDriverData(IDriverFactory driverFactory, IDriverRepository driverRepository, ISupplierRepository supplierRepository)
           {
                _driverFactory = driverFactory;
                _driverRepository = driverRepository;
+               _supplierRepository = supplierRepository;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -23,6 +25,18 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     throw new ArgumentNullException(nameof(request.DriverLicenseExpirationDate));
                if (!request.WorkplaceId.HasValue)
                     throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for drivers.");
+
+               var supplier = await _supplierRepository.GetSupplierByIdAsync(request.WorkplaceId.Value);
+               if (supplier == null)
+               {
+                    return new RecordUserDataResponseDTO
+                    {
+                         Success = false,
+                         Message = "Supplier does not exist",
+                         UserEmail = request.UserEmail,
+                         UserId = request.UserId
+                    };
+               }
 
                var driver = _driverFactory.CreateDriver(
                    new UserId(request.UserId),

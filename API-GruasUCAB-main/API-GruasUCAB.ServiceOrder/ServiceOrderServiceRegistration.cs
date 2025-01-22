@@ -8,12 +8,20 @@ namespace API_GruasUCAB.ServiceOrder
             services.AddDbContext<ServiceOrderDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMediatR(typeof(CreateServiceOrderService).Assembly);
+            // Registrar MediatR
+            services.AddMediatR(typeof(CreateServiceOrderCommandHandler).Assembly);
+            services.AddMediatR(typeof(UpdateServiceOrderCommandHandler).Assembly);
+
+            // Registrar servicios
             services.AddScoped<IService<CreateServiceOrderRequestDTO, CreateServiceOrderResponseDTO>, CreateServiceOrderService>();
             services.AddScoped<IService<UpdateServiceOrderRequestDTO, UpdateServiceOrderResponseDTO>, UpdateServiceOrderService>();
+
+            // Registrar repositorios
             services.AddScoped<IServiceOrderRepository, ServiceOrderRepository>();
             services.AddScoped<IServiceOrderFactory, ServiceOrderFactory>();
-            services.AddScoped<IKeycloakRepository, KeycloakRepository>();
+            services.AddScoped<IncidentCostCalculator>();
+
+            // Registrar otros servicios necesarios
             services.AddHttpClient();
 
             // SecurityDecorator for CreateServiceOrder

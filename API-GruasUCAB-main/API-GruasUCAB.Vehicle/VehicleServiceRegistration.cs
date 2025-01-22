@@ -39,7 +39,7 @@ namespace API_GruasUCAB.Vehicle
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Proveedor"));
+                    "Proveedor"));
 
             services.Decorate<IService<UpdateVehicleRequestDTO, UpdateVehicleResponseDTO>>(
                 (inner, provider) => new SecurityDecorator<UpdateVehicleRequestDTO, UpdateVehicleResponseDTO>(
@@ -47,7 +47,7 @@ namespace API_GruasUCAB.Vehicle
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Proveedor"));
+                    "Proveedor"));
 
             // VehicleType SecurityDecorator
             services.Decorate<IService<CreateVehicleTypeRequestDTO, CreateVehicleTypeResponseDTO>>(

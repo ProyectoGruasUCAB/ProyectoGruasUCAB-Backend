@@ -29,7 +29,7 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.DTOs.UpdateServiceOrder
 
           public string? CustomerVehicleDescription { get; set; } = string.Empty;
 
-          public float? IncidentCost { get; set; }
+          public decimal? IncidentCost { get; set; }
 
           public Guid? PolicyId { get; set; }
 

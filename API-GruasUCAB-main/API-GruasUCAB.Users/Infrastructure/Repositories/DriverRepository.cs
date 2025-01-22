@@ -123,7 +123,6 @@ namespace API_GruasUCAB.Users.Infrastructure.Repositories
                existingDriver.ChangeDriverLicense(new UserDriverLicense(driverDto.DriverLicense));
                existingDriver.ChangeMedicalCertificateExpirationDate(new UserMedicalCertificateExpirationDate(driverDto.MedicalCertificateExpirationDate));
                existingDriver.ChangeDriverLicenseExpirationDate(new UserDriverLicenseExpirationDate(driverDto.DriverLicenseExpirationDate));
-               existingDriver.ChangeSupplierId(new SupplierId(driverDto.SupplierId));
 
                if (!string.IsNullOrEmpty(driverDto.Token))
                {

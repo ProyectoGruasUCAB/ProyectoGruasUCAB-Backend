@@ -46,10 +46,6 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.DTOs.CreateServiceOrder
           [JsonPropertyOrder(10)]
           public string CustomerVehicleDescription { get; set; } = string.Empty;
 
-          [Required(ErrorMessage = "Incident cost is required.")]
-          [JsonPropertyOrder(11)]
-          public float IncidentCost { get; set; }
-
           [Required(ErrorMessage = "Policy ID is required.")]
           [JsonPropertyOrder(12)]
           public Guid PolicyId { get; set; }
