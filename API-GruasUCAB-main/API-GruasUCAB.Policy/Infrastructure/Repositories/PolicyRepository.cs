@@ -1,98 +1,100 @@
 namespace API_GruasUCAB.Policy.Infrastructure.Repositories
 {
-     public class PolicyRepository : IPolicyRepository
-     {
-          private readonly List<PolicyDTO> _policies;
+    public class PolicyRepository : IPolicyRepository
+    {
+        private readonly PolicyDbContext _context;
 
-          public PolicyRepository()
-          {
-               // Inicializar la lista con datos de ejemplo
-               _policies = new List<PolicyDTO>
+        public PolicyRepository(PolicyDbContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public async Task<List<PolicyDTO>> GetAllPoliciesAsync()
+        {
+            return await _context.Policies
+                .Select(p => new PolicyDTO
+                {
+                    PolicyId = p.Id.Value,
+                    Number = p.PolicyNumber.Value,
+                    Name = p.PolicyName.Value,
+                    CoverageAmount = p.PolicyCoverageAmount.Value,
+                    CoverageKm = p.PolicyCoverageKm.Value,
+                    BaseAmount = p.PolicyBaseAmount.Value,
+                    IssueDate = p.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
+                    ExpirationDate = p.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
+                    ClientId = p.PolicyClient.Value
+                })
+                .ToListAsync();
+        }
+
+        public async Task<PolicyDTO> GetPolicyByIdAsync(Guid id)
+        {
+            var policy = await _context.Policies.FindAsync(new PolicyId(id));
+            if (policy == null)
             {
-                new PolicyDTO
-                {
-                    PolicyId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Number = "123456",
-                    Name = "Basic Coverage",
-                    CoverageAmount = 10000,
-                    CoverageKm = 100,
-                    BaseAmount = 500,
-                    PriceKm = 5,
-                    IssueDate = "01-01-2023",
-                    ExpirationDate = "01-01-2024",
-                    ClientId = Guid.Parse("22222222-2222-2222-2222-222222222222")
-                },
-                new PolicyDTO
-                {
-                    PolicyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Number = "654321",
-                    Name = "Premium Coverage",
-                    CoverageAmount = 50000,
-                    CoverageKm = 500,
-                    BaseAmount = 2000,
-                    PriceKm = 10,
-                    IssueDate = "01-01-2023",
-                    ExpirationDate = "01-01-2025",
-                    ClientId = Guid.Parse("44444444-4444-4444-4444-444444444444")
-                }
+                throw new KeyNotFoundException($"Policy with ID {id} not found.");
+            }
+
+            // Verificar el valor del número de póliza
+            if (string.IsNullOrWhiteSpace(policy.PolicyNumber.Value))
+            {
+                throw new Exception("Invalid policy number");
+            }
+
+            return new PolicyDTO
+            {
+                PolicyId = policy.Id.Value,
+                Number = policy.PolicyNumber.Value,
+                Name = policy.PolicyName.Value,
+                CoverageAmount = policy.PolicyCoverageAmount.Value,
+                CoverageKm = policy.PolicyCoverageKm.Value,
+                BaseAmount = policy.PolicyBaseAmount.Value,
+                IssueDate = policy.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
+                ExpirationDate = policy.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
+                ClientId = policy.PolicyClient.Value
             };
-          }
+        }
 
-          public async Task<List<PolicyDTO>> GetAllPoliciesAsync()
-          {
-               // Simulación de una llamada a la base de datos
-               return await Task.FromResult(_policies);
-          }
+        public async Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber)
+        {
+            var policy = await _context.Policies
+                .FirstOrDefaultAsync(p => p.PolicyNumber.Value == policyNumber);
+            if (policy == null)
+            {
+                throw new KeyNotFoundException($"Policy with number {policyNumber} not found.");
+            }
 
-          public async Task<PolicyDTO> GetPolicyByIdAsync(Guid id)
-          {
-               // Simulación de una llamada a la base de datos
-               var policy = _policies.FirstOrDefault(p => p.PolicyId == id);
-               if (policy == null)
-               {
-                    throw new KeyNotFoundException($"Policy with ID {id} not found.");
-               }
-               return await Task.FromResult(policy);
-          }
+            return new PolicyDTO
+            {
+                PolicyId = policy.Id.Value,
+                Number = policy.PolicyNumber.Value,
+                Name = policy.PolicyName.Value,
+                CoverageAmount = policy.PolicyCoverageAmount.Value,
+                CoverageKm = policy.PolicyCoverageKm.Value,
+                BaseAmount = policy.PolicyBaseAmount.Value,
+                IssueDate = policy.PolicyIssueDate.Value.ToString("dd-MM-yyyy"),
+                ExpirationDate = policy.PolicyExpirationDate.Value.ToString("dd-MM-yyyy"),
+                ClientId = policy.PolicyClient.Value
+            };
+        }
 
-          public async Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber)
-          {
-               // Simulación de una llamada a la base de datos
-               var policy = _policies.FirstOrDefault(p => p.Number == policyNumber);
-               if (policy == null)
-               {
-                    throw new KeyNotFoundException($"Policy with number {policyNumber} not found.");
-               }
-               return await Task.FromResult(policy);
-          }
+        public async Task AddPolicyAsync(PolicyDTO policyDto)
+        {
+            var policy = new PolicyAggregate(
+                new PolicyId(policyDto.PolicyId),
+                new PolicyNumber(policyDto.Number),
+                new PolicyName(policyDto.Name),
+                new PolicyCoverageAmount(policyDto.CoverageAmount),
+                new PolicyCoverageKm(policyDto.CoverageKm),
+                new PolicyBaseAmount(policyDto.BaseAmount),
+                new PolicyPriceKm(policyDto.PriceKm),
+                new PolicyIssueDate(policyDto.IssueDate),
+                new PolicyExpirationDate(policyDto.ExpirationDate, DateTime.ParseExact(policyDto.IssueDate, "dd-MM-yyyy", CultureInfo.InvariantCulture)),
+                new PolicyClient(policyDto.ClientId)
+            );
 
-          public async Task AddPolicyAsync(PolicyDTO policy)
-          {
-               // Simulación de una llamada a la base de datos
-               _policies.Add(policy);
-               await Task.CompletedTask;
-          }
-
-          public async Task UpdatePolicyAsync(PolicyDTO policy)
-          {
-               // Simulación de una llamada a la base de datos
-               var existingPolicy = _policies.FirstOrDefault(p => p.PolicyId == policy.PolicyId);
-               if (existingPolicy == null)
-               {
-                    throw new KeyNotFoundException($"Policy with ID {policy.PolicyId} not found.");
-               }
-
-               existingPolicy.Number = policy.Number;
-               existingPolicy.Name = policy.Name;
-               existingPolicy.CoverageAmount = policy.CoverageAmount;
-               existingPolicy.CoverageKm = policy.CoverageKm;
-               existingPolicy.BaseAmount = policy.BaseAmount;
-               existingPolicy.PriceKm = policy.PriceKm;
-               existingPolicy.IssueDate = policy.IssueDate;
-               existingPolicy.ExpirationDate = policy.ExpirationDate;
-               existingPolicy.ClientId = policy.ClientId;
-
-               await Task.CompletedTask;
-          }
-     }
+            _context.Policies.Add(policy);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

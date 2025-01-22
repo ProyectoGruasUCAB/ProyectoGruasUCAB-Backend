@@ -6,6 +6,5 @@ namespace API_GruasUCAB.Policy.Domain.Repositories
           Task<PolicyDTO> GetPolicyByIdAsync(Guid policyId);
           Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber);
           Task AddPolicyAsync(PolicyDTO policy);
-          Task UpdatePolicyAsync(PolicyDTO policy);
      }
 }

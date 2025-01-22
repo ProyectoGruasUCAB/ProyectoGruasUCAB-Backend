@@ -54,7 +54,7 @@ namespace API_GruasUCAB.Policy.Domain.AggregateRoot
           private void ValidatePolicyNumber()
           {
                if (PolicyNumber == null)
-                    throw new InvalidPolicyNumberException();
+                    throw new InvalidPolicyNumberException("Invalid policy number");
           }
 
           private void ValidatePolicyName()
@@ -103,6 +103,26 @@ namespace API_GruasUCAB.Policy.Domain.AggregateRoot
           {
                if (PolicyClient == null)
                     throw new InvalidPolicyClientIdException();
+          }
+
+
+          private Policy() : base(new PolicyId(Guid.NewGuid()))
+          {
+               PolicyNumber = new PolicyNumber("2222");
+               PolicyName = new PolicyName("DefaultName");
+               PolicyCoverageAmount = new PolicyCoverageAmount(06);
+               PolicyCoverageKm = new PolicyCoverageKm(05);
+               PolicyBaseAmount = new PolicyBaseAmount(50);
+               PolicyPriceKm = new PolicyPriceKm(05);
+               PolicyIssueDate = new PolicyIssueDate(DateTime.Now.ToString("dd-MM-yyyy"));
+               PolicyExpirationDate = new PolicyExpirationDate(DateTime.Now.AddYears(1).ToString("dd-MM-yyyy"), DateTime.Now);
+               PolicyClient = new PolicyClient(Guid.NewGuid());
+          }
+
+          public string PolicyNumberValue
+          {
+               get => PolicyNumber.Value;
+               private set => PolicyNumber = new PolicyNumber(value);
           }
      }
 }

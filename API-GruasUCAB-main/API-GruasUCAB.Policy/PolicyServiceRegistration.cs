@@ -2,8 +2,13 @@ namespace API_GruasUCAB.Policy
 {
     public static class PolicyServiceRegistration
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            // Configurar DbContext
+            services.AddDbContext<PolicyDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddMediatR(typeof(CreatePolicyService).Assembly);
             services.AddScoped<IService<CreatePolicyRequestDTO, CreatePolicyResponseDTO>, CreatePolicyService>();
             services.AddScoped<IPolicyRepository, PolicyRepository>();
@@ -49,6 +54,15 @@ namespace API_GruasUCAB.Policy
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
                     "Administrador", "Trabajador"));
+
+            // Client Services
+            services.AddScoped<CreateClientService>();
+            services.AddScoped<IClientRepository, ClientRepository>();
+
+            // Client Queries
+            services.AddScoped<IRequestHandler<GetAllClientsQuery, List<ClientDTO>>, GetAllClientsQueryHandler>();
+            services.AddScoped<IRequestHandler<GetClientByIdQuery, ClientDTO>, GetClientByIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetClientByClientNumberQuery, ClientDTO>, GetClientByClientNumberQueryHandler>();
         }
     }
 }

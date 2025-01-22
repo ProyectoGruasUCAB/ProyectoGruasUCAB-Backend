@@ -83,7 +83,7 @@ namespace API_GruasUCAB.Controllers
                return await ActionExecutor.Execute(async () =>
                {
                     var userId = GetUserId();
-                    var query = new GetPolicyByPolicyNumberQuery(userId, policyNumber);
+                    var query = new GetPolicyByPolicyNumberQuery(policyNumber);
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetPolicyByPolicyNumber");

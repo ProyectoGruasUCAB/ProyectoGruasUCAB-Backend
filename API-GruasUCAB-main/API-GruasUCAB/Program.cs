@@ -12,6 +12,10 @@ using API_GruasUCAB.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Registrar servicios de la aplicación
+PolicyServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
+
+
 // Configurar Serilog
 CoreServiceRegistration.ConfigureLogging(builder);
 
@@ -25,7 +29,7 @@ ServiceFeeServiceRegistration.RegisterServices(builder.Services, builder.Configu
 DepartmentServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 SupplierServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 VehicleServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
-PolicyServiceRegistration.RegisterServices(builder.Services);
+PolicyServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 ServiceOrderServiceRegistration.RegisterServices(builder.Services, builder.Configuration);
 
 // Agregar YARP
