@@ -6,6 +6,7 @@ namespace API_GruasUCAB.Vehicle.Domain.Repositories
           Task<VehicleDTO> GetVehicleByIdAsync(Guid id);
           Task<VehicleDTO> GetVehicleByLicensePlateAsync(string licensePlate);
           Task<List<VehicleDTO>> GetVehiclesBySupplierIdAsync(Guid supplierId);
+          Task<VehicleDTO?> GetVehicleByDriverIdAsync(Guid driverId);
           Task<List<VehicleDTO>> GetVehiclesByDriverIdIsNotNullAsync();
           Task AddVehicleAsync(VehicleDTO vehicle);
           Task UpdateVehicleAsync(VehicleDTO vehicle);

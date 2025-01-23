@@ -13,6 +13,21 @@ namespace API_GruasUCAB.Users.Domain.ValueObject
                     throw new InvalidUserMedicalCertificateExpirationDateFormatException(expirationDate);
                }
 
+               if (parsedDate < DateTime.UtcNow)
+               {
+                    throw new InvalidUserMedicalCertificateExpirationDateExpiredException(parsedDate);
+               }
+
+               if (parsedDate > DateTime.UtcNow.AddYears(10))
+               {
+                    throw new InvalidUserMedicalCertificateExpirationDateTooFarException(parsedDate);
+               }
+
+               if (parsedDate < DateTime.UtcNow.AddDays(7))
+               {
+                    throw new InvalidUserMedicalCertificateExpirationDateException(expirationDate);
+               }
+
                ExpirationDate = parsedDate;
           }
 

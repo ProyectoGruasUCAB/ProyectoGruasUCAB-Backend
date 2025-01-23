@@ -9,16 +9,6 @@ namespace API_GruasUCAB.Users.Domain.Events
 
           public UserDriverLicenseExpirationDateChangedEvent(UserId userId, UserDriverLicenseExpirationDate newDriverLicenseExpirationDate)
           {
-               if (newDriverLicenseExpirationDate.Value < DateTime.UtcNow)
-               {
-                    throw new InvalidUserDriverLicenseExpirationDateExpiredException(newDriverLicenseExpirationDate.Value);
-               }
-
-               if (newDriverLicenseExpirationDate.Value > DateTime.UtcNow.AddYears(10))
-               {
-                    throw new InvalidUserDriverLicenseExpirationDateTooFarException(newDriverLicenseExpirationDate.Value);
-               }
-
                UserId = userId ?? throw new ArgumentNullException(nameof(userId), "UserId cannot be null.");
                NewDriverLicenseExpirationDate = newDriverLicenseExpirationDate ?? throw new ArgumentNullException(nameof(newDriverLicenseExpirationDate), "NewDriverLicenseExpirationDate cannot be null.");
                Timestamp = DateTime.UtcNow;

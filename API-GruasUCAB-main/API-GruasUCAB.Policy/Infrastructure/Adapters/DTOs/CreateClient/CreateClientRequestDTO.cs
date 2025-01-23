@@ -1,7 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
 namespace API_GruasUCAB.Policy.Infrastructure.Adapters.DTOs.CreateClient
 {
     public class CreateClientRequestDTO
