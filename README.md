@@ -4,7 +4,7 @@ Backend repository in the ProyectoGruasUCAB project
 
 ## Descripción
 
-GruasUCAB es un proyecto de la asignatura **Desarrollo de Software** cuyo desarrollo se debe realiazr haciendo uso de:
+GruasUCAB es un proyecto de la asignatura **Desarrollo de Software** cuyo desarrollo se debe realizar haciendo uso de:
 - Enfoque a microservicios
 - .NET Core 8
 - Arquitectura Hexagonal
