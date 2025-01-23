@@ -19,9 +19,11 @@ namespace API_GruasUCAB.ServiceOrder
             // Registrar repositorios
             services.AddScoped<IServiceOrderRepository, ServiceOrderRepository>();
             services.AddScoped<IServiceOrderFactory, ServiceOrderFactory>();
-            services.AddScoped<IncidentCostCalculator>();
 
-            // Registrar otros servicios necesarios
+            // Domain Services 
+            services.AddScoped<IncidentCostCalculator>();
+            services.AddScoped<ServiceOrderDomainService>();
+
             services.AddHttpClient();
 
             // SecurityDecorator for CreateServiceOrder

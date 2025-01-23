@@ -122,8 +122,21 @@ namespace API_GruasUCAB.ServiceOrder.Infrastructure.Repositories
                 throw new ArgumentException($"Invalid incident date: {serviceOrderDto.IncidentDate}");
             }
 
-            serviceOrderDto.ToEntity();
+            serviceOrder.UpdateIncidentDescription(new IncidentDescription(serviceOrderDto.IncidentDescription));
+            serviceOrder.UpdateInitialLocationDriver(new Coordinates(serviceOrderDto.InitialLocationDriverLatitude, serviceOrderDto.InitialLocationDriverLongitude));
+            serviceOrder.UpdateIncidentLocation(new Coordinates(serviceOrderDto.IncidentLocationLatitude, serviceOrderDto.IncidentLocationLongitude));
+            serviceOrder.UpdateIncidentLocationEnd(new Coordinates(serviceOrderDto.IncidentLocationEndLatitude, serviceOrderDto.IncidentLocationEndLongitude));
+            serviceOrder.UpdateIncidentDistance(new IncidentDistance(serviceOrderDto.IncidentDistance));
+            serviceOrder.UpdateCustomerVehicleDescription(new CustomerVehicleDescription(serviceOrderDto.CustomerVehicleDescription));
+            serviceOrder.UpdateIncidentCost(new IncidentCost(serviceOrderDto.IncidentCost));
+            serviceOrder.UpdatePolicyId(new PolicyId(serviceOrderDto.PolicyId));
+            serviceOrder.UpdateStatusServiceOrder(new StatusServiceOrder(Enum.Parse<ServiceOrderStatus>(serviceOrderDto.StatusServiceOrder)));
             serviceOrder.UpdateIncidentDate(new IncidentDate(parsedDate.ToString("dd-MM-yyyy")));
+            serviceOrder.UpdateVehicleId(new VehicleId(serviceOrderDto.VehicleId));
+            serviceOrder.UpdateDriverId(new UserId(serviceOrderDto.DriverId));
+            serviceOrder.UpdateCustomerId(new UserId(serviceOrderDto.CustomerId));
+            serviceOrder.UpdateOperatorId(new UserId(serviceOrderDto.OperatorId));
+            serviceOrder.UpdateServiceFeeId(new ServiceFeeId(serviceOrderDto.ServiceFeeId));
 
             _context.ServiceOrders.Update(serviceOrder);
             await _context.SaveChangesAsync();

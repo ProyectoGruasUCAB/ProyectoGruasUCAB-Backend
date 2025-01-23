@@ -11,6 +11,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
           private readonly IClientRepository _clientRepository;
           private readonly IWorkerRepository _workerRepository;
           private readonly IncidentCostCalculator _incidentCostCalculator;
+          private readonly ServiceOrderDomainService _serviceOrderDomainService;
 
           public CreateServiceOrderService(
               IServiceOrderRepository serviceOrderRepository,
@@ -21,7 +22,8 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
               IPolicyRepository policyRepository,
               IClientRepository clientRepository,
               IWorkerRepository workerRepository,
-              IncidentCostCalculator incidentCostCalculator)
+              IncidentCostCalculator incidentCostCalculator,
+              ServiceOrderDomainService serviceOrderDomainService)
           {
                _serviceOrderRepository = serviceOrderRepository;
                _serviceOrderFactory = serviceOrderFactory;
@@ -32,6 +34,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                _clientRepository = clientRepository;
                _workerRepository = workerRepository;
                _incidentCostCalculator = incidentCostCalculator;
+               _serviceOrderDomainService = serviceOrderDomainService;
           }
 
           public async Task<CreateServiceOrderResponseDTO> Execute(CreateServiceOrderRequestDTO request)
@@ -42,6 +45,9 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                }
 
                await ValidateIdsExist(request);
+               await _serviceOrderDomainService.ValidateClientCanCreateOrder(request.CustomerId);
+               await _serviceOrderDomainService.ValidateDriverCanCreateOrder(request.DriverId, request.VehicleId);
+
                var incidentCost = await _incidentCostCalculator.CalculateIncidentCost(
                    request.PolicyId,
                    request.ServiceFeeId,

@@ -31,7 +31,7 @@ namespace API_GruasUCAB.ServiceOrder.Domain.StateMachine
                 .Permit(Trigger.Pay, ServiceOrderStatus.Pagado);
 
             _machine.Configure(ServiceOrderStatus.Pagado)
-                .PermitReentry(Trigger.Pay); // No permite transiciones a otros estados
+                .PermitReentry(Trigger.Pay);
         }
 
         public ServiceOrderStatus State => _machine.State;
