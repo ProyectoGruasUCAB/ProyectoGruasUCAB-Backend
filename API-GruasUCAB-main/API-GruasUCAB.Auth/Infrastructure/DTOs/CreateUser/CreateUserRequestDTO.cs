@@ -17,5 +17,8 @@ namespace API_GruasUCAB.Auth.Infrastructure.DTOs.CreateUser
 
           [JsonPropertyOrder(2)]
           public Guid? WorkplaceId { get; set; }
+
+          [JsonPropertyOrder(2)]
+          public string? Position { get; set; } = string.Empty;
      }
 }

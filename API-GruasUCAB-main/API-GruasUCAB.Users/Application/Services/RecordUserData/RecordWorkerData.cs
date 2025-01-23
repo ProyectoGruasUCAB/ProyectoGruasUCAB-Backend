@@ -5,24 +5,34 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           private readonly IWorkerFactory _workerFactory;
           private readonly IWorkerRepository _workerRepository;
           private readonly IDepartmentRepository _departmentRepository;
+          private readonly INewWorkerRepository _newWorkerRepository;
           private readonly IMapper _mapper;
 
-          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository, IDepartmentRepository departmentRepository, IMapper mapper)
+          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository, IDepartmentRepository departmentRepository, INewWorkerRepository newWorkerRepository, IMapper mapper)
           {
                _workerFactory = workerFactory;
                _workerRepository = workerRepository;
                _departmentRepository = departmentRepository;
+               _newWorkerRepository = newWorkerRepository;
                _mapper = mapper;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               if (request.Position == null)
-                    throw new ArgumentNullException(nameof(request.Position));
-               if (!request.WorkplaceId.HasValue)
-                    throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for workers.");
+               var departmentAndPosition = await _newWorkerRepository.GetDepartmentAndPositionByUserId(request.UserId);
+               if (departmentAndPosition == null)
+               {
+                    return new RecordUserDataResponseDTO
+                    {
+                         Success = false,
+                         Message = "DepartmentId and Position not found for the given UserId",
+                         UserEmail = request.UserEmail,
+                         UserId = request.UserId
+                    };
+               }
 
-               var department = await _departmentRepository.GetDepartmentByIdAsync(request.WorkplaceId.Value);
+               var (departmentId, position) = departmentAndPosition.Value;
+               var department = await _departmentRepository.GetDepartmentByIdAsync(departmentId);
                if (department == null)
                {
                     return new RecordUserDataResponseDTO
@@ -41,8 +51,8 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserPhone(request.Phone),
                    new UserCedula(request.Cedula),
                    new UserBirthDate(request.BirthDate),
-                   new UserPosition(request.Position),
-                   new DepartmentId(request.WorkplaceId.Value)
+                   new UserPosition(position),
+                   new DepartmentId(departmentId)
                );
 
                var workerDTO = _mapper.Map<WorkerDTO>(worker);

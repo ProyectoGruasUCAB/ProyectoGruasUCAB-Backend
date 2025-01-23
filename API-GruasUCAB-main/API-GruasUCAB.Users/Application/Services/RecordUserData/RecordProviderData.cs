@@ -5,22 +5,20 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           private readonly IProviderFactory _providerFactory;
           private readonly IProviderRepository _providerRepository;
           private readonly ISupplierRepository _supplierRepository;
+          private readonly INewProviderRepository _newProviderRepository;
 
-          public RecordProviderData(IProviderFactory providerFactory, IProviderRepository providerRepository, ISupplierRepository supplierRepository)
+          public RecordProviderData(IProviderFactory providerFactory, IProviderRepository providerRepository, ISupplierRepository supplierRepository, INewProviderRepository newProviderRepository)
           {
                _providerFactory = providerFactory;
                _providerRepository = providerRepository;
                _supplierRepository = supplierRepository;
+               _newProviderRepository = newProviderRepository;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               if (!request.WorkplaceId.HasValue || request.WorkplaceId == Guid.Empty)
-               {
-                    throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for providers.");
-               }
-
-               var supplier = await _supplierRepository.GetSupplierByIdAsync(request.WorkplaceId.Value);
+               var supplierId = await _newProviderRepository.GetSupplierIdByUserId(request.UserId);
+               var supplier = await _supplierRepository.GetSupplierByIdAsync(supplierId.Value);
                if (supplier == null)
                {
                     return new RecordUserDataResponseDTO
@@ -39,7 +37,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserPhone(request.Phone),
                    new UserCedula(request.Cedula),
                    new UserBirthDate(request.BirthDate),
-                   new SupplierId(request.WorkplaceId.Value)
+                   new SupplierId(supplierId.Value)
                );
 
                var providerDTO = provider.ToDTO();
