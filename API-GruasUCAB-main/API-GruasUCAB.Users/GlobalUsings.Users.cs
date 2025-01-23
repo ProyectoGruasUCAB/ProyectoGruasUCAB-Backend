@@ -20,3 +20,4 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;
 global using API_GruasUCAB.Users.Infrastructure.Database;
 global using Microsoft.EntityFrameworkCore.Design;
+global using AutoMapper;

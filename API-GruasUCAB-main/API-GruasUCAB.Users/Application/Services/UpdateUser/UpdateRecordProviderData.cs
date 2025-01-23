@@ -13,9 +13,11 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 
           public async Task<UpdateRecordUserDataResponseDTO> Execute(UpdateRecordUserDataRequestDTO request)
           {
-               var provider = await _providerFactory.GetProviderById(new UserId(request.UserId));
-               ApplyChanges(provider, request);
-               await _providerRepository.UpdateProviderAsync(provider.ToDTO());
+               var providerDTO = await _providerRepository.GetProviderByIdAsync(request.UserId);
+               var providerEntity = providerDTO.ToEntity();
+               ApplyChanges(providerEntity, request);
+               var updatedProviderDTO = providerEntity.ToDTO();
+               await _providerRepository.UpdateProviderAsync(updatedProviderDTO);
 
                return new UpdateRecordUserDataResponseDTO
                {

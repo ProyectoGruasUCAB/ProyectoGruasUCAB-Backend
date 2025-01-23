@@ -4,11 +4,13 @@ namespace API_GruasUCAB.Department.Application.Services.UpdateDepartment
      {
           private readonly IDepartmentRepository _departmentRepository;
           private readonly IDepartmentFactory _departmentFactory;
+          private readonly IMapper _mapper;
 
-          public UpdateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory)
+          public UpdateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory, IMapper mapper)
           {
                _departmentRepository = departmentRepository;
                _departmentFactory = departmentFactory;
+               _mapper = mapper;
           }
 
           public async Task<UpdateDepartmentResponseDTO> Execute(UpdateDepartmentRequestDTO request)
@@ -35,9 +37,7 @@ namespace API_GruasUCAB.Department.Application.Services.UpdateDepartment
                     department.ChangeDescription(new DepartmentDescription(request.Descripcion));
                }
 
-               departmentDTO.Name = department.Name.Value;
-               departmentDTO.Descripcion = department.Description.Value;
-
+               departmentDTO = _mapper.Map<DepartmentDTO>(department);
                await _departmentRepository.UpdateDepartmentAsync(departmentDTO);
 
                return new UpdateDepartmentResponseDTO
@@ -45,9 +45,7 @@ namespace API_GruasUCAB.Department.Application.Services.UpdateDepartment
                     Success = true,
                     Message = "Department updated successfully",
                     UserEmail = request.UserEmail,
-                    DepartmentId = department.Id.Id,
-                    Name = department.Name.Value,
-                    Descripcion = department.Description.Value
+                    DepartmentId = department.Id.Value
                };
           }
      }

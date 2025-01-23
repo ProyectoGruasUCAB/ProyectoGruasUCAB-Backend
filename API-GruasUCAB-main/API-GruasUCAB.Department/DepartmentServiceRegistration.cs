@@ -7,7 +7,7 @@ namespace API_GruasUCAB.Department
             // Configurar DbContext            
             services.AddDbContext<DepartmentDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddAutoMapper(typeof(DepartmentProfile));
 
             services.AddMediatR(typeof(CreateDepartmentCommandHandler).Assembly);
             services.AddScoped<IService<CreateDepartmentRequestDTO, CreateDepartmentResponseDTO>, CreateDepartmentService>();

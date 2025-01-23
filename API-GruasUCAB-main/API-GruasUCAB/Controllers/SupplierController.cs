@@ -3,6 +3,7 @@ using API_GruasUCAB.Supplier.Application.Commands.UpdateSupplier;
 using API_GruasUCAB.Supplier.Application.Queries.GetAllSuppliers;
 using API_GruasUCAB.Supplier.Application.Queries.GetSupplierById;
 using API_GruasUCAB.Supplier.Application.Queries.GetSupplierByType;
+using API_GruasUCAB.Supplier.Application.Queries.GetSupplierByName;
 using API_GruasUCAB.Supplier.Infrastructure.DTOs.CreateSupplier;
 using API_GruasUCAB.Supplier.Infrastructure.DTOs.UpdateSupplier;
 using API_GruasUCAB.Supplier.Infrastructure.DTOs.SupplierQueries;
@@ -89,6 +90,24 @@ namespace API_GruasUCAB.Controllers
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetSupplierByType");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetSupplierByName/{name}")]
+          [ProducesResponseType(typeof(GetSupplierByNameResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetSupplierByName(string name)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var userId = GetUserId();
+                    var query = new GetSupplierByNameQuery(name);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetSupplierByName");
           }
 
           [HttpPost]

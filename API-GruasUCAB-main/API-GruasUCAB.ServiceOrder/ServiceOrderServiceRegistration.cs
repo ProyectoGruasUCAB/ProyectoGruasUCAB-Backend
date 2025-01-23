@@ -46,6 +46,11 @@ namespace API_GruasUCAB.ServiceOrder
             services.AddScoped<IRequestHandler<GetAllServiceOrdersQuery, GetAllServiceOrdersResponseDTO>, GetAllServiceOrdersQueryHandler>();
             services.AddScoped<IRequestHandler<GetServiceOrderByIdQuery, GetServiceOrderByIdResponseDTO>, GetServiceOrderByIdQueryHandler>();
             services.AddScoped<IRequestHandler<GetServiceOrdersByStatusQuery, GetServiceOrdersByStatusResponseDTO>, GetServiceOrdersByStatusQueryHandler>();
+            services.AddScoped<IRequestHandler<GetOrdersByDriverIdQuery, GetOrdersByDriverIdResponseDTO>, GetOrdersByDriverIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetOrdersByVehicleIdQuery, GetOrdersByVehicleIdResponseDTO>, GetOrdersByVehicleIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetOrdersByOperatorIdQuery, GetOrdersByOperatorIdResponseDTO>, GetOrdersByOperatorIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetOrdersBySupplierIdQuery, GetOrdersBySupplierIdResponseDTO>, GetOrdersBySupplierIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetOrdersByClientIdQuery, GetOrdersByClientIdResponseDTO>, GetOrdersByClientIdQueryHandler>();
 
             // SecurityRequestHandlerDecorator for GetAllServiceOrders
             services.Decorate<IRequestHandler<GetAllServiceOrdersQuery, GetAllServiceOrdersResponseDTO>>(
@@ -68,6 +73,51 @@ namespace API_GruasUCAB.ServiceOrder
             // SecurityRequestHandlerDecorator for GetServiceOrdersByStatus
             services.Decorate<IRequestHandler<GetServiceOrdersByStatusQuery, GetServiceOrdersByStatusResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetServiceOrdersByStatusQuery, GetServiceOrdersByStatusResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Trabajador"));
+
+            // SecurityRequestHandlerDecorator for GetOrdersByDriverId
+            services.Decorate<IRequestHandler<GetOrdersByDriverIdQuery, GetOrdersByDriverIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetOrdersByDriverIdQuery, GetOrdersByDriverIdResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Trabajador"));
+
+            // SecurityRequestHandlerDecorator for GetOrdersByVehicleId
+            services.Decorate<IRequestHandler<GetOrdersByVehicleIdQuery, GetOrdersByVehicleIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetOrdersByVehicleIdQuery, GetOrdersByVehicleIdResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Trabajador"));
+
+            // SecurityRequestHandlerDecorator for GetOrdersByOperatorId
+            services.Decorate<IRequestHandler<GetOrdersByOperatorIdQuery, GetOrdersByOperatorIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetOrdersByOperatorIdQuery, GetOrdersByOperatorIdResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Trabajador"));
+
+            // SecurityRequestHandlerDecorator for GetOrdersBySupplierId
+            services.Decorate<IRequestHandler<GetOrdersBySupplierIdQuery, GetOrdersBySupplierIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetOrdersBySupplierIdQuery, GetOrdersBySupplierIdResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Trabajador"));
+
+            // SecurityRequestHandlerDecorator for GetOrdersByClientId
+            services.Decorate<IRequestHandler<GetOrdersByClientIdQuery, GetOrdersByClientIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetOrdersByClientIdQuery, GetOrdersByClientIdResponseDTO>(
                     inner,
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),

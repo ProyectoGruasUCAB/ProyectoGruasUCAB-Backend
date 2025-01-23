@@ -5,7 +5,7 @@ namespace API_GruasUCAB.Vehicle
         public static void RegisterServices(IServiceCollection services, IConfiguration Configuration)
         {
             services.AddDbContext<VehicleDbContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(VehicleProfile), typeof(VehicleTypeProfile));
 
             services.AddMediatR(typeof(CreateVehicleCommandHandler).Assembly);
@@ -26,6 +26,8 @@ namespace API_GruasUCAB.Vehicle
             services.AddScoped<IRequestHandler<GetAllVehiclesQuery, GetAllVehiclesResponseDTO>, GetAllVehiclesQueryHandler>();
             services.AddScoped<IRequestHandler<GetVehicleByIdQuery, GetVehicleByIdResponseDTO>, GetVehicleByIdQueryHandler>();
             services.AddScoped<IRequestHandler<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>, GetVehicleByLicensePlateQueryHandler>();
+            services.AddScoped<IRequestHandler<GetVehiclesBySupplierIdQuery, GetVehiclesBySupplierIdResponseDTO>, GetVehiclesBySupplierIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetVehiclesByDriverIdIsNotNullQuery, GetVehiclesByDriverIdIsNotNullResponseDTO>, GetVehiclesByDriverIdIsNotNullQueryHandler>();
 
             // VehicleType Queries
             services.AddScoped<IRequestHandler<GetAllVehicleTypesQuery, GetAllVehicleTypesResponseDTO>, GetAllVehicleTypesQueryHandler>();
@@ -85,6 +87,22 @@ namespace API_GruasUCAB.Vehicle
 
             services.Decorate<IRequestHandler<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Proveedor"));
+
+            services.Decorate<IRequestHandler<GetVehiclesBySupplierIdQuery, GetVehiclesBySupplierIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetVehiclesBySupplierIdQuery, GetVehiclesBySupplierIdResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Proveedor"));
+
+            services.Decorate<IRequestHandler<GetVehiclesByDriverIdIsNotNullQuery, GetVehiclesByDriverIdIsNotNullResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetVehiclesByDriverIdIsNotNullQuery, GetVehiclesByDriverIdIsNotNullResponseDTO>(
                     inner,
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),

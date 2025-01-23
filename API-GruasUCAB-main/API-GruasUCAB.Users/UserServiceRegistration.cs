@@ -4,10 +4,12 @@ namespace API_GruasUCAB.Users
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            // Configurar DbContext
             services.AddDbContext<UserDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+            //  AutoMapper
+            services.AddAutoMapper(typeof(AdministratorProfile).Assembly);
+            services.AddAutoMapper(typeof(WorkerProfile).Assembly);
 
             services.AddMediatR(typeof(RecordUserDataCommandHandler).Assembly);
             services.AddScoped<IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>, RecordUserDataService>();
@@ -18,10 +20,6 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IDriverFactory, DriverFactory>();
             services.AddScoped<IWorkerFactory, WorkerFactory>();
             services.AddScoped<IProviderFactory, ProviderFactory>();
-
-            services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
-            services.AddScoped<IKeycloakRepository, KeycloakRepository>();
-            services.AddHttpClient();
 
             services.AddScoped<IService<UpdateRecordUserDataRequestDTO, UpdateRecordUserDataResponseDTO>, UpdateRecordUserDataService>();
             services.AddScoped<IKeycloakRepository, KeycloakRepository>();
@@ -53,6 +51,7 @@ namespace API_GruasUCAB.Users
             services.AddScoped<IRequestHandler<GetAllDriversQuery, GetAllDriversResponseDTO>, GetAllDriversQueryHandler>();
             services.AddScoped<IRequestHandler<GetDriverByIdQuery, GetDriverByIdResponseDTO>, GetDriverByIdQueryHandler>();
             services.AddScoped<IRequestHandler<GetDriversByNameQuery, GetDriversByNameResponseDTO>, GetDriversByNameQueryHandler>();
+            services.AddScoped<IRequestHandler<GetDriversBySupplierIdQuery, GetDriversBySupplierIdResponseDTO>, GetDriversBySupplierIdQueryHandler>();
 
             services.AddScoped<IRequestHandler<GetAllWorkersQuery, GetAllWorkersResponseDTO>, GetAllWorkersQueryHandler>();
             services.AddScoped<IRequestHandler<GetWorkerByIdQuery, GetWorkerByIdResponseDTO>, GetWorkerByIdQueryHandler>();
@@ -65,7 +64,6 @@ namespace API_GruasUCAB.Users
 
             services.AddHttpClient();
 
-            //  SecurityDecorator
             services.Decorate<IService<RecordUserDataRequestDTO, RecordUserDataResponseDTO>>(
                 (inner, provider) => new RecordUserDataSecurityDecorator<RecordUserDataRequestDTO, RecordUserDataResponseDTO>(
                     inner,
@@ -80,7 +78,6 @@ namespace API_GruasUCAB.Users
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>()));
 
-            //  SecurityRequestHandlerDecorator
             services.Decorate<IRequestHandler<GetAllAdministratorsQuery, GetAllAdministratorsResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetAllAdministratorsQuery, GetAllAdministratorsResponseDTO>(
                     inner,
@@ -119,10 +116,18 @@ namespace API_GruasUCAB.Users
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Proveedor", "Trabajador"));
+                    "Administrador", "Proveedor", "Trabajador", "Conductor"));
 
             services.Decorate<IRequestHandler<GetDriversByNameQuery, GetDriversByNameResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetDriversByNameQuery, GetDriversByNameResponseDTO>(
+                    inner,
+                    provider.GetRequiredService<IKeycloakRepository>(),
+                    provider.GetRequiredService<IHttpClientFactory>(),
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    "Administrador", "Proveedor", "Trabajador", "Conductor"));
+
+            services.Decorate<IRequestHandler<GetDriversBySupplierIdQuery, GetDriversBySupplierIdResponseDTO>>(
+                (inner, provider) => new SecurityRequestHandlerDecorator<GetDriversBySupplierIdQuery, GetDriversBySupplierIdResponseDTO>(
                     inner,
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),

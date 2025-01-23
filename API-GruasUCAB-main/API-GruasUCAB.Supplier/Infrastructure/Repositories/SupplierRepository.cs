@@ -1,38 +1,31 @@
-using API_GruasUCAB.Supplier.Domain.AggregateRoot;
-using API_GruasUCAB.Supplier.Infrastructure.Database;
-using API_GruasUCAB.Supplier.Infrastructure.DTOs.SupplierQueries;
-using API_GruasUCAB.Supplier.Infrastructure.Mappers;
-using Microsoft.EntityFrameworkCore;
-
 namespace API_GruasUCAB.Supplier.Infrastructure.Repositories
 {
      public class SupplierRepository : ISupplierRepository
      {
           private readonly SupplierDbContext _context;
+          private readonly IMapper _mapper;
 
-          public SupplierRepository(SupplierDbContext context)
+          public SupplierRepository(SupplierDbContext context, IMapper mapper)
           {
                _context = context;
+               _mapper = mapper;
           }
 
           public async Task<List<SupplierDTO>> GetAllSuppliersAsync()
           {
-               return await _context.Suppliers
-                   .Select(s => s.ToDTO())
-                   .ToListAsync();
+               var suppliers = await _context.Suppliers.ToListAsync();
+               return _mapper.Map<List<SupplierDTO>>(suppliers);
           }
 
           public async Task<SupplierDTO> GetSupplierByIdAsync(Guid id)
           {
-               var supplier = await _context.Suppliers
-                   .FirstOrDefaultAsync(s => s.Id == new SupplierId(id));
-
+               var supplier = await _context.Suppliers.FindAsync(new SupplierId(id));
                if (supplier == null)
                {
                     throw new KeyNotFoundException($"Supplier with ID {id} not found.");
                }
 
-               return supplier.ToDTO();
+               return _mapper.Map<SupplierDTO>(supplier);
           }
 
           public async Task<List<SupplierDTO>> GetSuppliersByTypeAsync(string type)
@@ -42,12 +35,11 @@ namespace API_GruasUCAB.Supplier.Infrastructure.Repositories
                     throw new ArgumentException($"Invalid supplier type: {type}");
                }
 
-               var suppliers = await _context.Suppliers
-                   .ToListAsync();
+               var suppliers = await _context.Suppliers.ToListAsync();
 
                var filteredSuppliers = suppliers
+                   .AsEnumerable()
                    .Where(s => s.Type.Value == typeEnum)
-                   .Select(s => s.ToDTO())
                    .ToList();
 
                if (!filteredSuppliers.Any())
@@ -55,31 +47,43 @@ namespace API_GruasUCAB.Supplier.Infrastructure.Repositories
                     throw new KeyNotFoundException($"No suppliers with type '{type}' found.");
                }
 
-               return filteredSuppliers;
+               return _mapper.Map<List<SupplierDTO>>(filteredSuppliers);
+          }
+
+
+          public async Task<List<SupplierDTO>> GetSuppliersByNameAsync(string name)
+          {
+               var suppliers = await _context.Suppliers
+                   .ToListAsync();
+
+               var filteredSuppliers = suppliers
+                   .Where(s => s.Name.Value.ToLower().Contains(name.ToLower()))
+                   .ToList();
+
+               if (!filteredSuppliers.Any())
+               {
+                    throw new KeyNotFoundException($"No suppliers with name containing '{name}' found.");
+               }
+
+               return _mapper.Map<List<SupplierDTO>>(filteredSuppliers);
           }
 
           public async Task AddSupplierAsync(SupplierDTO supplierDto)
           {
-               var supplier = supplierDto.ToEntity();
-
+               var supplier = _mapper.Map<Domain.AggregateRoot.Supplier>(supplierDto);
                _context.Suppliers.Add(supplier);
                await _context.SaveChangesAsync();
           }
 
           public async Task UpdateSupplierAsync(SupplierDTO supplierDto)
           {
-               var supplier = await _context.Suppliers
-                   .FirstOrDefaultAsync(s => s.Id == new SupplierId(supplierDto.SupplierId));
-
-               if (supplier == null)
+               var existingSupplier = await _context.Suppliers.FindAsync(new SupplierId(supplierDto.SupplierId));
+               if (existingSupplier == null)
                {
                     throw new KeyNotFoundException($"Supplier with ID {supplierDto.SupplierId} not found.");
                }
 
-               supplier.ChangeName(new SupplierName(supplierDto.Name));
-               supplier.ChangeType(new SupplierType(Enum.Parse<SupplierTypeEnum>(supplierDto.Type)));
-
-               _context.Suppliers.Update(supplier);
+               _mapper.Map(supplierDto, existingSupplier);
                await _context.SaveChangesAsync();
           }
      }

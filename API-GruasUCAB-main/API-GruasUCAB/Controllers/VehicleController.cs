@@ -3,6 +3,8 @@ using API_GruasUCAB.Vehicle.Application.Commands.UpdateVehicle;
 using API_GruasUCAB.Vehicle.Application.Queries.GetAllVehicles;
 using API_GruasUCAB.Vehicle.Application.Queries.GetVehicleById;
 using API_GruasUCAB.Vehicle.Application.Queries.GetVehicleByLicensePlate;
+using API_GruasUCAB.Vehicle.Application.Queries.GetVehiclesBySupplierId;
+using API_GruasUCAB.Vehicle.Application.Queries.GetVehiclesByDriverIdIsNotNull;
 using API_GruasUCAB.Vehicle.Application.Commands.CreateVehicleType;
 using API_GruasUCAB.Vehicle.Application.Commands.UpdateVehicleType;
 using API_GruasUCAB.Vehicle.Application.Queries.GetAllVehicleTypes;
@@ -96,6 +98,40 @@ namespace API_GruasUCAB.Controllers
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetVehicleByLicensePlate");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetVehiclesBySupplierId/{supplierId}")]
+          [ProducesResponseType(typeof(GetVehiclesBySupplierIdResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetVehiclesBySupplierId(Guid supplierId)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var query = new GetVehiclesBySupplierIdQuery(supplierId);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetVehiclesBySupplierId");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetVehiclesByDriverIdIsNotNull")]
+          [ProducesResponseType(typeof(GetVehiclesByDriverIdIsNotNullResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetVehiclesByDriverIdIsNotNull()
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var query = new GetVehiclesByDriverIdIsNotNullQuery();
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetVehiclesByDriverIdIsNotNull");
           }
 
           [HttpPost]

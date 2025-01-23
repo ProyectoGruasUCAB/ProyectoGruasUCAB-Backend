@@ -4,13 +4,16 @@ namespace API_GruasUCAB.Supplier.Application.Services.UpdateSupplier
      {
           private readonly ISupplierRepository _supplierRepository;
           private readonly ISupplierFactory _supplierFactory;
+          private readonly IMapper _mapper;
 
           public UpdateSupplierService(
               ISupplierRepository supplierRepository,
-              ISupplierFactory supplierFactory)
+              ISupplierFactory supplierFactory,
+              IMapper mapper)
           {
                _supplierRepository = supplierRepository;
                _supplierFactory = supplierFactory;
+               _mapper = mapper;
           }
 
           public async Task<UpdateSupplierResponseDTO> Execute(UpdateSupplierRequestDTO request)
@@ -37,9 +40,7 @@ namespace API_GruasUCAB.Supplier.Application.Services.UpdateSupplier
                     supplier.ChangeType(new SupplierType(supplierType));
                }
 
-               supplierDTO.Name = supplier.Name.Value;
-               supplierDTO.Type = supplier.Type.Value.ToString();
-
+               supplierDTO = _mapper.Map<SupplierDTO>(supplier);
                await _supplierRepository.UpdateSupplierAsync(supplierDTO);
 
                return new UpdateSupplierResponseDTO
@@ -47,7 +48,7 @@ namespace API_GruasUCAB.Supplier.Application.Services.UpdateSupplier
                     Success = true,
                     Message = "Supplier updated successfully",
                     UserEmail = request.UserEmail,
-                    SupplierId = supplier.Id.Id,
+                    SupplierId = supplier.Id.Value,
                     Name = supplier.Name.Value,
                     Type = supplier.Type.Value.ToString()
                };

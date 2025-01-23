@@ -20,3 +20,6 @@ global using API_GruasUCAB.Vehicle.Domain.ValueObject;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.EntityFrameworkCore;
 global using API_GruasUCAB.ServiceOrder.Infrastructure.Database;
+global using API_GruasUCAB.ServiceOrder.Infrastructure.Mappers;
+global using API_GruasUCAB.Users.Infrastructure.Database;
+global using AutoMapper;

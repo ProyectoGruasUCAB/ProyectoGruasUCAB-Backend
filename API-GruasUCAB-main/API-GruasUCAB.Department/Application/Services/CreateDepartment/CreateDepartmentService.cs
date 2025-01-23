@@ -4,11 +4,13 @@ namespace API_GruasUCAB.Department.Application.Services.CreateDepartment
      {
           private readonly IDepartmentRepository _departmentRepository;
           private readonly IDepartmentFactory _departmentFactory;
+          private readonly IMapper _mapper;
 
-          public CreateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory)
+          public CreateDepartmentService(IDepartmentRepository departmentRepository, IDepartmentFactory departmentFactory, IMapper mapper)
           {
                _departmentRepository = departmentRepository;
                _departmentFactory = departmentFactory;
+               _mapper = mapper;
           }
 
           public async Task<CreateDepartmentResponseDTO> Execute(CreateDepartmentRequestDTO request)
@@ -19,13 +21,7 @@ namespace API_GruasUCAB.Department.Application.Services.CreateDepartment
                    new DepartmentDescription(request.Descripcion)
                );
 
-               var departmentDTO = new DepartmentDTO
-               {
-                    DepartmentId = department.Id.Id,
-                    Name = department.Name.Value,
-                    Descripcion = department.Description.Value
-               };
-
+               var departmentDTO = _mapper.Map<DepartmentDTO>(department);
                await _departmentRepository.AddDepartmentAsync(departmentDTO);
 
                return new CreateDepartmentResponseDTO
@@ -33,7 +29,7 @@ namespace API_GruasUCAB.Department.Application.Services.CreateDepartment
                     Success = true,
                     Message = "Department created successfully",
                     UserEmail = request.UserEmail,
-                    DepartmentId = department.Id.Id
+                    DepartmentId = department.Id.Value
                };
           }
      }

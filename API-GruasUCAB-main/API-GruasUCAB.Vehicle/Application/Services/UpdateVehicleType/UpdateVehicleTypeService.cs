@@ -44,9 +44,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicleType
                {
                     Success = true,
                     Message = "Vehicle type updated successfully",
-                    VehicleTypeId = vehicleType.Id.Id,
-                    Name = vehicleType.Type.ToString(),
-                    Description = vehicleType.DescripcionVehicleType.Value
+                    VehicleTypeId = vehicleType.Id.Id
                };
           }
      }

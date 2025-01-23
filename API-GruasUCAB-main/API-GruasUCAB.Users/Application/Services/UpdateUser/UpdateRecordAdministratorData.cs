@@ -4,18 +4,21 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
      {
           private readonly IAdministratorFactory _administratorFactory;
           private readonly IAdministratorRepository _administratorRepository;
+          private readonly IMapper _mapper;
 
-          public UpdateRecordAdministratorData(IAdministratorFactory administratorFactory, IAdministratorRepository administratorRepository)
+          public UpdateRecordAdministratorData(IAdministratorFactory administratorFactory, IAdministratorRepository administratorRepository, IMapper mapper)
           {
                _administratorFactory = administratorFactory;
                _administratorRepository = administratorRepository;
+               _mapper = mapper;
           }
 
           public async Task<UpdateRecordUserDataResponseDTO> Execute(UpdateRecordUserDataRequestDTO request)
           {
                var administrator = await _administratorFactory.GetAdministratorById(new UserId(request.UserId.ToString()));
                ApplyChanges(administrator, request);
-               await _administratorRepository.UpdateAdministratorAsync(administrator.ToDTO());
+               var administratorDTO = _mapper.Map<AdministratorDTO>(administrator);
+               await _administratorRepository.UpdateAdministratorAsync(administratorDTO);
 
                return new UpdateRecordUserDataResponseDTO
                {

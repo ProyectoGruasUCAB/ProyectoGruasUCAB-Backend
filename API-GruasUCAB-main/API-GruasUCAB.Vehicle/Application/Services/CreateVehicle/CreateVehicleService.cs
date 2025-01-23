@@ -18,16 +18,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.CreateVehicle
           public async Task<CreateVehicleResponseDTO> Execute(CreateVehicleRequestDTO request)
           {
                var provider = await _providerRepository.GetProviderByIdAsync(request.UserId);
-               if (provider == null)
-               {
-                    throw new KeyNotFoundException($"Provider with ID {request.UserId} not found.");
-               }
-               var vehicleType = await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId);
-               if (vehicleType == null)
-               {
-                    throw new KeyNotFoundException($"VehicleType with ID {request.VehicleTypeId} not found.");
-               }
-
+               await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId);
                var supplierId = provider.SupplierId;
                var vehicle = _vehicleFactory.CreateVehicle(
                    new VehicleId(Guid.NewGuid()),

@@ -66,7 +66,8 @@ namespace API_GruasUCAB.Policy.Application.Services.CreatePolicy
                     Success = true,
                     Message = "Policy created successfully",
                     UserEmail = request.UserEmail,
-                    PolicyId = policy.Id.Id
+                    PolicyId = policy.Id.Id,
+                    Number = int.Parse(policy.PolicyNumber.Value)
                };
           }
      }

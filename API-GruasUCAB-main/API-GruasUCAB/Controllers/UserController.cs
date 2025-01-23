@@ -6,6 +6,7 @@ using API_GruasUCAB.Users.Application.Queries.GetAdministratorsByName;
 using API_GruasUCAB.Users.Application.Queries.GetAllDrivers;
 using API_GruasUCAB.Users.Application.Queries.GetDriverById;
 using API_GruasUCAB.Users.Application.Queries.GetDriversByName;
+using API_GruasUCAB.Users.Application.Queries.GetDriversBySupplierId;
 using API_GruasUCAB.Users.Application.Queries.GetAllWorkers;
 using API_GruasUCAB.Users.Application.Queries.GetWorkerById;
 using API_GruasUCAB.Users.Application.Queries.GetWorkersByName;
@@ -156,6 +157,23 @@ namespace API_GruasUCAB.Controllers
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetDriversByName");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetDriversBySupplierId/{supplierId}")]
+          [ProducesResponseType(typeof(GetDriversBySupplierIdResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetDriversBySupplierId(Guid supplierId)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var query = new GetDriversBySupplierIdQuery(supplierId);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetDriversBySupplierId");
           }
 
           [HttpGet]

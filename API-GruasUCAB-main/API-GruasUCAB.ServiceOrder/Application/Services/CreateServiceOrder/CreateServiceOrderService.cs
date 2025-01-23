@@ -70,29 +70,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                    new ServiceFeeId(request.ServiceFeeId)
                );
 
-               var serviceOrderDTO = new ServiceOrderDTO
-               {
-                    ServiceOrderId = serviceOrder.Id.Value,
-                    StatusServiceOrder = serviceOrder.StatusServiceOrder.Value.ToString(),
-                    IncidentDescription = serviceOrder.IncidentDescription.Value,
-                    InitialLocationDriverLatitude = (float)serviceOrder.InitialLocationDriver.Latitude,
-                    InitialLocationDriverLongitude = (float)serviceOrder.InitialLocationDriver.Longitude,
-                    IncidentLocationLatitude = (float)serviceOrder.IncidentLocation.Latitude,
-                    IncidentLocationLongitude = (float)serviceOrder.IncidentLocation.Longitude,
-                    IncidentLocationEndLatitude = (float)serviceOrder.IncidentLocationEnd.Latitude,
-                    IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude,
-                    IncidentDistance = (float)serviceOrder.IncidentDistance.Value,
-                    CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value,
-                    IncidentCost = serviceOrder.IncidentCost.Value,
-                    PolicyId = serviceOrder.PolicyId.Value,
-                    IncidentDate = serviceOrder.IncidentDate.Value.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture),
-                    VehicleId = serviceOrder.VehicleId.Value,
-                    DriverId = serviceOrder.DriverId.Value,
-                    CustomerId = serviceOrder.CustomerId.Value,
-                    OperatorId = serviceOrder.OperatorId.Value,
-                    ServiceFeeId = serviceOrder.ServiceFeeId.Value
-               };
-
+               var serviceOrderDTO = serviceOrder.ToDTO();
                await _serviceOrderRepository.AddServiceOrderAsync(serviceOrderDTO);
 
                return new CreateServiceOrderResponseDTO
@@ -100,7 +78,8 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.CreateServiceOrder
                     Success = true,
                     Message = "Service order created successfully.",
                     UserEmail = request.UserEmail,
-                    ServiceOrderId = serviceOrder.Id.Value
+                    ServiceOrderId = serviceOrder.Id.Value,
+                    TotalPrice = incidentCost
                };
           }
 

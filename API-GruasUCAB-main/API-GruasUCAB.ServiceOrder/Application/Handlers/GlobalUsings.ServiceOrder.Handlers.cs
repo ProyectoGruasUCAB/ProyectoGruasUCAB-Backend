@@ -3,3 +3,8 @@ global using API_GruasUCAB.ServiceOrder.Application.Handlers.UpdateServiceOrder;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetServiceOrdersByStatus;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetServiceOrderById;
 global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetAllServiceOrders;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetOrdersByDriverId;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetOrdersByVehicleId;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetOrdersByOperatorId;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetOrdersBySupplierId;
+global using API_GruasUCAB.ServiceOrder.Application.Handlers.GetOrdersByClientId;

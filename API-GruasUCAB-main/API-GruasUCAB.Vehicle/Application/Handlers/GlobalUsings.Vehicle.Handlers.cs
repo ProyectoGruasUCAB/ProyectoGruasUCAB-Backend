@@ -8,3 +8,5 @@ global using API_GruasUCAB.Vehicle.Application.Handlers.UpdateVehicleType;
 global using API_GruasUCAB.Vehicle.Application.Handlers.GetVehicleTypeById;
 global using API_GruasUCAB.Vehicle.Application.Handlers.GetAllVehicleTypes;
 global using API_GruasUCAB.Vehicle.Application.Handlers.GetVehicleTypeByName;
+global using API_GruasUCAB.Vehicle.Application.Handlers.GetVehiclesBySupplierId;
+global using API_GruasUCAB.Vehicle.Application.Handlers.GetVehiclesByDriverIdIsNotNull;

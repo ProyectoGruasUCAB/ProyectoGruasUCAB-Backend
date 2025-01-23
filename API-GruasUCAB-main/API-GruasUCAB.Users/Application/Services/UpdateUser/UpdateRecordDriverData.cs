@@ -1,3 +1,9 @@
+using API_GruasUCAB.Users.Domain.Entities;
+using API_GruasUCAB.Users.Infrastructure.DTOs.DriverQueries;
+using API_GruasUCAB.Users.Infrastructure.Mappers;
+using System;
+using System.Threading.Tasks;
+
 namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 {
      public class UpdateRecordDriverData : IUpdateRecordDriverData
@@ -13,9 +19,11 @@ namespace API_GruasUCAB.Users.Application.Services.UpdateUser
 
           public async Task<UpdateRecordUserDataResponseDTO> Execute(UpdateRecordUserDataRequestDTO request)
           {
-               var driver = await _driverFactory.GetDriverById(new UserId(request.UserId.ToString()));
-               ApplyChanges(driver, request);
-               await _driverRepository.UpdateDriverAsync(driver.ToDTO());
+               var driverDTO = await _driverRepository.GetDriverByIdAsync(request.UserId);
+               var driverEntity = driverDTO.ToEntity();
+               ApplyChanges(driverEntity, request);
+               var updatedDriverDTO = driverEntity.ToDTO();
+               await _driverRepository.UpdateDriverAsync(updatedDriverDTO);
 
                return new UpdateRecordUserDataResponseDTO
                {

@@ -15,7 +15,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
-               if (!request.WorkplaceId.HasValue)
+               if (!request.WorkplaceId.HasValue || request.WorkplaceId == Guid.Empty)
                {
                     throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for providers.");
                }

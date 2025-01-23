@@ -35,8 +35,6 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
             {
                 throw new KeyNotFoundException($"Policy with ID {id} not found.");
             }
-
-            // Verificar el valor del número de póliza
             if (string.IsNullOrWhiteSpace(policy.PolicyNumber.Value))
             {
                 throw new Exception("Invalid policy number");
@@ -59,8 +57,12 @@ namespace API_GruasUCAB.Policy.Infrastructure.Repositories
 
         public async Task<PolicyDTO> GetPolicyByPolicyNumberAsync(string policyNumber)
         {
-            var policy = await _context.Policies
-                .FirstOrDefaultAsync(p => p.PolicyNumber.Value == policyNumber);
+            var policies = await _context.Policies.ToListAsync();
+
+            var policy = policies
+                .AsEnumerable()
+                .FirstOrDefault(p => p.PolicyNumber.Value == policyNumber);
+
             if (policy == null)
             {
                 throw new KeyNotFoundException($"Policy with number {policyNumber} not found.");

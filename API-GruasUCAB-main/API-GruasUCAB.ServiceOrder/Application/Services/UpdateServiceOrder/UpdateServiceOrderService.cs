@@ -38,24 +38,7 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                var serviceOrderDTO = await _serviceOrderRepository.GetServiceOrderByIdAsync(request.ServiceOrderId)
                    ?? throw new ServiceOrderNotFoundException(request.ServiceOrderId);
 
-               var serviceOrder = _serviceOrderFactory.CreateServiceOrder(
-                   new ServiceOrderId(serviceOrderDTO.ServiceOrderId),
-                   new IncidentDescription(serviceOrderDTO.IncidentDescription),
-                   new Coordinates(serviceOrderDTO.InitialLocationDriverLatitude, serviceOrderDTO.InitialLocationDriverLongitude),
-                   new Coordinates(serviceOrderDTO.IncidentLocationLatitude, serviceOrderDTO.IncidentLocationLongitude),
-                   new Coordinates(serviceOrderDTO.IncidentLocationEndLatitude, serviceOrderDTO.IncidentLocationEndLongitude),
-                   new IncidentDistance(serviceOrderDTO.IncidentDistance),
-                   new CustomerVehicleDescription(serviceOrderDTO.CustomerVehicleDescription),
-                   new IncidentCost(serviceOrderDTO.IncidentCost),
-                   new PolicyId(serviceOrderDTO.PolicyId),
-                   new StatusServiceOrder(Enum.Parse<ServiceOrderStatus>(serviceOrderDTO.StatusServiceOrder)),
-                   new IncidentDate(serviceOrderDTO.IncidentDate),
-                   new VehicleId(serviceOrderDTO.VehicleId),
-                   new UserId(serviceOrderDTO.DriverId),
-                   new UserId(serviceOrderDTO.CustomerId),
-                   new UserId(serviceOrderDTO.OperatorId),
-                   new ServiceFeeId(serviceOrderDTO.ServiceFeeId)
-               );
+               var serviceOrder = serviceOrderDTO.ToEntity();
 
                if (serviceOrder.StatusServiceOrder.Status >= ServiceOrderStatus.EnProceso)
                {
@@ -180,32 +163,15 @@ namespace API_GruasUCAB.ServiceOrder.Application.Services.UpdateServiceOrder
                     }
                }
 
-               serviceOrderDTO.InitialLocationDriverLatitude = (float)serviceOrder.InitialLocationDriver.Latitude;
-               serviceOrderDTO.InitialLocationDriverLongitude = (float)serviceOrder.InitialLocationDriver.Longitude;
-               serviceOrderDTO.IncidentLocationLatitude = (float)serviceOrder.IncidentLocation.Latitude;
-               serviceOrderDTO.IncidentLocationLongitude = (float)serviceOrder.IncidentLocation.Longitude;
-               serviceOrderDTO.IncidentLocationEndLatitude = (float)serviceOrder.IncidentLocationEnd.Latitude;
-               serviceOrderDTO.IncidentLocationEndLongitude = (float)serviceOrder.IncidentLocationEnd.Longitude;
-               serviceOrderDTO.IncidentDistance = serviceOrder.IncidentDistance.Value;
-               serviceOrderDTO.CustomerVehicleDescription = serviceOrder.CustomerVehicleDescription.Value;
-               serviceOrderDTO.IncidentCost = serviceOrder.IncidentCost.Value;
-               serviceOrderDTO.PolicyId = serviceOrder.PolicyId.Id;
-               serviceOrderDTO.StatusServiceOrder = serviceOrder.StatusServiceOrder.Status.ToString();
-               serviceOrderDTO.IncidentDate = serviceOrder.IncidentDate.Value.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
-               serviceOrderDTO.VehicleId = serviceOrder.VehicleId.Id;
-               serviceOrderDTO.DriverId = serviceOrder.DriverId.Id;
-               serviceOrderDTO.CustomerId = serviceOrder.CustomerId.Id;
-               serviceOrderDTO.OperatorId = serviceOrder.OperatorId.Id;
-               serviceOrderDTO.ServiceFeeId = serviceOrder.ServiceFeeId.Id;
-
-               await _serviceOrderRepository.UpdateServiceOrderAsync(serviceOrderDTO);
+               var updatedServiceOrderDTO = serviceOrder.ToDTO();
+               await _serviceOrderRepository.UpdateServiceOrderAsync(updatedServiceOrderDTO);
 
                return new UpdateServiceOrderResponseDTO
                {
                     Success = true,
                     Message = "Service order updated successfully",
                     UserEmail = request.UserEmail,
-                    ServiceOrderId = serviceOrder.Id.Id,
+                    ServiceOrderId = serviceOrder.Id.Value,
                };
           }
 

@@ -13,3 +13,4 @@ global using API_GruasUCAB.Users.Application.Handlers.GetAllWorkers;
 global using API_GruasUCAB.Users.Application.Handlers.GetProviderById;
 global using API_GruasUCAB.Users.Application.Handlers.GetProvidersByName;
 global using API_GruasUCAB.Users.Application.Handlers.GetAllProviders;
+global using API_GruasUCAB.Users.Application.Handlers.GetDriversBySupplierId;

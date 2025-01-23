@@ -67,12 +67,7 @@ namespace API_GruasUCAB.ServiceFee.Application.Services.UpdateServiceFee
                     Message = "Service fee updated successfully",
                     UserEmail = request.UserEmail,
                     Time = DateTime.UtcNow,
-                    ServiceFeeId = serviceFee.Id.Value,
-                    Name = serviceFee.Name.Value,
-                    Price = serviceFee.Price.Value,
-                    PriceKm = serviceFee.PriceKm.Value,
-                    Radius = serviceFee.Radius.Value,
-                    Description = serviceFee.Description.Value
+                    ServiceFeeId = serviceFee.Id.Value
                };
           }
      }

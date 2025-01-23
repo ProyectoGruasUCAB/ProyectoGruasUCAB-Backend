@@ -1,25 +1,20 @@
-using API_GruasUCAB.Department.Domain.AggregateRoot;
-using API_GruasUCAB.Department.Infrastructure.Database;
-using API_GruasUCAB.Department.Infrastructure.DTOs.DepartmentQueries;
-using API_GruasUCAB.Department.Infrastructure.Mappers;
-using Microsoft.EntityFrameworkCore;
-
 namespace API_GruasUCAB.Department.Infrastructure.Repositories
 {
      public class DepartmentRepository : IDepartmentRepository
      {
           private readonly DepartmentDbContext _context;
+          private readonly IMapper _mapper;
 
-          public DepartmentRepository(DepartmentDbContext context)
+          public DepartmentRepository(DepartmentDbContext context, IMapper mapper)
           {
                _context = context;
+               _mapper = mapper;
           }
 
           public async Task<List<DepartmentDTO>> GetAllDepartmentsAsync()
           {
-               return await _context.Departments
-                   .Select(d => d.ToDTO())
-                   .ToListAsync();
+               var departments = await _context.Departments.ToListAsync();
+               return _mapper.Map<List<DepartmentDTO>>(departments);
           }
 
           public async Task<DepartmentDTO> GetDepartmentByIdAsync(Guid id)
@@ -32,31 +27,28 @@ namespace API_GruasUCAB.Department.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Department with ID {id} not found.");
                }
 
-               return department.ToDTO();
+               return _mapper.Map<DepartmentDTO>(department);
           }
 
           public async Task<DepartmentDTO> GetDepartmentByNameAsync(string name)
           {
-               var departments = await _context.Departments
-                   .ToListAsync();
+               var departments = await _context.Departments.ToListAsync();
 
                var department = departments
-                   .Where(d => d.Name.Value.ToLower().Contains(name.ToLower()))
-                   .Select(d => d.ToDTO())
-                   .FirstOrDefault();
+                   .AsEnumerable()
+                   .FirstOrDefault(d => d.Name.Value.ToLower() == name.ToLower());
 
                if (department == null)
                {
-                    throw new KeyNotFoundException($"Department with name {name} not found.");
+                    throw new KeyNotFoundException($"Department with name '{name}' not found.");
                }
 
-               return department;
+               return _mapper.Map<DepartmentDTO>(department);
           }
 
           public async Task AddDepartmentAsync(DepartmentDTO departmentDto)
           {
-               var department = departmentDto.ToEntity();
-
+               var department = _mapper.Map<Domain.AggregateRoot.Department>(departmentDto);
                _context.Departments.Add(department);
                await _context.SaveChangesAsync();
           }
@@ -71,10 +63,7 @@ namespace API_GruasUCAB.Department.Infrastructure.Repositories
                     throw new KeyNotFoundException($"Department with ID {departmentDto.DepartmentId} not found.");
                }
 
-               department.ChangeName(new DepartmentName(departmentDto.Name));
-               department.ChangeDescription(new DepartmentDescription(departmentDto.Descripcion));
-
-               _context.Departments.Update(department);
+               _mapper.Map(departmentDto, department);
                await _context.SaveChangesAsync();
           }
      }

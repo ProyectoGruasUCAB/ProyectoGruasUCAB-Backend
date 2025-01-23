@@ -50,5 +50,11 @@ namespace API_GruasUCAB.Supplier.Domain.AggregateRoot
                ValidateState();
                AddDomainEvent(new SupplierTypeChangedEvent(Id, newType));
           }
+
+          private Supplier() : base(new SupplierId(Guid.NewGuid()))
+          {
+               Name = new SupplierName("Default Name");
+               Type = new SupplierType(SupplierTypeEnum.Interno);
+          }
      }
 }

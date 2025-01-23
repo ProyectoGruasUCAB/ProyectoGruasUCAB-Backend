@@ -5,7 +5,7 @@ namespace API_GruasUCAB.Supplier.Domain.Exceptions
      public class InvalidSupplierIdException : DomainException
      {
           public InvalidSupplierIdException()
-              : base("Invalid Supplier ID")
+              : base("Invalid Supplier ID.")
           {
           }
      }

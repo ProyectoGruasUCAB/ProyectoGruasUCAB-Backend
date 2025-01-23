@@ -15,5 +15,18 @@ namespace API_GruasUCAB.Users.Infrastructure.Mappers
                     SupplierId = provider.SupplierId.Id
                };
           }
+
+          public static Provider ToEntity(this ProviderDTO providerDTO)
+          {
+               return new Provider(
+                   new UserId(providerDTO.Id),
+                   new UserName(providerDTO.Name),
+                   new UserEmail(providerDTO.UserEmail),
+                   new UserPhone(providerDTO.Phone),
+                   new UserCedula(providerDTO.Cedula),
+                   new UserBirthDate(providerDTO.BirthDate),
+                   new SupplierId(providerDTO.SupplierId)
+               );
+          }
      }
 }

@@ -60,7 +60,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     return await Task.FromResult(new RecordUserDataResponseDTO
                     {
                          Success = false,
-                         Message = ex.Message,
+                         Message = ex.Message + " " + ex.StackTrace,
                          UserEmail = request.UserEmail,
                          UserId = Guid.Empty
                     });

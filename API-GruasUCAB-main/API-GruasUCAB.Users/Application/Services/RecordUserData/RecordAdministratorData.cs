@@ -4,17 +4,19 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
      {
           private readonly IAdministratorFactory _administratorFactory;
           private readonly IAdministratorRepository _administratorRepository;
+          private readonly IMapper _mapper;
 
-          public RecordAdministratorData(IAdministratorFactory administratorFactory, IAdministratorRepository administratorRepository)
+          public RecordAdministratorData(IAdministratorFactory administratorFactory, IAdministratorRepository administratorRepository, IMapper mapper)
           {
                _administratorFactory = administratorFactory;
                _administratorRepository = administratorRepository;
+               _mapper = mapper;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
           {
                var administrator = _administratorFactory.CreateAdministrator(
-                   new UserId(request.UserId.ToString()),
+                   new UserId(request.UserId),
                    new UserName(request.Name),
                    new UserEmail(request.UserEmail),
                    new UserPhone(request.Phone),
@@ -22,16 +24,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserBirthDate(request.BirthDate)
                );
 
-               var administratorDTO = new AdministratorDTO
-               {
-                    UserId = request.UserId,
-                    Name = request.Name,
-                    Email = request.UserEmail,
-                    Phone = request.Phone,
-                    Cedula = request.Cedula,
-                    BirthDate = request.BirthDate
-               };
-
+               var administratorDTO = _mapper.Map<AdministratorDTO>(administrator);
                await _administratorRepository.AddAdministratorAsync(administratorDTO);
 
                return new RecordUserDataResponseDTO

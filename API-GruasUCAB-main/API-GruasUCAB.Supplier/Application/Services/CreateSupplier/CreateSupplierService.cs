@@ -4,13 +4,16 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
      {
           private readonly ISupplierRepository _supplierRepository;
           private readonly ISupplierFactory _supplierFactory;
+          private readonly IMapper _mapper;
 
           public CreateSupplierService(
               ISupplierRepository supplierRepository,
-              ISupplierFactory supplierFactory)
+              ISupplierFactory supplierFactory,
+              IMapper mapper)
           {
                _supplierRepository = supplierRepository;
                _supplierFactory = supplierFactory;
+               _mapper = mapper;
           }
 
           public async Task<CreateSupplierResponseDTO> Execute(CreateSupplierRequestDTO request)
@@ -26,13 +29,7 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
                    new SupplierType(supplierType)
                );
 
-               var supplierDTO = new SupplierDTO
-               {
-                    SupplierId = supplier.Id.Id,
-                    Name = supplier.Name.Value,
-                    Type = supplier.Type.Value.ToString()
-               };
-
+               var supplierDTO = _mapper.Map<SupplierDTO>(supplier);
                await _supplierRepository.AddSupplierAsync(supplierDTO);
 
                return new CreateSupplierResponseDTO
@@ -40,7 +37,7 @@ namespace API_GruasUCAB.Supplier.Application.Services.CreateSupplier
                     Success = true,
                     Message = "Supplier created successfully",
                     UserEmail = request.UserEmail,
-                    SupplierId = supplier.Id.Id
+                    SupplierId = supplier.Id.Value
                };
           }
      }

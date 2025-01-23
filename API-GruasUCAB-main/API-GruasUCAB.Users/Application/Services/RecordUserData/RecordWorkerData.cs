@@ -5,12 +5,14 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           private readonly IWorkerFactory _workerFactory;
           private readonly IWorkerRepository _workerRepository;
           private readonly IDepartmentRepository _departmentRepository;
+          private readonly IMapper _mapper;
 
-          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository, IDepartmentRepository departmentRepository)
+          public RecordWorkerData(IWorkerFactory workerFactory, IWorkerRepository workerRepository, IDepartmentRepository departmentRepository, IMapper mapper)
           {
                _workerFactory = workerFactory;
                _workerRepository = workerRepository;
                _departmentRepository = departmentRepository;
+               _mapper = mapper;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -43,7 +45,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new DepartmentId(request.WorkplaceId.Value)
                );
 
-               var workerDTO = worker.ToDTO();
+               var workerDTO = _mapper.Map<WorkerDTO>(worker);
                await _workerRepository.AddWorkerAsync(workerDTO);
 
                return new RecordUserDataResponseDTO
