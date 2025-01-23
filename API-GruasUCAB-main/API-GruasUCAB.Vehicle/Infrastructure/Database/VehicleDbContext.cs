@@ -1,7 +1,4 @@
-using API_GruasUCAB.Vehicle.Domain.AggregateRoot;
-using API_GruasUCAB.Vehicle.Domain.Entity;
 using API_GruasUCAB.Vehicle.Infrastructure.Database.Configuration;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API_GruasUCAB.Vehicle.Infrastructure.Database
@@ -9,6 +6,14 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Database
      public class VehicleDbContext : DbContext
      {
           public VehicleDbContext(DbContextOptions<VehicleDbContext> options) : base(options) { }
+
+          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+          {
+               if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+               {
+                    optionsBuilder.EnableSensitiveDataLogging();
+               }
+          }
 
           public DbSet<VehicleAggregate> Vehicles { get; set; } = null!;
           public DbSet<VehicleTypeAggregate> VehicleTypes { get; set; } = null!;

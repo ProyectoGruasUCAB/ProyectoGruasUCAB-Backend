@@ -180,7 +180,7 @@ namespace API_GruasUCAB.Users
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Proveedor", "Trabajador"));
 
             services.Decorate<IRequestHandler<GetProvidersByNameQuery, GetProvidersByNameResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetProvidersByNameQuery, GetProvidersByNameResponseDTO>(

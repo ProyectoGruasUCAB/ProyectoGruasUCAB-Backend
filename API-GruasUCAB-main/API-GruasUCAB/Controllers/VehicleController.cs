@@ -5,6 +5,7 @@ using API_GruasUCAB.Vehicle.Application.Queries.GetVehicleById;
 using API_GruasUCAB.Vehicle.Application.Queries.GetVehicleByLicensePlate;
 using API_GruasUCAB.Vehicle.Application.Queries.GetVehiclesBySupplierId;
 using API_GruasUCAB.Vehicle.Application.Queries.GetVehiclesByDriverIdIsNotNull;
+using API_GruasUCAB.Vehicle.Application.Queries.GetVehicleByDriverId;
 using API_GruasUCAB.Vehicle.Application.Commands.CreateVehicleType;
 using API_GruasUCAB.Vehicle.Application.Commands.UpdateVehicleType;
 using API_GruasUCAB.Vehicle.Application.Queries.GetAllVehicleTypes;
@@ -132,6 +133,23 @@ namespace API_GruasUCAB.Controllers
                     var response = await _mediator.Send(query);
                     return Ok(response);
                }, ModelState, _logger, "GetVehiclesByDriverIdIsNotNull");
+          }
+
+          [HttpGet]
+          [Authorize]
+          [Route("GetVehicleByDriverId/{driverId}")]
+          [ProducesResponseType(typeof(GetVehicleByDriverIdResponseDTO), 200)]
+          [ProducesResponseType(400)]
+          [ProducesResponseType(401)]
+          [ProducesResponseType(500)]
+          public async Task<IActionResult> GetVehicleByDriverId(Guid driverId)
+          {
+               return await ActionExecutor.Execute(async () =>
+               {
+                    var query = new GetVehicleByDriverIdQuery(driverId);
+                    var response = await _mediator.Send(query);
+                    return Ok(response);
+               }, ModelState, _logger, "GetVehicleByDriverId");
           }
 
           [HttpPost]

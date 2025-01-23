@@ -58,6 +58,17 @@ namespace API_GruasUCAB.Vehicle.Infrastructure.Repositories
                return _mapper.Map<List<VehicleDTO>>(filteredVehicles);
           }
 
+          public async Task<VehicleDTO?> GetVehicleByDriverIdAsync(Guid driverId)
+          {
+               var vehicles = await _context.Vehicles
+                   .Where(v => v.DriverId != null)
+                   .ToListAsync();
+
+               var vehicle = vehicles.FirstOrDefault(v => v.DriverId != null && v.DriverId.Value == driverId);
+
+               return vehicle != null ? _mapper.Map<VehicleDTO>(vehicle) : null;
+          }
+
           public async Task<List<VehicleDTO>> GetVehiclesByDriverIdIsNotNullAsync()
           {
                var vehicles = await _context.Vehicles

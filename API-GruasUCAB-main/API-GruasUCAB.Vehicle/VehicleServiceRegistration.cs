@@ -28,6 +28,7 @@ namespace API_GruasUCAB.Vehicle
             services.AddScoped<IRequestHandler<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>, GetVehicleByLicensePlateQueryHandler>();
             services.AddScoped<IRequestHandler<GetVehiclesBySupplierIdQuery, GetVehiclesBySupplierIdResponseDTO>, GetVehiclesBySupplierIdQueryHandler>();
             services.AddScoped<IRequestHandler<GetVehiclesByDriverIdIsNotNullQuery, GetVehiclesByDriverIdIsNotNullResponseDTO>, GetVehiclesByDriverIdIsNotNullQueryHandler>();
+            services.AddScoped<IRequestHandler<GetVehicleByDriverIdQuery, GetVehicleByDriverIdResponseDTO>, GetVehicleByDriverIdQueryHandler>();
 
             // VehicleType Queries
             services.AddScoped<IRequestHandler<GetAllVehicleTypesQuery, GetAllVehicleTypesResponseDTO>, GetAllVehicleTypesQueryHandler>();

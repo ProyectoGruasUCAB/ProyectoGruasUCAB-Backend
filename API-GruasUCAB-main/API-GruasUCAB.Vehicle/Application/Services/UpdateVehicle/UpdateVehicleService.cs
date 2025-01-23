@@ -19,20 +19,34 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
 
           public async Task<UpdateVehicleResponseDTO> Execute(UpdateVehicleRequestDTO request)
           {
+               if (request.VehicleId == Guid.Empty)
+               {
+                    throw new ArgumentException("Invalid Vehicle ID");
+               }
+
                var vehicleDTO = await _vehicleRepository.GetVehicleByIdAsync(request.VehicleId);
                var provider = await _providerRepository.GetProviderByIdAsync(request.UserId);
+
                if (provider.SupplierId != vehicleDTO.SupplierId)
                {
                     throw new UnauthorizedAccessException("User does not have permission to update this vehicle.");
                }
-               if (request.DriverId.HasValue)
+
+               if (request.DriverId.HasValue && request.DriverId.Value != Guid.Empty)
                {
                     var driver = await _driverRepository.GetDriverByIdAsync(request.DriverId.Value);
                     if (driver.SupplierId != vehicleDTO.SupplierId || driver.SupplierId != provider.SupplierId)
                     {
                          throw new UnauthorizedAccessException("Driver does not have permission to be assigned to this vehicle.");
                     }
+
+                    var existingVehicle = await _vehicleRepository.GetVehicleByDriverIdAsync(request.DriverId.Value);
+                    if (existingVehicle != null && existingVehicle.VehicleId != vehicleDTO.VehicleId)
+                    {
+                         throw new InvalidOperationException("Driver already has a vehicle assigned.");
+                    }
                }
+
                if (request.VehicleTypeId.HasValue)
                {
                     var vehicleType = await _vehicleTypeRepository.GetVehicleTypeByIdAsync(request.VehicleTypeId.Value);
@@ -96,7 +110,7 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeVehicleTypeId(new VehicleTypeId(request.VehicleTypeId.Value));
                }
 
-               if (request.DriverId.HasValue)
+               if (request.DriverId.HasValue && request.DriverId.Value != Guid.Empty)
                {
                     vehicle.ChangeDriverId(new UserId(request.DriverId.Value));
                }
@@ -105,18 +119,22 @@ namespace API_GruasUCAB.Vehicle.Application.Services.UpdateVehicle
                     vehicle.ChangeDriverId(null);
                }
 
-               vehicleDTO.CivilLiability = vehicle.CivilLiability.Value;
-               vehicleDTO.CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy");
-               vehicleDTO.TrafficLicense = vehicle.TrafficLicense.Value;
-               vehicleDTO.LicensePlate = vehicle.LicensePlate.Value;
-               vehicleDTO.Brand = vehicle.Brand.Value;
-               vehicleDTO.Color = vehicle.Color.Value;
-               vehicleDTO.Model = vehicle.Model.Value;
-               vehicleDTO.VehicleTypeId = vehicle.VehicleTypeId.Id;
-               vehicleDTO.DriverId = vehicle.DriverId?.Id;
-               vehicleDTO.SupplierId = vehicle.SupplierId.Id;
+               var updatedVehicleDTO = new VehicleDTO
+               {
+                    VehicleId = vehicle.Id.Id,
+                    CivilLiability = vehicle.CivilLiability.Value,
+                    CivilLiabilityExpirationDate = vehicle.CivilLiabilityExpirationDate.Value.ToString("dd-MM-yyyy"),
+                    TrafficLicense = vehicle.TrafficLicense.Value,
+                    LicensePlate = vehicle.LicensePlate.Value,
+                    Brand = vehicle.Brand.Value,
+                    Color = vehicle.Color.Value,
+                    Model = vehicle.Model.Value,
+                    VehicleTypeId = vehicle.VehicleTypeId.Id,
+                    DriverId = vehicle.DriverId?.Id,
+                    SupplierId = vehicle.SupplierId.Id
+               };
 
-               await _vehicleRepository.UpdateVehicleAsync(vehicleDTO);
+               await _vehicleRepository.UpdateVehicleAsync(updatedVehicleDTO);
 
                return new UpdateVehicleResponseDTO
                {
