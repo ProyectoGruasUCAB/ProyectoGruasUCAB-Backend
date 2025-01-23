@@ -4,6 +4,10 @@ namespace API_GruasUCAB.Auth
      {
           public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
           {
+               //   AuthDbContext
+               services.AddDbContext<AuthDbContext>(options =>
+                   options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
                // Keycloak Configuration
                var configurationBuilder = new ConfigurationBuilder()
                    .AddConfiguration(configuration);
@@ -55,6 +59,11 @@ namespace API_GruasUCAB.Auth
                services.AddScoped<IService<ChangePasswordRequestDTO, ChangePasswordResponseDTO>, AuthChangePasswordValidator>();
                services.AddScoped<IService<RecoverPasswordRequestDTO, RecoverPasswordResponseDTO>, AuthRecoverPasswordValidate>();
                services.AddScoped<IService<IncompleteAccountRequestDTO, IncompleteAccountResponseDTO>, AuthHandleIncompleteAccountValidator>();
+
+               //   Repositories
+               services.AddScoped<INewWorkerRepository, NewWorkerRepository>();
+               services.AddScoped<INewProviderRepository, NewProviderRepository>();
+               services.AddScoped<INewDriverRepository, NewDriverRepository>();
 
                // Decorators
                services.Decorate<IService<CreateUserRequestDTO, CreateUserResponseDTO>>(

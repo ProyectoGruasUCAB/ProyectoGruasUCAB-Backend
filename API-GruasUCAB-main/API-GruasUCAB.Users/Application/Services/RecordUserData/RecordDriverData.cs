@@ -5,12 +5,14 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
           private readonly IDriverFactory _driverFactory;
           private readonly IDriverRepository _driverRepository;
           private readonly ISupplierRepository _supplierRepository;
+          private readonly INewDriverRepository _newDriverRepository;
 
-          public RecordDriverData(IDriverFactory driverFactory, IDriverRepository driverRepository, ISupplierRepository supplierRepository)
+          public RecordDriverData(IDriverFactory driverFactory, IDriverRepository driverRepository, ISupplierRepository supplierRepository, INewDriverRepository newDriverRepository)
           {
                _driverFactory = driverFactory;
                _driverRepository = driverRepository;
                _supplierRepository = supplierRepository;
+               _newDriverRepository = newDriverRepository;
           }
 
           public async Task<RecordUserDataResponseDTO> Execute(RecordUserDataRequestDTO request)
@@ -23,10 +25,9 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                     throw new ArgumentNullException(nameof(request.DriverLicense));
                if (request.DriverLicenseExpirationDate == null)
                     throw new ArgumentNullException(nameof(request.DriverLicenseExpirationDate));
-               if (!request.WorkplaceId.HasValue)
-                    throw new ArgumentNullException(nameof(request.WorkplaceId), "WorkplaceId is required for drivers.");
 
-               var supplier = await _supplierRepository.GetSupplierByIdAsync(request.WorkplaceId.Value);
+               var supplierId = await _newDriverRepository.GetSupplierIdByUserId(request.UserId);
+               var supplier = await _supplierRepository.GetSupplierByIdAsync(supplierId);
                if (supplier == null)
                {
                     return new RecordUserDataResponseDTO
@@ -49,7 +50,7 @@ namespace API_GruasUCAB.Users.Application.Services.RecordUserData
                    new UserMedicalCertificateExpirationDate(request.MedicalCertificateExpirationDate),
                    new UserDriverLicense(request.DriverLicense),
                    new UserDriverLicenseExpirationDate(request.DriverLicenseExpirationDate),
-                   new SupplierId(request.WorkplaceId.Value),
+                   new SupplierId(supplierId),
                    request.Token ?? string.Empty
                );
 
