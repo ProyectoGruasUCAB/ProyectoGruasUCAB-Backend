@@ -88,7 +88,7 @@ namespace API_GruasUCAB.ServiceOrder
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador", "Proveedor", "Conductor"));
 
             // SecurityRequestHandlerDecorator for GetOrdersByVehicleId
             services.Decorate<IRequestHandler<GetOrdersByVehicleIdQuery, GetOrdersByVehicleIdResponseDTO>>(
@@ -97,7 +97,7 @@ namespace API_GruasUCAB.ServiceOrder
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador", "Proveedor"));
 
             // SecurityRequestHandlerDecorator for GetOrdersByOperatorId
             services.Decorate<IRequestHandler<GetOrdersByOperatorIdQuery, GetOrdersByOperatorIdResponseDTO>>(
@@ -115,7 +115,7 @@ namespace API_GruasUCAB.ServiceOrder
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador", "Proveedor"));
 
             // SecurityRequestHandlerDecorator for GetOrdersByClientId
             services.Decorate<IRequestHandler<GetOrdersByClientIdQuery, GetOrdersByClientIdResponseDTO>>(

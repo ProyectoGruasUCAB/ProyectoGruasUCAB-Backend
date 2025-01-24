@@ -46,7 +46,7 @@ namespace API_GruasUCAB.Department
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador","Proveedor"));
 
             services.Decorate<IRequestHandler<GetDepartmentByIdQuery, GetDepartmentByIdResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetDepartmentByIdQuery, GetDepartmentByIdResponseDTO>(
