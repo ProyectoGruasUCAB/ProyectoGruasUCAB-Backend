@@ -1,4 +1,4 @@
-namespace API_GruasUCAB.Auth.Infrastructure.Adapters.Email
+namespace API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.Email
 {
      public class EmailTemplateService
      {
@@ -6,7 +6,7 @@ namespace API_GruasUCAB.Auth.Infrastructure.Adapters.Email
 
           public EmailTemplateService()
           {
-               _templatesPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates");
+               _templatesPath = Path.Combine(Directory.GetCurrentDirectory(), "../API-GruasUCAB.Auth/Templates");
           }
 
           public async Task<string> LoadTemplateAsync(string templateName)

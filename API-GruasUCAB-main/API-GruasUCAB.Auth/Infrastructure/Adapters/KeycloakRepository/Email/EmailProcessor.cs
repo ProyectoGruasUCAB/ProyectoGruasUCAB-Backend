@@ -1,3 +1,5 @@
+using API_GruasUCAB.Auth.Infrastructure.Adapters.KeycloakRepository.Email;
+
 namespace API_GruasUCAB.Auth.Infrastructure.Adapters.Email
 {
      public class EmailProcessor
