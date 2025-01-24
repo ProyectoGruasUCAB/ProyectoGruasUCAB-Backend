@@ -443,3 +443,9 @@ reportgenerator
 
 NassaApiStarter/appsettings.Local.json
 NassaApiStarter.Tests/packages-microsoft-prod.deb
+
+# User-specific project files
+*.csproj.user
+
+# User-specific publish profile files
+*.pubxml.user
