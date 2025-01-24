@@ -82,11 +82,25 @@ Ahora para realizar las migraciones a la base de datos, ingrese a su aplicación
 dotnet tool install --global dotnet-ef 
 ```   
 ```
-dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Supplier -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Department -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Users -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Policy -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.ServiceOrder -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Vehicle -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.ServiceFee -s API-GruasUCAB-main/API-GruasUCAB 
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Auth -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Supplier -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Department -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Users -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Policy -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.ServiceOrder -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.Vehicle -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef migrations add InitialCreate -p API-GruasUCAB-main/API-GruasUCAB.ServiceFee -s API-GruasUCAB-main/API-GruasUCAB
 ```
     
 ```
-dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Supplier -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Department -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.ServiceFee -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.ServiceOrder -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Vehicle -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Policy -s API-GruasUCAB-main/API-GruasUCAB && dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Users -s API-GruasUCAB-main/API-GruasUCAB
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Auth -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Supplier -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Department -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.ServiceFee -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.ServiceOrder -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Vehicle -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Policy -s API-GruasUCAB-main/API-GruasUCAB &&
+dotnet ef database update -p API-GruasUCAB-main/API-GruasUCAB.Users -s API-GruasUCAB-main/API-GruasUCAB
 ```
 
 Ahora, para correr el backend del proyecto ejecute el siguiente comando desde ProyectoGruasUCAB-Backend ❯ API-GruasUCAB-main ❯ API-GruasUCAB:
