@@ -29,7 +29,7 @@ namespace API_GruasUCAB.Supplier
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador"));
+                    "Administrador","Proveedor"));
 
             services.Decorate<IService<UpdateSupplierRequestDTO, UpdateSupplierResponseDTO>>(
                 (inner, provider) => new SecurityDecorator<UpdateSupplierRequestDTO, UpdateSupplierResponseDTO>(
@@ -46,7 +46,7 @@ namespace API_GruasUCAB.Supplier
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador"));
+                    "Administrador", "Proveedor", "Conductor"));
 
             services.Decorate<IRequestHandler<GetSupplierByIdQuery, GetSupplierByIdResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetSupplierByIdQuery, GetSupplierByIdResponseDTO>(
