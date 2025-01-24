@@ -1,0 +1,2 @@
+global using API_GruasUCAB.ServiceOrder.Application.Commands.CreateServiceOrder;
+global using API_GruasUCAB.ServiceOrder.Application.Commands.UpdateServiceOrder;

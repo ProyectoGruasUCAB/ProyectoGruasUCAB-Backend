@@ -1,0 +1,10 @@
+{
+  "realm": "GruasUCAB",
+  "auth-server-url": "http://localhost:8180/",
+  "ssl-required": "external",
+  "resource": "ClientGruasUCAB",
+  "credentials": {
+    "secret": "ESf6O4ul3ry1EneCi6lD22Vc0hQqvAKT"
+  },
+  "verify-token-audience": true
+}

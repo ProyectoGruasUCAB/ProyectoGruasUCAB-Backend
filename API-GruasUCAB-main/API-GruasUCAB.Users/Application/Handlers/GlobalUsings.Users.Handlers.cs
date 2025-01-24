@@ -1,0 +1,16 @@
+global using API_GruasUCAB.Users.Application.Handlers.RecordUserData;
+global using API_GruasUCAB.Users.Application.Handlers.UpdateUser;
+global using API_GruasUCAB.Users.Application.Handlers.GetAdministratorsByName;
+global using API_GruasUCAB.Users.Application.Handlers.GetAdministratorById;
+global using API_GruasUCAB.Users.Application.Handlers.GetAllAdministrators;
+global using API_GruasUCAB.Users.Application.Handlers.GetDriversByName;
+global using API_GruasUCAB.Users.Application.Handlers.GetDriverById;
+global using API_GruasUCAB.Users.Application.Handlers.GetAllDrivers;
+global using API_GruasUCAB.Users.Application.Handlers.GetWorkersByPosition;
+global using API_GruasUCAB.Users.Application.Handlers.GetWorkersByName;
+global using API_GruasUCAB.Users.Application.Handlers.GetWorkerById;
+global using API_GruasUCAB.Users.Application.Handlers.GetAllWorkers;
+global using API_GruasUCAB.Users.Application.Handlers.GetProviderById;
+global using API_GruasUCAB.Users.Application.Handlers.GetProvidersByName;
+global using API_GruasUCAB.Users.Application.Handlers.GetAllProviders;
+global using API_GruasUCAB.Users.Application.Handlers.GetDriversBySupplierId;

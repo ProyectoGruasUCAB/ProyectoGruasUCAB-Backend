@@ -1,0 +1,5 @@
+global using API_GruasUCAB.ServiceFee.Application.Handlers.CreateServiceFee;
+global using API_GruasUCAB.ServiceFee.Application.Handlers.UpdateServiceFee;
+global using API_GruasUCAB.ServiceFee.Application.Handlers.GetServiceFeeByName;
+global using API_GruasUCAB.ServiceFee.Application.Handlers.GetServiceFeeById;
+global using API_GruasUCAB.ServiceFee.Application.Handlers.GetAllServiceFees;

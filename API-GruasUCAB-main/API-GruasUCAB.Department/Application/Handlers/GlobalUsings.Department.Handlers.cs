@@ -1,0 +1,5 @@
+global using API_GruasUCAB.Department.Application.Handlers.CreateDepartment;
+global using API_GruasUCAB.Department.Application.Handlers.UpdateDepartment;
+global using API_GruasUCAB.Department.Application.Handlers.GetAllDepartments;
+global using API_GruasUCAB.Department.Application.Handlers.GetDepartmentById;
+global using API_GruasUCAB.Department.Application.Handlers.GetDepartmentByName;

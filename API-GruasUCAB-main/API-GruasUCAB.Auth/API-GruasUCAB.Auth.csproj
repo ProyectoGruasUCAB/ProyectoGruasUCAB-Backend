@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>API_GruasUCAB.Auth</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scrutor" Version="3.3.0" />
+    <PackageReference Include="Keycloak.AuthServices.Common" Version="2.6.0" />
+    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.6.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\API-GruasUCAB.Core\API-GruasUCAB.Core.csproj" />
+    <ProjectReference Include="..\API-GruasUCAB.Commons\API-GruasUCAB.Commons.csproj" />
+  </ItemGroup>
+
+</Project>

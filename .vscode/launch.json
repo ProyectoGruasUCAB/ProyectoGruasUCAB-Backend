@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Docker .NET Container SDK Launch",
+            "type": "docker",
+            "request": "launch",
+            "netCore": {
+                "appProject": "${workspaceFolder}/API-GruasUCAB-main/API-GruasUCAB/API-GruasUCAB.csproj",
+                "buildWithSdk": true
+            }
+        }
+    ],
+    "dotnet.defaultSolution": "API-GruasUCAB.sln"
+}
