@@ -45,7 +45,7 @@ namespace API_GruasUCAB.ServiceFee
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Trabajador"));
+                    "Administrador", "Trabajador", "Proveedor"));
 
             services.Decorate<IRequestHandler<GetServiceFeeByIdQuery, GetServiceFeeByIdResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetServiceFeeByIdQuery, GetServiceFeeByIdResponseDTO>(

@@ -76,7 +76,7 @@ namespace API_GruasUCAB.Vehicle
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Proveedor"));
+                    "Administrador", "Proveedor", "Trabajador"));
 
             services.Decorate<IRequestHandler<GetVehicleByIdQuery, GetVehicleByIdResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetVehicleByIdQuery, GetVehicleByIdResponseDTO>(
@@ -84,7 +84,7 @@ namespace API_GruasUCAB.Vehicle
                     provider.GetRequiredService<IKeycloakRepository>(),
                     provider.GetRequiredService<IHttpClientFactory>(),
                     provider.GetRequiredService<IHttpContextAccessor>(),
-                    "Administrador", "Proveedor"));
+                    "Administrador", "Proveedor", "Trabajador"));
 
             services.Decorate<IRequestHandler<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>>(
                 (inner, provider) => new SecurityRequestHandlerDecorator<GetVehicleByLicensePlateQuery, GetVehicleByLicensePlateResponseDTO>(
